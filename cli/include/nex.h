@@ -94,7 +94,7 @@ typedef struct {
 
 /* ============ Function Declarations ============ */
 
-/* Commands (commands/*.c) */
+/* Commands - see commands folder */
 int cmd_install(int argc, char *argv[]);
 int cmd_run(int argc, char *argv[]);
 int cmd_update(int argc, char *argv[]);

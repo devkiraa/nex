@@ -5,6 +5,7 @@
 #include "nex.h"
 #include <stdarg.h>
 #include <ctype.h>
+#include <errno.h>
 
 /* ANSI color codes */
 #ifdef _WIN32

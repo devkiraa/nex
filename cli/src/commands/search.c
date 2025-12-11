@@ -4,6 +4,7 @@
 
 #include "nex.h"
 #include "cJSON.h"
+#include <ctype.h>
 
 int cmd_search(int argc, char *argv[]) {
     if (argc < 1) {
