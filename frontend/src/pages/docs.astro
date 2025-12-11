@@ -2,148 +2,252 @@
 import Layout from '../layouts/Layout.astro';
 ---
 
-<Layout title="Documentation">
-  <div class="container">
-    <h1>📚 Documentation</h1>
-    
-    <nav class="doc-nav">
-      <a href="#installation">Installation</a>
-      <a href="#usage">Usage</a>
-      <a href="#commands">Commands</a>
-      <a href="#authoring">Package Authoring</a>
-    </nav>
-    
-    <section id="installation">
-      <h2>Installation</h2>
-      
-      <h3>Download</h3>
-      <p>Download the latest <code>nex.exe</code> from the 
-        <a href="https://github.com/devkiraa/nex/releases">GitHub Releases</a> page.
-      </p>
-      
-      <h3>Add to PATH</h3>
-      <p>Add the directory containing <code>nex.exe</code> to your system PATH:</p>
-      
-      <h4>Windows</h4>
-      <ol>
-        <li>Open System Properties → Advanced → Environment Variables</li>
-        <li>Under "System variables", find and select "Path"</li>
-        <li>Click "Edit" and add the directory path</li>
-        <li>Click "OK" to save</li>
-      </ol>
-      
-      <h4>Linux/macOS</h4>
-      <pre><code>sudo cp nex /usr/local/bin/
+<Layout title="Documentation | Nex" description="Learn how to use Nex package manager">
+  <div class="docs-hero">
+    <div class="container">
+      <h1>Documentation</h1>
+      <p>Everything you need to know about using Nex</p>
+    </div>
+  </div>
+
+  <main class="container">
+    <div class="docs-grid">
+      <aside class="docs-nav">
+        <nav>
+          <h4>Getting Started</h4>
+          <ul>
+            <li><a href="#installation">Installation</a></li>
+            <li><a href="#quickstart">Quick Start</a></li>
+          </ul>
+          
+          <h4>Usage</h4>
+          <ul>
+            <li><a href="#commands">Commands</a></li>
+            <li><a href="#installing">Installing Packages</a></li>
+            <li><a href="#running">Running Packages</a></li>
+            <li><a href="#managing">Managing Packages</a></li>
+          </ul>
+          
+          <h4>Package Authors</h4>
+          <ul>
+            <li><a href="#creating">Creating Packages</a></li>
+            <li><a href="#manifest">Manifest Schema</a></li>
+            <li><a href="#publishing">Publishing</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <div class="docs-content">
+        <section id="installation">
+          <h2>Installation</h2>
+          
+          <h3>Download</h3>
+          <p>Download the latest release from GitHub:</p>
+          <a href="https://github.com/devkiraa/nex/releases" class="download-btn" target="_blank">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+            </svg>
+            Download from GitHub Releases
+          </a>
+          
+          <h3>Windows</h3>
+          <div class="code-block">
+            <div class="code-header">Add to PATH</div>
+            <pre><code># Add the directory containing nex.exe to your PATH
+# System Properties → Advanced → Environment Variables
+# Edit "Path" and add the directory</code></pre>
+          </div>
+          
+          <h3>Linux / macOS</h3>
+          <div class="code-block">
+            <div class="code-header">Install globally</div>
+            <pre><code>sudo cp nex /usr/local/bin/
 chmod +x /usr/local/bin/nex</code></pre>
-      
-      <h3>Verify Installation</h3>
-      <pre><code>nex --version</code></pre>
-    </section>
-    
-    <section id="usage">
-      <h2>Usage</h2>
-      
-      <h3>Installing Packages</h3>
-      <pre><code># Install a package
-nex install author.package-name
+          </div>
+          
+          <h3>Verify Installation</h3>
+          <div class="code-block">
+            <pre><code>nex --version</code></pre>
+          </div>
+        </section>
 
-# Example
-nex install example.hello-world</code></pre>
-      
-      <h3>Running Packages</h3>
-      <pre><code># Run the default command
-nex run author.package-name
+        <section id="quickstart">
+          <h2>Quick Start</h2>
+          <p>Get up and running with Nex in seconds:</p>
+          
+          <div class="steps">
+            <div class="step">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <h4>Search for a package</h4>
+                <div class="code-block">
+                  <pre><code>nex search markdown</code></pre>
+                </div>
+              </div>
+            </div>
+            
+            <div class="step">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <h4>Install the package</h4>
+                <div class="code-block">
+                  <pre><code>nex install devkiraa.pagepull</code></pre>
+                </div>
+              </div>
+            </div>
+            
+            <div class="step">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <h4>Run the package</h4>
+                <div class="code-block">
+                  <pre><code>nex run devkiraa.pagepull</code></pre>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
 
-# Run a specific command
-nex run author.package-name command-name
+        <section id="commands">
+          <h2>Command Reference</h2>
+          
+          <div class="command-table">
+            <table>
+              <thead>
+                <tr>
+                  <th>Command</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>nex install &lt;package&gt;</code></td>
+                  <td>Install a package from the registry</td>
+                </tr>
+                <tr>
+                  <td><code>nex run &lt;package&gt; [cmd]</code></td>
+                  <td>Run a package command</td>
+                </tr>
+                <tr>
+                  <td><code>nex update [package]</code></td>
+                  <td>Update package(s) to latest version</td>
+                </tr>
+                <tr>
+                  <td><code>nex remove &lt;package&gt;</code></td>
+                  <td>Remove an installed package</td>
+                </tr>
+                <tr>
+                  <td><code>nex list</code></td>
+                  <td>List installed packages</td>
+                </tr>
+                <tr>
+                  <td><code>nex search &lt;query&gt;</code></td>
+                  <td>Search the package registry</td>
+                </tr>
+                <tr>
+                  <td><code>nex info &lt;package&gt;</code></td>
+                  <td>Show package details</td>
+                </tr>
+                <tr>
+                  <td><code>nex --version</code></td>
+                  <td>Show Nex version</td>
+                </tr>
+                <tr>
+                  <td><code>nex --help</code></td>
+                  <td>Show help message</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
 
-# Pass arguments
-nex run author.package-name convert --input file.txt</code></pre>
-      
-      <h3>Managing Packages</h3>
-      <pre><code># List installed packages
-nex list
+        <section id="installing">
+          <h2>Installing Packages</h2>
+          
+          <p>Install packages using the package ID:</p>
+          <div class="code-block">
+            <pre><code>nex install author.package-name</code></pre>
+          </div>
+          
+          <p>Packages are installed to <code>~/.nex/packages/</code> and can be run from anywhere.</p>
+        </section>
 
-# Update a package
-nex update author.package-name
+        <section id="running">
+          <h2>Running Packages</h2>
+          
+          <h3>Default Command</h3>
+          <div class="code-block">
+            <pre><code>nex run author.package-name</code></pre>
+          </div>
+          
+          <h3>Specific Command</h3>
+          <div class="code-block">
+            <pre><code>nex run author.package-name command-name</code></pre>
+          </div>
+          
+          <h3>With Arguments</h3>
+          <div class="code-block">
+            <pre><code>nex run author.package-name convert --input file.txt</code></pre>
+          </div>
+        </section>
 
-# Update all packages
-nex update
+        <section id="managing">
+          <h2>Managing Packages</h2>
+          
+          <div class="code-block">
+            <div class="code-header">List installed packages</div>
+            <pre><code>nex list</code></pre>
+          </div>
+          
+          <div class="code-block">
+            <div class="code-header">Update a specific package</div>
+            <pre><code>nex update author.package-name</code></pre>
+          </div>
+          
+          <div class="code-block">
+            <div class="code-header">Update all packages</div>
+            <pre><code>nex update</code></pre>
+          </div>
+          
+          <div class="code-block">
+            <div class="code-header">Remove a package</div>
+            <pre><code>nex remove author.package-name</code></pre>
+          </div>
+        </section>
 
-# Remove a package
-nex remove author.package-name</code></pre>
-    </section>
-    
-    <section id="commands">
-      <h2>Command Reference</h2>
-      
-      <table>
-        <thead>
-          <tr>
-            <th>Command</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><code>install &lt;package&gt;</code></td>
-            <td>Install a package from the registry</td>
-          </tr>
-          <tr>
-            <td><code>run &lt;package&gt; [cmd]</code></td>
-            <td>Run a package command</td>
-          </tr>
-          <tr>
-            <td><code>update [package]</code></td>
-            <td>Update package(s) to latest version</td>
-          </tr>
-          <tr>
-            <td><code>remove &lt;package&gt;</code></td>
-            <td>Remove an installed package</td>
-          </tr>
-          <tr>
-            <td><code>list</code></td>
-            <td>List installed packages</td>
-          </tr>
-          <tr>
-            <td><code>search &lt;query&gt;</code></td>
-            <td>Search the registry</td>
-          </tr>
-          <tr>
-            <td><code>info &lt;package&gt;</code></td>
-            <td>Show package details</td>
-          </tr>
-          <tr>
-            <td><code>--version, -v</code></td>
-            <td>Show version</td>
-          </tr>
-          <tr>
-            <td><code>--help, -h</code></td>
-            <td>Show help</td>
-          </tr>
-        </tbody>
-      </table>
-    </section>
-    
-    <section id="authoring">
-      <h2>Package Authoring</h2>
-      
-      <h3>Package ID Format</h3>
-      <p>Package IDs follow the format: <code>author.package-name</code></p>
-      <ul>
-        <li>Use lowercase letters, numbers, and hyphens only</li>
-        <li>Author is typically your GitHub username</li>
-        <li>Package name should be descriptive</li>
-      </ul>
-      
-      <h3>Manifest File</h3>
-      <p>Create a <code>manifest.json</code> in your package repository:</p>
-      
-      <pre><code>{`{
+        <section id="creating">
+          <h2>Creating Packages</h2>
+          
+          <h3>Package ID Format</h3>
+          <p>Package IDs follow the format <code>author.package-name</code>:</p>
+          <ul>
+            <li>Use lowercase letters, numbers, and hyphens only</li>
+            <li>Author is typically your GitHub username</li>
+            <li>Package name should be descriptive</li>
+          </ul>
+          
+          <div class="info-box">
+            <strong>Example:</strong> <code>devkiraa.pagepull</code>
+          </div>
+        </section>
+
+        <section id="manifest">
+          <h2>Manifest Schema</h2>
+          
+          <p>Create a <code>nex.json</code> file in your package repository:</p>
+          
+          <div class="code-block">
+            <div class="code-header">nex.json</div>
+            <pre><code>{
   "id": "yourname.your-tool",
   "name": "Your Tool Name",
   "version": "1.0.0",
   "description": "What your tool does",
+  "author": {
+    "name": "Your Name",
+    "github": "yourusername"
+  },
+  "license": "MIT",
   "repository": "https://github.com/yourname/your-tool",
   "runtime": {
     "type": "python",
@@ -154,98 +258,384 @@ nex remove author.package-name</code></pre>
     "default": "python main.py",
     "help": "python main.py --help"
   },
-  "keywords": ["utility", "automation"]
-}`}</code></pre>
-      
-      <h3>Submitting to Registry</h3>
-      <ol>
-        <li>Fork the <a href="https://github.com/devkiraa/nex">nex repository</a></li>
-        <li>Create your manifest at <code>registry/packages/&lt;first-letter&gt;/&lt;author&gt;/&lt;package-name&gt;/manifest.json</code></li>
-        <li>Add your package to <code>registry/index.json</code></li>
-        <li>Submit a Pull Request</li>
-      </ol>
-    </section>
-  </div>
+  "keywords": ["cli", "utility", "tool"],
+  "platforms": ["windows", "linux", "macos"]
+}</code></pre>
+          </div>
+
+          <h3>Required Fields</h3>
+          <div class="field-list">
+            <div class="field">
+              <code>id</code>
+              <span>Unique package identifier (author.name format)</span>
+            </div>
+            <div class="field">
+              <code>name</code>
+              <span>Human-readable package name</span>
+            </div>
+            <div class="field">
+              <code>version</code>
+              <span>Semantic version (e.g., 1.0.0)</span>
+            </div>
+            <div class="field">
+              <code>description</code>
+              <span>Brief description of the package</span>
+            </div>
+            <div class="field">
+              <code>repository</code>
+              <span>GitHub repository URL</span>
+            </div>
+          </div>
+        </section>
+
+        <section id="publishing">
+          <h2>Publishing</h2>
+          
+          <p>To publish your package to the Nex registry:</p>
+          
+          <ol class="publish-steps">
+            <li>Create your tool repository with a valid <code>nex.json</code></li>
+            <li>Fork the <a href="https://github.com/devkiraa/nex" target="_blank">nex repository</a></li>
+            <li>Add your package to <code>registry/index.json</code></li>
+            <li>Create your manifest file in <code>registry/packages/</code></li>
+            <li>Submit a pull request</li>
+          </ol>
+          
+          <a href="https://github.com/devkiraa/nex" class="submit-btn" target="_blank">
+            Submit a Package
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </a>
+        </section>
+      </div>
+    </div>
+  </main>
 </Layout>
 
 <style>
-  .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 2rem 1rem;
+  .docs-hero {
+    background: linear-gradient(135deg, #cb3837 0%, #a02f2e 100%);
+    color: white;
+    padding: 3rem 1rem;
+    text-align: center;
   }
-  
-  h1 {
+
+  .docs-hero h1 {
     font-size: 2.5rem;
-    margin-bottom: 2rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
   }
-  
-  .doc-nav {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    padding: 1rem;
-    background-color: var(--color-bg-secondary);
-    border: 1px solid var(--color-border);
+
+  .docs-hero p {
+    font-size: 1.1rem;
+    opacity: 0.9;
+    margin: 0;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  main.container {
+    padding: 2rem 1rem 4rem;
+  }
+
+  .docs-grid {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 3rem;
+  }
+
+  .docs-nav {
+    position: sticky;
+    top: 2rem;
+    height: fit-content;
+  }
+
+  .docs-nav nav {
+    background: #f7f7f7;
     border-radius: 8px;
-    margin-bottom: 3rem;
+    padding: 1.5rem;
   }
-  
-  section {
-    margin-bottom: 3rem;
+
+  .docs-nav h4 {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #666;
+    margin: 0 0 0.75rem 0;
   }
-  
-  h2 {
+
+  .docs-nav h4:not(:first-child) {
+    margin-top: 1.5rem;
+  }
+
+  .docs-nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .docs-nav li {
+    margin-bottom: 0.5rem;
+  }
+
+  .docs-nav a {
+    color: #333;
+    text-decoration: none;
+    font-size: 0.95rem;
+    display: block;
+    padding: 0.25rem 0;
+    transition: color 0.2s;
+  }
+
+  .docs-nav a:hover {
+    color: #cb3837;
+  }
+
+  .docs-content section {
+    margin-bottom: 3rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #e1e1e1;
+  }
+
+  .docs-content section:last-child {
+    border-bottom: none;
+  }
+
+  .docs-content h2 {
     font-size: 1.75rem;
-    margin-bottom: 1.5rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid var(--color-border);
+    font-weight: 700;
+    color: #333;
+    margin: 0 0 1.5rem 0;
   }
-  
-  h3 {
+
+  .docs-content h3 {
     font-size: 1.25rem;
-    margin: 1.5rem 0 0.75rem;
+    font-weight: 600;
+    color: #333;
+    margin: 1.5rem 0 1rem 0;
   }
-  
-  h4 {
+
+  .docs-content h4 {
     font-size: 1rem;
-    margin: 1rem 0 0.5rem;
-    color: var(--color-text-muted);
+    font-weight: 600;
+    color: #333;
+    margin: 0 0 0.5rem 0;
   }
-  
-  p {
-    margin-bottom: 1rem;
-    color: var(--color-text-muted);
+
+  .docs-content p {
+    color: #444;
+    line-height: 1.7;
+    margin: 0 0 1rem 0;
   }
-  
-  ul, ol {
-    margin-bottom: 1rem;
+
+  .docs-content ul,
+  .docs-content ol {
+    color: #444;
+    line-height: 1.7;
+    margin: 0 0 1rem 0;
     padding-left: 1.5rem;
   }
-  
-  li {
+
+  .docs-content li {
     margin-bottom: 0.5rem;
-    color: var(--color-text-muted);
   }
-  
-  pre {
-    margin-bottom: 1rem;
+
+  .download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #cb3837;
+    color: white;
+    padding: 0.75rem 1.25rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    margin: 1rem 0;
+    transition: background 0.2s;
   }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
+
+  .download-btn:hover {
+    background: #a02f2e;
+  }
+
+  .download-btn svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .code-block {
+    background: #1a1a2e;
+    border-radius: 8px;
+    overflow: hidden;
     margin: 1rem 0;
   }
-  
-  th, td {
-    text-align: left;
-    padding: 0.75rem;
-    border-bottom: 1px solid var(--color-border);
+
+  .code-header {
+    background: rgba(255,255,255,0.05);
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    color: #888;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
   }
-  
-  th {
-    background-color: var(--color-bg-secondary);
+
+  .code-block pre {
+    margin: 0;
+    padding: 1rem;
+    overflow-x: auto;
+  }
+
+  .code-block code {
+    color: #00d9ff;
+    font-family: 'SF Mono', Monaco, 'Courier New', monospace;
+    font-size: 0.9rem;
+  }
+
+  code:not(.code-block code) {
+    background: #f0f0f0;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: #cb3837;
+  }
+
+  .steps {
+    margin-top: 1.5rem;
+  }
+
+  .step {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .step-number {
+    width: 32px;
+    height: 32px;
+    background: #cb3837;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .step-content {
+    flex: 1;
+  }
+
+  .command-table {
+    overflow-x: auto;
+    margin: 1rem 0;
+  }
+
+  .command-table table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border: 1px solid #e1e1e1;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .command-table th,
+  .command-table td {
+    text-align: left;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid #e1e1e1;
+  }
+
+  .command-table th {
+    background: #f7f7f7;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .command-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .info-box {
+    background: #e8f4fd;
+    border-left: 4px solid #2196f3;
+    padding: 1rem 1.25rem;
+    border-radius: 0 6px 6px 0;
+    margin: 1rem 0;
+  }
+
+  .field-list {
+    margin: 1rem 0;
+  }
+
+  .field {
+    display: flex;
+    gap: 1rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid #e1e1e1;
+  }
+
+  .field code {
+    min-width: 120px;
+    font-weight: 500;
+  }
+
+  .field span {
+    color: #666;
+  }
+
+  .publish-steps {
+    margin: 1rem 0 2rem 0;
+  }
+
+  .publish-steps li {
+    padding: 0.5rem 0;
+  }
+
+  .submit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #333;
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.2s;
+  }
+
+  .submit-btn:hover {
+    background: #cb3837;
+  }
+
+  .submit-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  @media (max-width: 900px) {
+    .docs-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .docs-nav {
+      position: static;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .docs-hero h1 {
+      font-size: 1.75rem;
+    }
+
+    .step {
+      flex-direction: column;
+    }
   }
 </style>

@@ -1,11 +1,12 @@
 ---
-// Base layout for all pages
+// Base layout for all pages - npm-inspired design
 export interface Props {
   title: string;
   description?: string;
+  showSearch?: boolean;
 }
 
-const { title, description = 'Nimble Executor - Package manager for developer tools' } = Astro.props;
+const { title, description = 'Nex - Package manager for developer tools', showSearch = true } = Astro.props;
 const baseUrl = import.meta.env.BASE_URL;
 ---
 
@@ -16,18 +17,28 @@ const baseUrl = import.meta.env.BASE_URL;
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href={`${baseUrl}favicon.svg`} />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
     <title>{title} | Nex</title>
     <style is:global>
       :root {
-        --color-bg: #0d1117;
-        --color-bg-secondary: #161b22;
-        --color-border: #30363d;
-        --color-text: #c9d1d9;
-        --color-text-muted: #8b949e;
-        --color-primary: #58a6ff;
-        --color-success: #3fb950;
-        --color-warning: #d29922;
-        --font-mono: 'SF Mono', 'Cascadia Code', Consolas, monospace;
+        --nex-red: #cb3837;
+        --nex-red-dark: #a82726;
+        --nex-red-light: #fb3e44;
+        --nex-black: #231f20;
+        --nex-dark: #333333;
+        --nex-gray: #757575;
+        --nex-gray-light: #c2c2c2;
+        --nex-bg: #f7f7f7;
+        --nex-white: #ffffff;
+        --nex-border: #e0e0e0;
+        --nex-success: #00c642;
+        --nex-link: #196cb2;
+        --font-main: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        --font-mono: 'Fira Code', 'SF Mono', Consolas, monospace;
+        --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+        --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+        --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+        --radius: 8px;
       }
       
       * {
@@ -37,112 +48,373 @@ const baseUrl = import.meta.env.BASE_URL;
       }
       
       body {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-        background-color: var(--color-bg);
-        color: var(--color-text);
+        font-family: var(--font-main);
+        background-color: var(--nex-bg);
+        color: var(--nex-black);
         line-height: 1.6;
+        font-size: 16px;
       }
       
       a {
-        color: var(--color-primary);
+        color: var(--nex-link);
         text-decoration: none;
+        transition: color 0.2s;
       }
       
       a:hover {
+        color: var(--nex-red);
         text-decoration: underline;
       }
       
       code {
         font-family: var(--font-mono);
-        background-color: var(--color-bg-secondary);
-        padding: 0.2em 0.4em;
+        background-color: #f0f0f0;
+        padding: 0.2em 0.5em;
         border-radius: 4px;
         font-size: 0.9em;
+        color: var(--nex-dark);
       }
       
       pre {
-        background-color: var(--color-bg-secondary);
-        border: 1px solid var(--color-border);
-        border-radius: 8px;
-        padding: 1rem;
+        background-color: var(--nex-black);
+        color: #fff;
+        border-radius: var(--radius);
+        padding: 1rem 1.25rem;
         overflow-x: auto;
+        font-size: 0.9rem;
       }
       
       pre code {
         background: none;
         padding: 0;
+        color: inherit;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius);
+        font-weight: 600;
+        font-size: 1rem;
+        text-decoration: none;
+        transition: all 0.2s;
+        cursor: pointer;
+        border: none;
+      }
+
+      .btn-primary {
+        background-color: var(--nex-red);
+        color: white;
+      }
+
+      .btn-primary:hover {
+        background-color: var(--nex-red-dark);
+        color: white;
+        text-decoration: none;
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+      }
+
+      .btn-secondary {
+        background-color: var(--nex-white);
+        color: var(--nex-dark);
+        border: 2px solid var(--nex-border);
+      }
+
+      .btn-secondary:hover {
+        border-color: var(--nex-red);
+        color: var(--nex-red);
+        text-decoration: none;
+      }
+
+      .btn-dark {
+        background-color: var(--nex-black);
+        color: white;
+      }
+
+      .btn-dark:hover {
+        background-color: #000;
+        color: white;
+        text-decoration: none;
       }
     </style>
   </head>
   <body>
-    <header>
-      <nav class="container">
-        <a href={baseUrl} class="logo">⚡ Nex</a>
-        <div class="nav-links">
-          <a href={`${baseUrl}`}>Home</a>
-          <a href={`${baseUrl}packages`}>Packages</a>
-          <a href={`${baseUrl}docs`}>Docs</a>
-          <a href="https://github.com/devkiraa/nex" target="_blank">GitHub</a>
+    <header class="header">
+      <div class="header-top">
+        <div class="container header-container">
+          <a href={baseUrl} class="logo">
+            <span class="logo-icon">⚡</span>
+            <span class="logo-text">nex</span>
+          </a>
+          
+          {showSearch && (
+            <div class="search-container">
+              <form action={`${baseUrl}packages`} method="get" class="search-form">
+                <input 
+                  type="search" 
+                  name="q" 
+                  placeholder="Search packages..." 
+                  class="search-input"
+                  autocomplete="off"
+                />
+                <button type="submit" class="search-btn">Search</button>
+              </form>
+            </div>
+          )}
+          
+          <nav class="nav-links">
+            <a href={`${baseUrl}packages`}>Packages</a>
+            <a href={`${baseUrl}docs`}>Documentation</a>
+            <a href="https://github.com/devkiraa/nex" target="_blank" class="github-link">
+              <svg viewBox="0 0 16 16" width="20" height="20" fill="currentColor">
+                <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+              </svg>
+            </a>
+          </nav>
         </div>
-      </nav>
+      </div>
     </header>
     
     <main>
       <slot />
     </main>
     
-    <footer>
+    <footer class="footer">
       <div class="container">
-        <p>&copy; 2025 Nex Contributors. MIT License.</p>
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <span class="footer-logo">⚡ nex</span>
+            <p>Nimble Executor</p>
+            <p class="footer-tagline">Package manager for developer tools</p>
+          </div>
+          <div class="footer-col">
+            <h4>Resources</h4>
+            <a href={`${baseUrl}docs`}>Documentation</a>
+            <a href={`${baseUrl}packages`}>Browse Packages</a>
+            <a href="https://github.com/devkiraa/nex/releases">Releases</a>
+          </div>
+          <div class="footer-col">
+            <h4>Community</h4>
+            <a href="https://github.com/devkiraa/nex">GitHub</a>
+            <a href="https://github.com/devkiraa/nex/issues">Report Issues</a>
+            <a href="https://github.com/devkiraa/nex/blob/main/CONTRIBUTING.md">Contributing</a>
+          </div>
+          <div class="footer-col">
+            <h4>Legal</h4>
+            <a href="https://github.com/devkiraa/nex/blob/main/LICENSE">MIT License</a>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 Nex Contributors</p>
+        </div>
       </div>
     </footer>
     
     <style>
-      header {
-        background-color: var(--color-bg-secondary);
-        border-bottom: 1px solid var(--color-border);
-        padding: 1rem 0;
+      .header {
+        background-color: var(--nex-white);
+        box-shadow: var(--shadow-sm);
+        position: sticky;
+        top: 0;
+        z-index: 100;
       }
       
-      nav {
+      .header-top {
+        padding: 0.75rem 0;
+      }
+      
+      .header-container {
         display: flex;
-        justify-content: space-between;
         align-items: center;
+        gap: 2rem;
       }
       
       .logo {
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: var(--color-text);
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
+        text-decoration: none;
+        flex-shrink: 0;
       }
       
       .logo:hover {
         text-decoration: none;
-        color: var(--color-primary);
+      }
+      
+      .logo-icon {
+        font-size: 1.75rem;
+      }
+      
+      .logo-text {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--nex-red);
+        letter-spacing: -0.5px;
+      }
+      
+      .search-container {
+        flex: 1;
+        max-width: 600px;
+      }
+      
+      .search-form {
+        display: flex;
+        width: 100%;
+      }
+      
+      .search-input {
+        flex: 1;
+        padding: 0.75rem 1rem;
+        border: 2px solid var(--nex-border);
+        border-right: none;
+        border-radius: var(--radius) 0 0 var(--radius);
+        font-size: 1rem;
+        font-family: inherit;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+      
+      .search-input:focus {
+        border-color: var(--nex-red);
+      }
+      
+      .search-btn {
+        padding: 0.75rem 1.5rem;
+        background-color: var(--nex-black);
+        color: white;
+        border: none;
+        border-radius: 0 var(--radius) var(--radius) 0;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+      
+      .search-btn:hover {
+        background-color: var(--nex-red);
       }
       
       .nav-links {
         display: flex;
-        gap: 2rem;
+        align-items: center;
+        gap: 1.5rem;
+        flex-shrink: 0;
       }
       
-      .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 0 1rem;
+      .nav-links a {
+        color: var(--nex-dark);
+        font-weight: 500;
+        font-size: 0.95rem;
+      }
+      
+      .nav-links a:hover {
+        color: var(--nex-red);
+        text-decoration: none;
+      }
+      
+      .github-link {
+        display: flex;
+        align-items: center;
+        color: var(--nex-dark);
+      }
+      
+      .github-link:hover {
+        color: var(--nex-red);
       }
       
       main {
-        min-height: calc(100vh - 180px);
+        min-height: calc(100vh - 300px);
       }
       
-      footer {
-        background-color: var(--color-bg-secondary);
-        border-top: 1px solid var(--color-border);
-        padding: 2rem 0;
+      .footer {
+        background-color: var(--nex-black);
+        color: var(--nex-white);
+        padding: 4rem 0 2rem;
         margin-top: 4rem;
+      }
+      
+      .footer-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr 1fr;
+        gap: 3rem;
+        margin-bottom: 3rem;
+      }
+      
+      .footer-brand {
+        color: var(--nex-gray-light);
+      }
+      
+      .footer-logo {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--nex-white);
+      }
+      
+      .footer-tagline {
+        margin-top: 0.5rem;
+        font-size: 0.9rem;
+      }
+      
+      .footer-col h4 {
+        color: var(--nex-white);
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 1rem;
+      }
+      
+      .footer-col a {
+        display: block;
+        color: var(--nex-gray-light);
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+      }
+      
+      .footer-col a:hover {
+        color: var(--nex-white);
+        text-decoration: none;
+      }
+      
+      .footer-bottom {
+        border-top: 1px solid rgba(255,255,255,0.1);
+        padding-top: 2rem;
         text-align: center;
-        color: var(--color-text-muted);
+        color: var(--nex-gray);
+        font-size: 0.9rem;
+      }
+      
+      @media (max-width: 768px) {
+        .header-container {
+          flex-wrap: wrap;
+        }
+        
+        .search-container {
+          order: 3;
+          flex-basis: 100%;
+          max-width: none;
+          margin-top: 0.75rem;
+        }
+        
+        .nav-links {
+          gap: 1rem;
+        }
+        
+        .footer-grid {
+          grid-template-columns: 1fr 1fr;
+          gap: 2rem;
+        }
+        
+        .footer-brand {
+          grid-column: span 2;
+        }
       }
     </style>
   </body>
