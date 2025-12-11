@@ -1,0 +1,251 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Documentation">
+  <div class="container">
+    <h1>📚 Documentation</h1>
+    
+    <nav class="doc-nav">
+      <a href="#installation">Installation</a>
+      <a href="#usage">Usage</a>
+      <a href="#commands">Commands</a>
+      <a href="#authoring">Package Authoring</a>
+    </nav>
+    
+    <section id="installation">
+      <h2>Installation</h2>
+      
+      <h3>Download</h3>
+      <p>Download the latest <code>nex.exe</code> from the 
+        <a href="https://github.com/yourorg/nex/releases">GitHub Releases</a> page.
+      </p>
+      
+      <h3>Add to PATH</h3>
+      <p>Add the directory containing <code>nex.exe</code> to your system PATH:</p>
+      
+      <h4>Windows</h4>
+      <ol>
+        <li>Open System Properties → Advanced → Environment Variables</li>
+        <li>Under "System variables", find and select "Path"</li>
+        <li>Click "Edit" and add the directory path</li>
+        <li>Click "OK" to save</li>
+      </ol>
+      
+      <h4>Linux/macOS</h4>
+      <pre><code>sudo cp nex /usr/local/bin/
+chmod +x /usr/local/bin/nex</code></pre>
+      
+      <h3>Verify Installation</h3>
+      <pre><code>nex --version</code></pre>
+    </section>
+    
+    <section id="usage">
+      <h2>Usage</h2>
+      
+      <h3>Installing Packages</h3>
+      <pre><code># Install a package
+nex install author.package-name
+
+# Example
+nex install example.hello-world</code></pre>
+      
+      <h3>Running Packages</h3>
+      <pre><code># Run the default command
+nex run author.package-name
+
+# Run a specific command
+nex run author.package-name command-name
+
+# Pass arguments
+nex run author.package-name convert --input file.txt</code></pre>
+      
+      <h3>Managing Packages</h3>
+      <pre><code># List installed packages
+nex list
+
+# Update a package
+nex update author.package-name
+
+# Update all packages
+nex update
+
+# Remove a package
+nex remove author.package-name</code></pre>
+    </section>
+    
+    <section id="commands">
+      <h2>Command Reference</h2>
+      
+      <table>
+        <thead>
+          <tr>
+            <th>Command</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>install &lt;package&gt;</code></td>
+            <td>Install a package from the registry</td>
+          </tr>
+          <tr>
+            <td><code>run &lt;package&gt; [cmd]</code></td>
+            <td>Run a package command</td>
+          </tr>
+          <tr>
+            <td><code>update [package]</code></td>
+            <td>Update package(s) to latest version</td>
+          </tr>
+          <tr>
+            <td><code>remove &lt;package&gt;</code></td>
+            <td>Remove an installed package</td>
+          </tr>
+          <tr>
+            <td><code>list</code></td>
+            <td>List installed packages</td>
+          </tr>
+          <tr>
+            <td><code>search &lt;query&gt;</code></td>
+            <td>Search the registry</td>
+          </tr>
+          <tr>
+            <td><code>info &lt;package&gt;</code></td>
+            <td>Show package details</td>
+          </tr>
+          <tr>
+            <td><code>--version, -v</code></td>
+            <td>Show version</td>
+          </tr>
+          <tr>
+            <td><code>--help, -h</code></td>
+            <td>Show help</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+    
+    <section id="authoring">
+      <h2>Package Authoring</h2>
+      
+      <h3>Package ID Format</h3>
+      <p>Package IDs follow the format: <code>author.package-name</code></p>
+      <ul>
+        <li>Use lowercase letters, numbers, and hyphens only</li>
+        <li>Author is typically your GitHub username</li>
+        <li>Package name should be descriptive</li>
+      </ul>
+      
+      <h3>Manifest File</h3>
+      <p>Create a <code>manifest.json</code> in your package repository:</p>
+      
+      <pre><code>{`{
+  "id": "yourname.your-tool",
+  "name": "Your Tool Name",
+  "version": "1.0.0",
+  "description": "What your tool does",
+  "repository": "https://github.com/yourname/your-tool",
+  "runtime": {
+    "type": "python",
+    "version": ">=3.8"
+  },
+  "entrypoint": "main.py",
+  "commands": {
+    "default": "python main.py",
+    "help": "python main.py --help"
+  },
+  "keywords": ["utility", "automation"]
+}`}</code></pre>
+      
+      <h3>Submitting to Registry</h3>
+      <ol>
+        <li>Fork the <a href="https://github.com/yourorg/nex">nex repository</a></li>
+        <li>Create your manifest at <code>registry/packages/&lt;first-letter&gt;/&lt;author&gt;/&lt;package-name&gt;/manifest.json</code></li>
+        <li>Add your package to <code>registry/index.json</code></li>
+        <li>Submit a Pull Request</li>
+      </ol>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .doc-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem;
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    margin-bottom: 3rem;
+  }
+  
+  section {
+    margin-bottom: 3rem;
+  }
+  
+  h2 {
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+  
+  h3 {
+    font-size: 1.25rem;
+    margin: 1.5rem 0 0.75rem;
+  }
+  
+  h4 {
+    font-size: 1rem;
+    margin: 1rem 0 0.5rem;
+    color: var(--color-text-muted);
+  }
+  
+  p {
+    margin-bottom: 1rem;
+    color: var(--color-text-muted);
+  }
+  
+  ul, ol {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+  }
+  
+  li {
+    margin-bottom: 0.5rem;
+    color: var(--color-text-muted);
+  }
+  
+  pre {
+    margin-bottom: 1rem;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+  }
+  
+  th, td {
+    text-align: left;
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+  
+  th {
+    background-color: var(--color-bg-secondary);
+    font-weight: 600;
+  }
+</style>

@@ -1,0 +1,138 @@
+name: Build CLI
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'cli/**'
+      - '.github/workflows/build-cli.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'cli/**'
+  release:
+    types: [created]
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Setup vcpkg
+        uses: lukka/run-vcpkg@v11
+        with:
+          vcpkgGitCommitId: 'a34c873a9717a888f58dc05268dea15592c2f0ff'
+      
+      - name: Install dependencies
+        run: |
+          vcpkg install curl:x64-windows-static
+      
+      - name: Configure CMake
+        run: |
+          cd cli
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_TOOLCHAIN_FILE=$env:VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-static -DCMAKE_BUILD_TYPE=Release
+      
+      - name: Build
+        run: |
+          cd cli/build
+          cmake --build . --config Release
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nex-windows-x64
+          path: cli/build/Release/nex.exe
+      
+      - name: Upload to Release
+        if: github.event_name == 'release'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: cli/build/Release/nex.exe
+          asset_name: nex-windows-x64.exe
+          asset_content_type: application/octet-stream
+
+  build-linux:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake libcurl4-openssl-dev
+      
+      - name: Configure CMake
+        run: |
+          cd cli
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release
+      
+      - name: Build
+        run: |
+          cd cli/build
+          cmake --build .
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nex-linux-x64
+          path: cli/build/nex
+      
+      - name: Upload to Release
+        if: github.event_name == 'release'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: cli/build/nex
+          asset_name: nex-linux-x64
+          asset_content_type: application/octet-stream
+
+  build-macos:
+    runs-on: macos-latest
+    
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Install dependencies
+        run: |
+          brew install cmake curl
+      
+      - name: Configure CMake
+        run: |
+          cd cli
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release
+      
+      - name: Build
+        run: |
+          cd cli/build
+          cmake --build .
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nex-macos-x64
+          path: cli/build/nex
+      
+      - name: Upload to Release
+        if: github.event_name == 'release'
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: cli/build/nex
+          asset_name: nex-macos-x64
+          asset_content_type: application/octet-stream

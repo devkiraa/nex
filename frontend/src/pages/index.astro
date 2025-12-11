@@ -1,0 +1,382 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Fetch packages from registry (at build time)
+const registryUrl = 'https://raw.githubusercontent.com/yourorg/nex/main/registry/index.json';
+let packages = [];
+let error = null;
+
+try {
+  // In development, use local data
+  if (import.meta.env.DEV) {
+    // Use sample data for development
+    packages = [
+      {
+        id: 'example.hello-world',
+        name: 'Hello World',
+        version: '1.0.0',
+        description: 'A simple example package demonstrating nex structure',
+        keywords: ['example', 'demo', 'hello']
+      }
+    ];
+  } else {
+    const response = await fetch(registryUrl);
+    const data = await response.json();
+    packages = data.packages || [];
+  }
+} catch (e) {
+  error = e.message;
+  packages = [];
+}
+---
+
+<Layout title="Home">
+  <section class="hero">
+    <div class="container">
+      <h1>⚡ Nex</h1>
+      <p class="tagline">Nimble Executor - Package manager for developer tools</p>
+      
+      <div class="install-box">
+        <p class="label">Quick Install</p>
+        <div class="command">
+          <code>nex install author.package-name</code>
+          <button class="copy-btn" data-copy="nex install author.package-name">📋</button>
+        </div>
+      </div>
+      
+      <div class="cta-buttons">
+        <a href={`${import.meta.env.BASE_URL}packages`} class="btn btn-primary">Browse Packages</a>
+        <a href="https://github.com/yourorg/nex/releases" class="btn btn-secondary">Download CLI</a>
+      </div>
+    </div>
+  </section>
+  
+  <section class="features">
+    <div class="container">
+      <h2>Features</h2>
+      <div class="feature-grid">
+        <div class="feature">
+          <span class="icon">🚀</span>
+          <h3>Single Executable</h3>
+          <p>One .exe added to PATH. Works anywhere, no dependencies.</p>
+        </div>
+        <div class="feature">
+          <span class="icon">📦</span>
+          <h3>GitHub-Backed</h3>
+          <p>No database needed. Packages are JSON manifests in a GitHub repo.</p>
+        </div>
+        <div class="feature">
+          <span class="icon">🔧</span>
+          <h3>Multi-Runtime</h3>
+          <p>Python, Node.js, PowerShell, Bash, and more.</p>
+        </div>
+        <div class="feature">
+          <span class="icon">🤝</span>
+          <h3>Open Source</h3>
+          <p>Anyone can submit packages via Pull Request.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section class="quick-start">
+    <div class="container">
+      <h2>Quick Start</h2>
+      <div class="steps">
+        <div class="step">
+          <span class="step-num">1</span>
+          <h3>Download</h3>
+          <p>Get the latest <code>nex.exe</code> from GitHub Releases</p>
+        </div>
+        <div class="step">
+          <span class="step-num">2</span>
+          <h3>Add to PATH</h3>
+          <p>Add the executable location to your system PATH</p>
+        </div>
+        <div class="step">
+          <span class="step-num">3</span>
+          <h3>Install Packages</h3>
+          <pre><code>nex install example.hello-world
+nex run example.hello-world</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <section class="recent-packages">
+    <div class="container">
+      <h2>Available Packages</h2>
+      {error && <p class="error">Failed to load packages: {error}</p>}
+      {packages.length === 0 && !error && <p>No packages available yet.</p>}
+      <div class="package-grid">
+        {packages.map((pkg) => (
+          <a href={`${import.meta.env.BASE_URL}packages/${pkg.id}`} class="package-card">
+            <h3>{pkg.name}</h3>
+            <p class="package-id">{pkg.id}</p>
+            <p class="description">{pkg.description}</p>
+            <div class="meta">
+              <span class="version">v{pkg.version}</span>
+              {pkg.keywords && pkg.keywords.slice(0, 3).map((kw) => (
+                <span class="keyword">{kw}</span>
+              ))}
+            </div>
+          </a>
+        ))}
+      </div>
+      <p class="view-all">
+        <a href={`${import.meta.env.BASE_URL}packages`}>View all packages →</a>
+      </p>
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero {
+    text-align: center;
+    padding: 4rem 0;
+    background: linear-gradient(180deg, var(--color-bg-secondary) 0%, var(--color-bg) 100%);
+  }
+  
+  .hero h1 {
+    font-size: 3rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .tagline {
+    font-size: 1.5rem;
+    color: var(--color-text-muted);
+    margin-bottom: 2rem;
+  }
+  
+  .install-box {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    display: inline-block;
+    margin-bottom: 2rem;
+  }
+  
+  .install-box .label {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.5rem;
+  }
+  
+  .command {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .command code {
+    font-size: 1.1rem;
+    padding: 0.5rem 1rem;
+  }
+  
+  .copy-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+  
+  .copy-btn:hover {
+    opacity: 1;
+  }
+  
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+  }
+  
+  .btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 6px;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+  
+  .btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+  }
+  
+  .btn-primary:hover {
+    background-color: #4090e0;
+    text-decoration: none;
+  }
+  
+  .btn-secondary {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    color: var(--color-text);
+  }
+  
+  .btn-secondary:hover {
+    border-color: var(--color-text-muted);
+    text-decoration: none;
+  }
+  
+  .features, .quick-start, .recent-packages {
+    padding: 4rem 0;
+  }
+  
+  .features h2, .quick-start h2, .recent-packages h2 {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+  }
+  
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+  }
+  
+  .feature {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+  }
+  
+  .feature .icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 1rem;
+  }
+  
+  .feature h3 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .feature p {
+    color: var(--color-text-muted);
+  }
+  
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+  }
+  
+  .step {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 1.5rem;
+  }
+  
+  .step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    background-color: var(--color-primary);
+    color: white;
+    border-radius: 50%;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+  
+  .step h3 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .step pre {
+    margin-top: 1rem;
+  }
+  
+  .package-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+  }
+  
+  .package-card {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    display: block;
+    color: var(--color-text);
+    transition: border-color 0.2s;
+  }
+  
+  .package-card:hover {
+    border-color: var(--color-primary);
+    text-decoration: none;
+  }
+  
+  .package-card h3 {
+    margin-bottom: 0.25rem;
+  }
+  
+  .package-id {
+    font-family: var(--font-mono);
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    margin-bottom: 0.5rem;
+  }
+  
+  .description {
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+  }
+  
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .version {
+    background-color: var(--color-bg);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    color: var(--color-success);
+  }
+  
+  .keyword {
+    background-color: var(--color-bg);
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+  }
+  
+  .view-all {
+    text-align: center;
+    margin-top: 2rem;
+  }
+  
+  .error {
+    color: #f85149;
+    text-align: center;
+  }
+  
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+</style>
+
+<script>
+  // Copy to clipboard functionality
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const text = btn.getAttribute('data-copy');
+      navigator.clipboard.writeText(text);
+      btn.textContent = '✓';
+      setTimeout(() => btn.textContent = '📋', 2000);
+    });
+  });
+</script>

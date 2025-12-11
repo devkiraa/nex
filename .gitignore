@@ -1,0 +1,31 @@
+# Build outputs
+cli/build/
+cli/*.exe
+cli/*.obj
+cli/*.o
+
+# Dependencies
+frontend/node_modules/
+frontend/.astro/
+frontend/dist/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local nex data (for testing)
+.nex/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Environment
+.env
+.env.local

@@ -1,0 +1,349 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  // Fetch package list
+  const registryUrl = 'https://raw.githubusercontent.com/yourorg/nex/main/registry/index.json';
+  let packages = [];
+  
+  try {
+    if (import.meta.env.DEV) {
+      packages = [
+        {
+          id: 'example.hello-world',
+          name: 'Hello World',
+          version: '1.0.0',
+          description: 'A simple example package demonstrating nex structure',
+          keywords: ['example', 'demo', 'hello'],
+          manifest: 'packages/e/example/hello-world/manifest.json'
+        }
+      ];
+    } else {
+      const response = await fetch(registryUrl);
+      const data = await response.json();
+      packages = data.packages || [];
+    }
+  } catch (e) {
+    packages = [];
+  }
+  
+  return packages.map(pkg => ({
+    params: { id: pkg.id },
+    props: { package: pkg }
+  }));
+}
+
+const { id } = Astro.params;
+const { package: pkg } = Astro.props;
+
+// Fetch full manifest for more details
+const manifestUrl = `https://raw.githubusercontent.com/yourorg/nex/main/registry/${pkg.manifest}`;
+let manifest = null;
+
+try {
+  if (import.meta.env.DEV) {
+    manifest = {
+      id: 'example.hello-world',
+      name: 'Hello World',
+      version: '1.0.0',
+      description: 'A simple example package demonstrating nex structure. Prints a greeting message.',
+      author: { name: 'Nex Team', github: 'yourorg' },
+      license: 'MIT',
+      repository: 'https://github.com/yourorg/example-hello-world',
+      runtime: { type: 'python', version: '>=3.6' },
+      entrypoint: 'main.py',
+      commands: {
+        default: 'python main.py',
+        greet: 'python main.py greet',
+        help: 'python main.py --help'
+      },
+      keywords: ['example', 'demo', 'hello', 'starter'],
+      platforms: ['windows', 'linux', 'macos']
+    };
+  } else {
+    const response = await fetch(manifestUrl);
+    manifest = await response.json();
+  }
+} catch (e) {
+  manifest = pkg;
+}
+---
+
+<Layout title={manifest.name} description={manifest.description}>
+  <div class="container">
+    <nav class="breadcrumb">
+      <a href={`${import.meta.env.BASE_URL}packages`}>← Back to Packages</a>
+    </nav>
+    
+    <header class="package-header">
+      <div class="title-row">
+        <h1>{manifest.name}</h1>
+        <span class="version">v{manifest.version}</span>
+      </div>
+      <code class="package-id">{manifest.id}</code>
+      <p class="description">{manifest.description}</p>
+    </header>
+    
+    <section class="install-section">
+      <h2>Installation</h2>
+      <div class="command-box">
+        <pre><code>nex install {manifest.id}</code></pre>
+        <button class="copy-btn" data-copy={`nex install ${manifest.id}`}>📋 Copy</button>
+      </div>
+    </section>
+    
+    <section class="usage-section">
+      <h2>Usage</h2>
+      <div class="command-box">
+        <pre><code>nex run {manifest.id}</code></pre>
+        <button class="copy-btn" data-copy={`nex run ${manifest.id}`}>📋 Copy</button>
+      </div>
+      
+      {manifest.commands && Object.keys(manifest.commands).length > 0 && (
+        <div class="commands-list">
+          <h3>Available Commands</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Command</th>
+                <th>Runs</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.entries(manifest.commands).map(([name, cmd]) => (
+                <tr>
+                  <td><code>nex run {manifest.id} {name}</code></td>
+                  <td><code>{cmd}</code></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </section>
+    
+    <section class="details-section">
+      <h2>Details</h2>
+      <dl class="details-grid">
+        {manifest.author && (
+          <>
+            <dt>Author</dt>
+            <dd>
+              {typeof manifest.author === 'string' ? manifest.author : manifest.author.name}
+              {manifest.author.github && (
+                <a href={`https://github.com/${manifest.author.github}`} target="_blank">
+                  @{manifest.author.github}
+                </a>
+              )}
+            </dd>
+          </>
+        )}
+        
+        {manifest.license && (
+          <>
+            <dt>License</dt>
+            <dd>{manifest.license}</dd>
+          </>
+        )}
+        
+        {manifest.runtime && (
+          <>
+            <dt>Runtime</dt>
+            <dd>
+              {manifest.runtime.type}
+              {manifest.runtime.version && ` ${manifest.runtime.version}`}
+            </dd>
+          </>
+        )}
+        
+        {manifest.repository && (
+          <>
+            <dt>Repository</dt>
+            <dd><a href={manifest.repository} target="_blank">{manifest.repository}</a></dd>
+          </>
+        )}
+        
+        {manifest.platforms && (
+          <>
+            <dt>Platforms</dt>
+            <dd>{manifest.platforms.join(', ')}</dd>
+          </>
+        )}
+      </dl>
+    </section>
+    
+    {manifest.keywords && manifest.keywords.length > 0 && (
+      <section class="keywords-section">
+        <h2>Keywords</h2>
+        <div class="keywords">
+          {manifest.keywords.map(kw => (
+            <span class="keyword">{kw}</span>
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+</Layout>
+
+<style>
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+  
+  .breadcrumb {
+    margin-bottom: 2rem;
+  }
+  
+  .package-header {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+  
+  .title-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .title-row h1 {
+    font-size: 2rem;
+    margin: 0;
+  }
+  
+  .version {
+    background-color: rgba(63, 185, 80, 0.2);
+    color: var(--color-success);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+  
+  .package-id {
+    font-size: 1rem;
+    color: var(--color-text-muted);
+    display: block;
+    margin-bottom: 1rem;
+  }
+  
+  .description {
+    font-size: 1.1rem;
+    color: var(--color-text-muted);
+  }
+  
+  section {
+    margin-bottom: 2rem;
+  }
+  
+  section h2 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+  
+  .command-box {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .command-box pre {
+    flex: 1;
+    margin: 0;
+    border: none;
+    padding: 0;
+    background: none;
+  }
+  
+  .copy-btn {
+    background-color: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    padding: 0.5rem 1rem;
+    color: var(--color-text);
+    cursor: pointer;
+    font-size: 0.875rem;
+    transition: all 0.2s;
+  }
+  
+  .copy-btn:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+  }
+  
+  .commands-list {
+    margin-top: 1.5rem;
+  }
+  
+  .commands-list h3 {
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    text-align: left;
+    padding: 0.75rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+  
+  th {
+    color: var(--color-text-muted);
+    font-weight: 500;
+  }
+  
+  .details-grid {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 0.75rem;
+  }
+  
+  .details-grid dt {
+    color: var(--color-text-muted);
+    font-weight: 500;
+  }
+  
+  .details-grid dd {
+    margin: 0;
+  }
+  
+  .keywords {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .keyword {
+    background-color: var(--color-bg-secondary);
+    border: 1px solid var(--color-border);
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+  }
+</style>
+
+<script>
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const text = btn.getAttribute('data-copy');
+      navigator.clipboard.writeText(text);
+      const original = btn.textContent;
+      btn.textContent = '✓ Copied!';
+      setTimeout(() => btn.textContent = original, 2000);
+    });
+  });
+</script>
