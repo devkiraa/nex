@@ -10,6 +10,14 @@
       "description": "A simple example package demonstrating nex structure",
       "keywords": ["example", "demo", "hello"],
       "manifest": "packages/e/example/hello-world/manifest.json"
+    },
+    {
+      "id": "devkiraa.pagepull",
+      "name": "PagePull",
+      "version": "0.0.1",
+      "description": "Pull entire websites for offline viewing. Single-file CLI tool with stealth mode and local server preview.",
+      "keywords": ["website", "downloader", "offline", "scraper", "web", "backup"],
+      "manifest": "packages/d/devkiraa/pagepull/manifest.json"
     }
   ]
 }

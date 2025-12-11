@@ -245,3 +245,141 @@ To release a new version:
    - `index.json` with new version
 
 Users can then run `nex update` to get the latest version.
+
+## The nex.json File
+
+You can optionally add a `nex.json` file to your tool's repository. This file tells Nex exactly how to install and run your tool.
+
+### Why use nex.json?
+
+- **Self-documenting**: Your repo contains all the info Nex needs
+- **Version control**: Update run configuration with your code
+- **Discoverability**: Nex can auto-detect tools with `nex.json`
+- **Simpler registry**: The registry manifest can reference your `nex.json`
+
+### nex.json Structure
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/devkiraa/nex/main/registry/schema/nex-package.schema.json",
+  "id": "author.package-name",
+  "name": "My Tool",
+  "version": "1.0.0",
+  "description": "What the tool does",
+  "type": "python",
+  
+  "python": {
+    "version": ">=3.8",
+    "entry": "main.py",
+    "requirements": "requirements.txt"
+  },
+  
+  "run": {
+    "command": "python",
+    "args": ["main.py"],
+    "passthrough_args": true
+  },
+  
+  "author": {
+    "name": "Your Name",
+    "github": "yourusername"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/yourusername/my-tool"
+}
+```
+
+### Package Types
+
+| Type | Description | Requirements |
+|------|-------------|--------------|
+| `python` | Python script | `python` section with `entry` and optional `requirements` |
+| `node` | Node.js app | `node` section with `entry` and optional `package_manager` |
+| `binary` | Native executable | `binary` section with platform-specific executables |
+| `script` | Shell script | Direct execution |
+
+### Example: Python Tool (PagePull)
+
+```json
+{
+  "$schema": "https://raw.githubusercontent.com/devkiraa/nex/main/registry/schema/nex-package.schema.json",
+  "id": "devkiraa.pagepull",
+  "name": "PagePull",
+  "version": "0.0.1",
+  "description": "Pull entire websites for offline viewing",
+  "type": "python",
+  "python": {
+    "version": ">=3.8",
+    "entry": "pagepull.py",
+    "requirements": "requirements.txt"
+  },
+  "run": {
+    "command": "python",
+    "args": ["pagepull.py"],
+    "passthrough_args": true
+  },
+  "author": {
+    "name": "devkiraa",
+    "github": "devkiraa"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/devkiraa/pagepull"
+}
+```
+
+### Example: Node.js Tool
+
+```json
+{
+  "id": "author.my-node-tool",
+  "name": "My Node Tool",
+  "version": "1.0.0",
+  "type": "node",
+  "node": {
+    "version": ">=18.0.0",
+    "entry": "cli.js",
+    "package_manager": "npm"
+  },
+  "run": {
+    "command": "node",
+    "args": ["cli.js"],
+    "passthrough_args": true
+  }
+}
+```
+
+### Example: Binary Tool
+
+```json
+{
+  "id": "author.my-binary",
+  "name": "My Binary Tool",
+  "version": "2.0.0",
+  "type": "binary",
+  "binary": {
+    "windows": "mytool.exe",
+    "linux": "mytool",
+    "macos": "mytool"
+  },
+  "run": {
+    "command": "${binary}",
+    "passthrough_args": true
+  }
+}
+```
+
+### How Nex Uses nex.json
+
+When you run `nex install author.package-name`:
+
+1. Nex fetches the registry manifest
+2. Downloads your tool from GitHub releases
+3. Reads `nex.json` (if present) for run configuration
+4. Sets up dependencies (pip install, npm install, etc.)
+
+When you run `nex run author.package-name [args]`:
+
+1. Nex reads the `run` configuration
+2. Executes the command with your arguments
+3. Passes through all args if `passthrough_args: true`
+

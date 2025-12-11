@@ -8,6 +8,7 @@ cli/*.o
 frontend/node_modules/
 frontend/.astro/
 frontend/dist/
+vcpkg/
 
 # IDE
 .vscode/

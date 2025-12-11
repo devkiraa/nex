@@ -32,6 +32,11 @@
 
 #include "cJSON.h"
 
+/* Windows compatibility: strcasecmp doesn't exist on Windows */
+#ifdef _WIN32
+#define strcasecmp _stricmp
+#endif
+
 /* Define our own boolean type */
 #ifndef true
 #define true ((cJSON_bool)1)
