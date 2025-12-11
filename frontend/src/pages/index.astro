@@ -42,12 +42,13 @@ const baseUrl = import.meta.env.BASE_URL;
   <section class="hero">
     <div class="hero-bg"></div>
     <div class="container hero-content">
+      <div class="hero-logo">nex</div>
       <h1 class="hero-title">
         Build amazing tools.
         <span class="hero-highlight">Share them with the world.</span>
       </h1>
       <p class="hero-subtitle">
-        Nex is the package manager for developer tools. Install, run, and share utilities with a single command.
+        The package manager for developer tools. Install, run, and share utilities with a single command.
       </p>
       
       <div class="hero-search">
@@ -247,6 +248,28 @@ nex install author.package-name</code></pre>
   .hero-content {
     position: relative;
     text-align: center;
+  }
+
+  .hero-logo {
+    font-size: 5rem;
+    font-weight: 700;
+    letter-spacing: -3px;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 50%, #e0e0e0 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 4px 30px rgba(0,0,0,0.3);
+    animation: logoGlow 3s ease-in-out infinite alternate;
+  }
+
+  @keyframes logoGlow {
+    from {
+      filter: drop-shadow(0 0 20px rgba(255,255,255,0.3));
+    }
+    to {
+      filter: drop-shadow(0 0 40px rgba(255,255,255,0.5));
+    }
   }
   
   .hero-title {
@@ -622,6 +645,10 @@ nex install author.package-name</code></pre>
   }
   
   @media (max-width: 640px) {
+    .hero-logo {
+      font-size: 3.5rem;
+    }
+
     .hero-title {
       font-size: 2rem;
     }

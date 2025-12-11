@@ -18,7 +18,7 @@ const baseUrl = import.meta.env.BASE_URL;
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href={`${baseUrl}favicon.svg`} />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
-    <title>{title} | Nex</title>
+    <title>{title} | nex</title>
     <style is:global>
       :root {
         --nex-red: #cb3837;
@@ -152,7 +152,6 @@ const baseUrl = import.meta.env.BASE_URL;
       <div class="header-top">
         <div class="container header-container">
           <a href={baseUrl} class="logo">
-            <span class="logo-icon">⚡</span>
             <span class="logo-text">nex</span>
           </a>
           
@@ -241,7 +240,6 @@ const baseUrl = import.meta.env.BASE_URL;
       .logo {
         display: flex;
         align-items: center;
-        gap: 0.25rem;
         text-decoration: none;
         flex-shrink: 0;
       }
@@ -250,17 +248,36 @@ const baseUrl = import.meta.env.BASE_URL;
         text-decoration: none;
       }
       
-      .logo-icon {
-        font-size: 1.75rem;
+      .logo:hover .logo-text {
+        text-shadow: 0 0 20px rgba(203, 56, 55, 0.5);
       }
       
       .logo-text {
-        font-size: 1.5rem;
+        font-size: 2rem;
         font-weight: 700;
-        color: var(--nex-red);
-        letter-spacing: -0.5px;
+        color: white;
+        letter-spacing: -1px;
+        background: linear-gradient(135deg, #ff4d4d 0%, #cb3837 50%, #a82726 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        position: relative;
+        transition: all 0.3s ease;
       }
       
+      .logo-text::before {
+        content: 'nex';
+        position: absolute;
+        left: 0;
+        top: 0;
+        background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        z-index: -1;
+        filter: blur(0);
+      }
+
       .search-container {
         flex: 1;
         max-width: 600px;
