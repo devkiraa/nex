@@ -1,3 +1,4 @@
 ---
-return Astro.redirect('/docs');
+const base = import.meta.env.BASE_URL;
+return Astro.redirect(`${base}docs`);
 ---

@@ -27,5 +27,6 @@ export async function getStaticPaths() {
 }
 
 const { id } = Astro.props as { id: string };
-return Astro.redirect(`/packages/${id}`);
+const base = import.meta.env.BASE_URL;
+return Astro.redirect(`${base}packages/${id}`);
 ---
