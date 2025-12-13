@@ -8,6 +8,12 @@
     "version": ">=3.8"
   },
   "entrypoint": "pagepull.py",
+  "commands": {
+    "default": "python pagepull.py",
+    "pull": "python pagepull.py",
+    "serve": "python pagepull.py --serve",
+    "help": "python pagepull.py --help"
+  },
   "description": "Pull entire websites for offline viewing. Single-file CLI tool with stealth mode, local server preview, and support for modern JS frameworks.",
   "author": {
     "name": "devkiraa",
