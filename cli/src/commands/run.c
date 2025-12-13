@@ -6,13 +6,20 @@
 
 int cmd_run(int argc, char *argv[]) {
     if (argc < 1) {
-        print_error("Usage: nex run <package-id> [command] [args...]");
-        printf("Example: nex run author.package-name\n");
-        printf("         nex run author.package-name convert --input file.txt\n");
+        print_error("Usage: nex run <package> [command] [args...]");
+        printf("Example: nex run pagepull\n");
+        printf("         nex run pagepull --url https://example.com\n");
         return 1;
     }
     
-    const char *package_id = argv[0];
+    const char *input_name = argv[0];
+    char package_id[MAX_NAME_LEN];
+    
+    /* Resolve short name to full package ID */
+    if (package_resolve_name(input_name, package_id, sizeof(package_id)) != 0) {
+        return 1;
+    }
+    
     const char *command = "default";
     int cmd_argc = 0;
     char **cmd_argv = NULL;

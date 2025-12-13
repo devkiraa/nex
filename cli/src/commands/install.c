@@ -6,12 +6,25 @@
 
 int cmd_install(int argc, char *argv[]) {
     if (argc < 1) {
-        print_error("Usage: nex install <package-id>");
-        printf("Example: nex install author.package-name\n");
+        print_error("Usage: nex install <package>");
+        printf("Example: nex install pagepull\n");
+        printf("         nex install devkiraa.pagepull\n");
         return 1;
     }
     
-    const char *package_id = argv[0];
+    const char *input_name = argv[0];
+    char package_id[MAX_NAME_LEN];
+    
+    /* Resolve short name to full package ID */
+    if (package_resolve_name(input_name, package_id, sizeof(package_id)) != 0) {
+        return 1;
+    }
+    
+    /* Show resolved ID if different from input */
+    if (strcmp(input_name, package_id) != 0) {
+        print_info("Resolved '%s' to '%s'", input_name, package_id);
+    }
+    
     LocalPackage local;
     
     /* Check if already installed */
@@ -29,8 +42,12 @@ int cmd_install(int argc, char *argv[]) {
         return 1;
     }
     
+    /* Get the short name for the run command */
+    const char *short_name = strchr(package_id, '.');
+    short_name = short_name ? short_name + 1 : package_id;
+    
     print_success("Successfully installed: %s", package_id);
-    printf("Run with: nex run %s\n", package_id);
+    printf("Run with: nex run %s\n", short_name);
     
     return 0;
 }

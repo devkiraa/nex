@@ -40,9 +40,9 @@ static void print_usage(void) {
     printf("  -v, --version          Show version\n");
     printf("  -h, --help             Show this help message\n");
     printf("\n\033[33mExamples:\033[0m\n");
-    printf("  nex install john.image-converter\n");
-    printf("  nex run john.image-converter convert --input file.png\n");
-    printf("  nex search \"python utility\"\n");
+    printf("  nex install pagepull\n");
+    printf("  nex run pagepull --url https://example.com\n");
+    printf("  nex search \"website downloader\"\n");
     printf("  nex self-update\n");
     printf("\n");
 }

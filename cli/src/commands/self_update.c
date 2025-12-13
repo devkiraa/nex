@@ -4,6 +4,7 @@
 
 #include "nex.h"
 #include <string.h>
+#include <errno.h>
 
 #ifdef __APPLE__
 #include <mach-o/dyld.h>
@@ -169,7 +170,17 @@ static int download_to_file(const char *url, const char *filepath) {
     
     FILE *fp = fopen(filepath, "wb");
     if (!fp) {
+#ifndef _WIN32
+        if (errno == EACCES || errno == EPERM) {
+            print_error("Permission denied. Try running with sudo:");
+            printf("  sudo nex self-update\n");
+        } else {
+            print_error("Failed to create file: %s", filepath);
+        }
+#else
         print_error("Failed to create file: %s", filepath);
+        printf("Try running as Administrator.\n");
+#endif
         http_response_free(response);
         return -1;
     }

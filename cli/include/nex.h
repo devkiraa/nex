@@ -26,8 +26,8 @@
 #endif
 
 /* Version */
-#define NEX_VERSION "1.2.0"
-#define NEX_USER_AGENT "nex/1.2.0"
+#define NEX_VERSION "1.3.0"
+#define NEX_USER_AGENT "nex/1.3.0"
 
 /* Registry configuration */
 #define REGISTRY_BASE_URL "https://raw.githubusercontent.com/devkiraa/nex/main/registry"
@@ -121,6 +121,7 @@ int package_install(const char *package_id);
 int package_remove(const char *package_id);
 int package_is_installed(const char *package_id, LocalPackage *local);
 int package_execute(const char *package_id, const char *command, int argc, char *argv[]);
+int package_resolve_name(const char *name_or_id, char *resolved_id, size_t resolved_size);
 
 /* Configuration (config/config.c) */
 int config_init(void);

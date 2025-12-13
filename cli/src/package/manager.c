@@ -37,6 +37,87 @@ static int build_manifest_url(const char *package_id, char *url, size_t url_size
     return 0;
 }
 
+/* Resolve short name or full ID to full package ID */
+int package_resolve_name(const char *name_or_id, char *resolved_id, size_t resolved_size) {
+    /* If it already contains a dot, assume it's a full ID */
+    if (strchr(name_or_id, '.') != NULL) {
+        strncpy(resolved_id, name_or_id, resolved_size - 1);
+        resolved_id[resolved_size - 1] = '\0';
+        return 0;
+    }
+    
+    /* Fetch registry index to find the package */
+    HttpResponse *response = http_get(REGISTRY_INDEX_URL);
+    if (!response) {
+        print_error("Failed to fetch registry");
+        return -1;
+    }
+    
+    if (response->status_code != 200) {
+        print_error("Failed to fetch registry (HTTP %ld)", response->status_code);
+        http_response_free(response);
+        return -1;
+    }
+    
+    /* Parse JSON and search for matching shortName or name */
+    cJSON *json = cJSON_Parse(response->data);
+    http_response_free(response);
+    
+    if (!json) {
+        print_error("Failed to parse registry");
+        return -1;
+    }
+    
+    cJSON *packages = cJSON_GetObjectItemCaseSensitive(json, "packages");
+    if (!cJSON_IsArray(packages)) {
+        cJSON_Delete(json);
+        print_error("Invalid registry format");
+        return -1;
+    }
+    
+    char found_id[MAX_NAME_LEN] = {0};
+    int match_count = 0;
+    
+    cJSON *pkg;
+    cJSON_ArrayForEach(pkg, packages) {
+        cJSON *id = cJSON_GetObjectItemCaseSensitive(pkg, "id");
+        cJSON *shortName = cJSON_GetObjectItemCaseSensitive(pkg, "shortName");
+        
+        /* Check shortName first (preferred) */
+        if (cJSON_IsString(shortName) && strcasecmp(shortName->valuestring, name_or_id) == 0) {
+            if (cJSON_IsString(id)) {
+                strncpy(found_id, id->valuestring, MAX_NAME_LEN - 1);
+                match_count++;
+            }
+        }
+        /* Also check the package name part of the ID (after the dot) */
+        else if (cJSON_IsString(id)) {
+            const char *dot = strchr(id->valuestring, '.');
+            if (dot && strcasecmp(dot + 1, name_or_id) == 0) {
+                strncpy(found_id, id->valuestring, MAX_NAME_LEN - 1);
+                match_count++;
+            }
+        }
+    }
+    
+    cJSON_Delete(json);
+    
+    if (match_count == 0) {
+        print_error("Package '%s' not found in registry", name_or_id);
+        return -1;
+    }
+    
+    if (match_count > 1) {
+        print_error("Multiple packages match '%s'. Use full ID (author.package-name)", name_or_id);
+        return -1;
+    }
+    
+    strncpy(resolved_id, found_id, resolved_size - 1);
+    resolved_id[resolved_size - 1] = '\0';
+    
+    return 0;
+}
+
 int package_parse_manifest(const char *json_str, PackageInfo *info) {
     if (!json_str || !info) return -1;
     
