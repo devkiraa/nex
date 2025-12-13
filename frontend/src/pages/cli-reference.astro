@@ -1,0 +1,138 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const commands = [
+  {
+    name: 'install',
+    usage: 'nex install <package> [version]',
+    description: 'Installs a package from the registry. If no version is specified, the latest version is installed.'
+  },
+  {
+    name: 'remove',
+    usage: 'nex remove <package>',
+    description: 'Removes an installed package from your system.'
+  },
+  {
+    name: 'update',
+    usage: 'nex update <package>',
+    description: 'Updates an installed package to the latest version.'
+  },
+  {
+    name: 'list',
+    usage: 'nex list',
+    description: 'Lists all installed packages and their versions.'
+  },
+  {
+    name: 'search',
+    usage: 'nex search <query>',
+    description: 'Searches the registry for packages matching the query.'
+  },
+  {
+    name: 'info',
+    usage: 'nex info <package>',
+    description: 'Displays detailed information about a package.'
+  },
+  {
+    name: 'run',
+    usage: 'nex run <package> [args...]',
+    description: 'Runs a package command without installing it globally (if supported).'
+  }
+];
+---
+
+<Layout title="CLI Reference" showSearch={false}>
+  <div class="container page-content">
+    <header class="page-header">
+      <h1>CLI Reference</h1>
+      <p class="lead">Comprehensive documentation for all nex commands.</p>
+    </header>
+
+    <div class="commands-list">
+      {commands.map(cmd => (
+        <div class="command-card" id={cmd.name}>
+          <div class="command-header">
+            <h2>{cmd.name}</h2>
+            <code class="usage">{cmd.usage}</code>
+          </div>
+          <p class="description">{cmd.description}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .page-content {
+    padding-top: 3rem;
+    padding-bottom: 4rem;
+  }
+  
+  .page-header {
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+  
+  .page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--nex-black);
+  }
+  
+  .lead {
+    font-size: 1.2rem;
+    color: var(--nex-gray);
+  }
+  
+  .commands-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  
+  .command-card {
+    background: var(--nex-white);
+    padding: 2rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--nex-border);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  
+  .command-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  .command-header {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .command-header {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+  
+  .command-header h2 {
+    color: var(--nex-red);
+    margin: 0;
+  }
+  
+  .usage {
+    font-size: 0.9rem;
+    padding: 0.4rem 0.8rem;
+    background: var(--nex-black);
+    color: #fff;
+    border-radius: 4px;
+  }
+  
+  .description {
+    color: var(--nex-dark);
+    line-height: 1.6;
+  }
+</style>

@@ -1,0 +1,105 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="About" showSearch={false}>
+  <div class="container page-content">
+    <header class="page-header">
+      <h1>About nex</h1>
+      <p class="lead">Building the future of developer tool management.</p>
+    </header>
+
+    <section class="section">
+      <h2>Our Mission</h2>
+      <p>
+        Nex was born from a simple idea: developers shouldn't spend hours configuring their environment. 
+        We believe that sharing and using developer tools should be as easy as installing a mobile app.
+        Our mission is to create a universal package manager that simplifies the distribution and usage of CLI tools across all platforms.
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>The Story</h2>
+      <p>
+        Started in 2023, Nex began as a small script to manage dotfiles and local scripts. 
+        It quickly evolved into a full-fledged package manager when we realized the need for a 
+        lightweight, cross-platform solution that doesn't require complex dependencies.
+      </p>
+    </section>
+
+    <section class="section">
+      <h2>Team & Contributors</h2>
+      <p>
+        Nex is an open-source project driven by a community of passionate developers.
+        We welcome contributions from everyone, whether it's code, documentation, or feedback.
+      </p>
+      
+      <div class="contributors-link">
+        <a href="https://github.com/devkiraa/nex/graphs/contributors" target="_blank" class="btn">
+          View Contributors on GitHub
+        </a>
+      </div>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .page-content {
+    padding-top: 3rem;
+    padding-bottom: 4rem;
+    max-width: 800px;
+  }
+  
+  .page-header {
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+  
+  .page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--nex-black);
+  }
+  
+  .lead {
+    font-size: 1.2rem;
+    color: var(--nex-gray);
+  }
+  
+  .section {
+    margin-bottom: 3rem;
+  }
+  
+  .section h2 {
+    margin-bottom: 1rem;
+    color: var(--nex-black);
+    font-size: 1.8rem;
+  }
+  
+  .section p {
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+    color: var(--nex-dark);
+  }
+  
+  .contributors-link {
+    margin-top: 2rem;
+    text-align: center;
+  }
+  
+  .btn {
+    display: inline-block;
+    background: var(--nex-red);
+    color: white;
+    padding: 0.8rem 1.5rem;
+    border-radius: var(--radius);
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  
+  .btn:hover {
+    background: var(--nex-red-dark);
+    text-decoration: none;
+  }
+</style>

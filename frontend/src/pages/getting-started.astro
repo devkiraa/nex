@@ -1,0 +1,124 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Getting Started" showSearch={false}>
+  <div class="container page-content">
+    <header class="page-header">
+      <h1>Getting Started with nex</h1>
+      <p class="lead">Your journey to better tool management starts here.</p>
+    </header>
+
+    <section class="section">
+      <h2>Installation</h2>
+      <p>Install nex on your system using one of the following methods:</p>
+      
+      <div class="install-options">
+        <div class="install-card">
+          <h3>Windows</h3>
+          <p>Download the installer or run via PowerShell:</p>
+          <pre><code>iwr https://github.com/devkiraa/nex/releases/latest/download/install.ps1 -useb | iex</code></pre>
+        </div>
+        
+        <div class="install-card">
+          <h3>Linux / macOS</h3>
+          <p>Run the installation script:</p>
+          <pre><code>curl -fsSL https://github.com/devkiraa/nex/releases/latest/download/install.sh | sh</code></pre>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <h2>First Steps</h2>
+      <p>Once installed, verify the installation by checking the version:</p>
+      <pre><code>nex --version</code></pre>
+
+      <h3>Installing a Package</h3>
+      <p>Try installing a package, for example, the <code>hello-world</code> package:</p>
+      <pre><code>nex install hello-world</code></pre>
+    </section>
+
+    <section class="section">
+      <h2>Quick Examples</h2>
+      <p>Here are some common commands to get you moving:</p>
+      <ul>
+        <li><code>nex search &lt;query&gt;</code> - Search for packages</li>
+        <li><code>nex list</code> - List installed packages</li>
+        <li><code>nex update &lt;package&gt;</code> - Update a package</li>
+      </ul>
+    </section>
+  </div>
+</Layout>
+
+<style>
+  .page-content {
+    padding-top: 3rem;
+    padding-bottom: 4rem;
+  }
+  
+  .page-header {
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+  
+  .page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--nex-black);
+  }
+  
+  .lead {
+    font-size: 1.2rem;
+    color: var(--nex-gray);
+  }
+  
+  .section {
+    margin-bottom: 3rem;
+    background: var(--nex-white);
+    padding: 2rem;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--nex-border);
+  }
+  
+  .section h2 {
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid var(--nex-red);
+    display: inline-block;
+  }
+  
+  .section h3 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .install-options {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    margin-top: 1.5rem;
+  }
+  
+  @media (min-width: 768px) {
+    .install-options {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  
+  .install-card {
+    background: var(--nex-bg);
+    padding: 1.5rem;
+    border-radius: var(--radius);
+    border: 1px solid var(--nex-border);
+  }
+  
+  ul {
+    list-style-position: inside;
+    margin-left: 1rem;
+  }
+  
+  li {
+    margin-bottom: 0.5rem;
+  }
+</style>

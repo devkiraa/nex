@@ -1,0 +1,177 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const services = [
+  { name: 'Package Registry', status: 'operational' },
+  { name: 'Website', status: 'operational' },
+  { name: 'API', status: 'operational' },
+  { name: 'Downloads', status: 'operational' }
+];
+
+const incidents = [
+  // { date: '2023-10-20', title: 'Registry API Latency', status: 'resolved' }
+];
+---
+
+<Layout title="System Status" showSearch={false}>
+  <div class="container page-content">
+    <header class="page-header">
+      <h1>System Status</h1>
+      <p class="lead">Current status of nex services.</p>
+    </header>
+
+    <div class="status-overview operational">
+      <div class="status-icon">✓</div>
+      <div class="status-text">All Systems Operational</div>
+    </div>
+
+    <div class="services-list">
+      {services.map(service => (
+        <div class="service-item">
+          <span class="service-name">{service.name}</span>
+          <span class={`service-status ${service.status}`}>
+            {service.status === 'operational' ? 'Operational' : 'Issues'}
+          </span>
+        </div>
+      ))}
+    </div>
+
+    {incidents.length > 0 && (
+      <section class="incidents-section">
+        <h2>Past Incidents</h2>
+        <div class="incidents-list">
+          {incidents.map(incident => (
+            <div class="incident-item">
+              <div class="incident-header">
+                <span class="incident-title">{incident.title}</span>
+                <span class="incident-date">{incident.date}</span>
+              </div>
+              <span class={`incident-status ${incident.status}`}>{incident.status}</span>
+            </div>
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+</Layout>
+
+<style>
+  .page-content {
+    padding-top: 3rem;
+    padding-bottom: 4rem;
+    max-width: 800px;
+  }
+  
+  .page-header {
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+  
+  .page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--nex-black);
+  }
+  
+  .lead {
+    font-size: 1.2rem;
+    color: var(--nex-gray);
+  }
+  
+  .status-overview {
+    background: var(--nex-success);
+    color: white;
+    padding: 2rem;
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 3rem;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+  
+  .status-overview.issues {
+    background: var(--nex-red);
+  }
+  
+  .services-list {
+    background: var(--nex-white);
+    border: 1px solid var(--nex-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 3rem;
+  }
+  
+  .service-item {
+    padding: 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--nex-border);
+  }
+  
+  .service-item:last-child {
+    border-bottom: none;
+  }
+  
+  .service-name {
+    font-weight: 500;
+    font-size: 1.1rem;
+  }
+  
+  .service-status {
+    text-transform: capitalize;
+    font-weight: 600;
+  }
+  
+  .service-status.operational {
+    color: var(--nex-success);
+  }
+  
+  .service-status.issues {
+    color: var(--nex-red);
+  }
+  
+  .incidents-section h2 {
+    margin-bottom: 1.5rem;
+  }
+  
+  .incident-item {
+    background: var(--nex-white);
+    padding: 1.5rem;
+    border: 1px solid var(--nex-border);
+    border-radius: var(--radius);
+    margin-bottom: 1rem;
+  }
+  
+  .incident-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+  }
+  
+  .incident-title {
+    font-weight: 600;
+  }
+  
+  .incident-date {
+    color: var(--nex-gray);
+    font-size: 0.9rem;
+  }
+  
+  .incident-status {
+    display: inline-block;
+    padding: 0.2rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  
+  .incident-status.resolved {
+    background: #e6fffa;
+    color: var(--nex-success);
+  }
+</style>

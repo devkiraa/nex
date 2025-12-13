@@ -1,0 +1,230 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const registryUrl = 'https://raw.githubusercontent.com/devkiraa/nex/main/registry/index.json';
+  let packages = [];
+  try {
+    const response = await fetch(registryUrl);
+    const data = await response.json();
+    packages = data.packages || [];
+  } catch (e) {
+    packages = [];
+  }
+
+  const normalizeAuthor = (pkg) => {
+    if (!pkg.author) return 'Unknown';
+    if (typeof pkg.author === 'string') return pkg.author;
+    return pkg.author.name || pkg.author.github || 'Unknown';
+  };
+
+  const authors = [...new Set(packages.map(normalizeAuthor))];
+  
+  return authors.map((author) => ({
+    params: { name: author },
+  }));
+}
+
+const registryUrl = 'https://raw.githubusercontent.com/devkiraa/nex/main/registry/index.json';
+const { name } = Astro.params;
+let packages = [];
+
+const normalizeAuthor = (pkg) => {
+  if (!pkg.author) return 'Unknown';
+  if (typeof pkg.author === 'string') return pkg.author;
+  return pkg.author.name || pkg.author.github || 'Unknown';
+};
+
+try {
+  const response = await fetch(registryUrl);
+  const data = await response.json();
+  packages = data.packages || [];
+} catch (e) {
+  packages = [];
+}
+
+const authorName = name?.replace(/%20/g, ' ') || 'Unknown';
+const authorPackages = packages.filter((p) => normalizeAuthor(p).toLowerCase() === authorName.toLowerCase());
+const baseUrl = import.meta.env.BASE_URL;
+---
+
+<Layout title={`${authorName} | Author`} description={`Packages published by ${authorName}`}>
+  <section class="author-hero">
+    <div class="container">
+      <p class="eyebrow">Author</p>
+      <h1>{authorName}</h1>
+      <p class="subtitle">{authorPackages.length} package(s) published</p>
+    </div>
+  </section>
+
+  <main class="container author-main">
+    {authorPackages.length === 0 ? (
+      <div class="empty">
+        <p>No packages found for this author.</p>
+        <a class="btn btn-secondary" href={`${baseUrl}packages`}>Browse all packages</a>
+      </div>
+    ) : (
+      <div class="packages-grid">
+        {authorPackages.map((pkg) => (
+          <article class="card">
+            <header>
+              <div>
+                <h2>{pkg.name}</h2>
+                <p class="id">{pkg.id}</p>
+              </div>
+              <span class="version">v{pkg.version}</span>
+            </header>
+            <p class="description">{pkg.description}</p>
+            <div class="meta">
+              <span>{(pkg.keywords || []).slice(0, 3).join(' • ')}</span>
+            </div>
+            <div class="actions">
+              <a class="btn btn-secondary" href={`${baseUrl}packages/${pkg.id}`}>View package</a>
+              <button class="btn btn-dark copy-btn" type="button" data-copy={`nex install ${pkg.id}`}>Copy install</button>
+            </div>
+          </article>
+        ))}
+      </div>
+    )}
+  </main>
+</Layout>
+
+<style>
+  .author-hero {
+    background: linear-gradient(135deg, var(--nex-red) 0%, var(--nex-red-dark) 100%);
+    color: var(--nex-white);
+    padding: 3rem 0 2.5rem;
+  }
+
+  .eyebrow {
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+    opacity: 0.85;
+  }
+
+  h1 {
+    margin: 0.4rem 0;
+    font-size: 2.2rem;
+  }
+
+  .subtitle {
+    opacity: 0.9;
+  }
+
+  .author-main {
+    padding: 2.5rem 0 3.5rem;
+  }
+
+  .empty {
+    background: var(--nex-white);
+    border: 1px solid var(--nex-border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .packages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1rem;
+  }
+
+  .card {
+    background: var(--nex-white);
+    border: 1px solid var(--nex-border);
+    border-radius: 12px;
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .card:hover {
+    border-color: var(--nex-red);
+    box-shadow: var(--shadow-md);
+  }
+
+  .card header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .card h2 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+
+  .id {
+    margin: 0.2rem 0 0;
+    color: var(--nex-gray);
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+  }
+
+  .version {
+    background: var(--nex-bg);
+    border: 1px solid var(--nex-border);
+    padding: 0.3rem 0.6rem;
+    border-radius: 8px;
+    font-weight: 600;
+    color: var(--nex-dark);
+  }
+
+  .description {
+    margin: 0;
+    color: var(--nex-dark);
+  }
+
+  .meta {
+    color: var(--nex-gray);
+    font-size: 0.9rem;
+  }
+
+  .actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 520px) {
+    h1 {
+      font-size: 1.7rem;
+    }
+
+    .card header {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .packages-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  const copyButtons = document.querySelectorAll('.copy-btn');
+  copyButtons.forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const text = (btn as HTMLElement).dataset.copy;
+      if (!text) return;
+      try {
+        await navigator.clipboard.writeText(text);
+        const original = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => {
+          if (original) btn.textContent = original;
+        }, 1200);
+      } catch (e) {
+        console.error('Copy failed', e);
+      }
+    });
+  });
+</script>

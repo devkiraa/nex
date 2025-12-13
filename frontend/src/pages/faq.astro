@@ -1,0 +1,127 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+const faqs = [
+  {
+    question: 'How does nex differ from npm or pip?',
+    answer: 'Nex is designed specifically for distributing standalone CLI tools and binaries, rather than library dependencies for projects. It focuses on ease of use for end-users and cross-platform compatibility.'
+  },
+  {
+    question: 'Is nex free to use?',
+    answer: 'Yes, nex is open-source software released under the MIT license. You can use it for free for both personal and commercial purposes.'
+  },
+  {
+    question: 'How do I publish my own package?',
+    answer: 'To publish a package, you need to create a package definition file and submit a pull request to the nex registry repository. See our documentation for detailed instructions.'
+  },
+  {
+    question: 'Where are packages installed?',
+    answer: 'Packages are installed in a dedicated directory in your user home folder (e.g., ~/.nex/packages on Linux/macOS or %USERPROFILE%\\.nex\\packages on Windows).'
+  },
+  {
+    question: 'Can I use nex offline?',
+    answer: 'Nex requires an internet connection to install or update packages. However, once installed, packages can be run offline.'
+  }
+];
+---
+
+<Layout title="FAQ" showSearch={false}>
+  <div class="container page-content">
+    <header class="page-header">
+      <h1>Frequently Asked Questions</h1>
+      <p class="lead">Answers to common questions about nex.</p>
+    </header>
+
+    <div class="faq-list">
+      {faqs.map(faq => (
+        <details class="faq-item">
+          <summary class="faq-question">
+            {faq.question}
+            <span class="icon">+</span>
+          </summary>
+          <div class="faq-answer">
+            <p>{faq.answer}</p>
+          </div>
+        </details>
+      ))}
+    </div>
+  </div>
+</Layout>
+
+<style>
+  .page-content {
+    padding-top: 3rem;
+    padding-bottom: 4rem;
+    max-width: 800px;
+  }
+  
+  .page-header {
+    margin-bottom: 3rem;
+    text-align: center;
+  }
+  
+  .page-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--nex-black);
+  }
+  
+  .lead {
+    font-size: 1.2rem;
+    color: var(--nex-gray);
+  }
+  
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .faq-item {
+    background: var(--nex-white);
+    border: 1px solid var(--nex-border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  
+  .faq-question {
+    padding: 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+    font-size: 1.1rem;
+  }
+  
+  .faq-question::-webkit-details-marker {
+    display: none;
+  }
+  
+  .faq-question:hover {
+    background-color: #f9f9f9;
+  }
+  
+  .icon {
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: var(--nex-red);
+  }
+  
+  details[open] .icon {
+    transform: rotate(45deg);
+  }
+  
+  .faq-answer {
+    padding: 0 1.5rem 1.5rem 1.5rem;
+    color: var(--nex-dark);
+    line-height: 1.6;
+    border-top: 1px solid transparent;
+  }
+  
+  details[open] .faq-answer {
+    border-top-color: var(--nex-border);
+    padding-top: 1.5rem;
+  }
+</style>

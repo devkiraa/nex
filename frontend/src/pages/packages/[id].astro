@@ -26,7 +26,7 @@ export async function getStaticPaths() {
     packages = [];
   }
   
-  return packages.map(pkg => ({
+  return packages.map((pkg: any) => ({
     params: { id: pkg.id },
     props: { pkg }
   }));
@@ -37,6 +37,10 @@ const pkg = (Astro.props as any).pkg;
 
 const manifestUrl = `https://raw.githubusercontent.com/devkiraa/nex/main/registry/${pkg.manifest}`;
 let manifest = null;
+let versionHistory: any[] = [];
+let dependencyList: any[] = [];
+
+const siteBase = import.meta.env.BASE_URL || '/';
 
 try {
   if (import.meta.env.DEV) {
@@ -56,7 +60,14 @@ try {
         help: 'python main.py --help'
       },
       keywords: pkg.keywords,
-      platforms: ['windows', 'linux', 'macos']
+      platforms: ['windows', 'linux', 'macos'],
+      dependencies: [
+        { id: 'python', version: '>=3.10', type: 'runtime' },
+        { id: 'requests', version: '^2.31.0', type: 'library' }
+      ],
+      versions: [
+        { version: '1.0.0', date: '2023-10-25', changelog: 'Initial release.' }
+      ]
     };
   } else {
     const response = await fetch(manifestUrl);
@@ -64,6 +75,34 @@ try {
   }
 } catch (e) {
   manifest = pkg;
+}
+
+// Version history
+const versionsUrl = manifestUrl.replace('manifest.json', 'versions.json');
+try {
+  const res = await fetch(versionsUrl);
+  if (res.ok) {
+    versionHistory = await res.json();
+  }
+} catch (e) {
+  versionHistory = manifest.versions || [];
+}
+
+if (!versionHistory || versionHistory.length === 0) {
+  versionHistory = [
+    {
+      version: manifest.version,
+      date: manifest.publishedAt || manifest.updatedAt || '',
+      changelog: manifest.changelog || 'Latest release'
+    }
+  ];
+}
+
+// Dependencies
+if (Array.isArray(manifest.dependencies)) {
+  dependencyList = manifest.dependencies;
+} else if (manifest.dependencies && typeof manifest.dependencies === 'object') {
+  dependencyList = Object.entries(manifest.dependencies).map(([dep, ver]) => ({ id: dep, version: ver }));
 }
 ---
 
@@ -136,6 +175,49 @@ try {
               <div class="keywords-list">
                 {manifest.keywords.map((kw: string) => (
                   <a href="#" class="keyword-tag">{kw}</a>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {versionHistory && versionHistory.length > 0 && (
+            <section class="markdown-section">
+              <h2>Version History</h2>
+              <div class="versions-list">
+                {versionHistory.map((v) => (
+                  <div class="version-item">
+                    <div>
+                      <div class="version-label">v{v.version}</div>
+                      {v.date && <div class="version-date">{v.date}</div>}
+                      {v.changelog && <p class="version-notes">{v.changelog}</p>}
+                    </div>
+                    <div class="version-actions">
+                      <button class="copy-btn" data-copy={`nex install ${manifest.id}@${v.version}`} title="Copy install command">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <rect x="9" y="9" width="13" height="13" rx="2"/>
+                          <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {dependencyList && dependencyList.length > 0 && (
+            <section class="markdown-section">
+              <h2>Dependencies</h2>
+              <div class="dependency-graph">
+                {dependencyList.map((dep) => (
+                  <div class="dependency-node">
+                    <div class="dep-line"></div>
+                    <div class="dep-card">
+                      <div class="dep-name">{dep.id || dep.name}</div>
+                      {dep.version && <div class="dep-version">{dep.version}</div>}
+                      {dep.type && <span class="dep-tag">{dep.type}</span>}
+                    </div>
+                  </div>
                 ))}
               </div>
             </section>
@@ -313,9 +395,14 @@ try {
   /* Main Layout */
   .package-layout {
     display: grid;
-    grid-template-columns: 1fr 350px;
+    grid-template-columns: minmax(0, 1fr) 350px;
     gap: 3rem;
     padding: 2rem 0;
+  }
+
+  .main-column,
+  .sidebar-column {
+    min-width: 0;
   }
 
   /* Main Content */
@@ -353,6 +440,39 @@ try {
     font-weight: 500;
   }
 
+  .copy-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    border: 1px solid var(--border-color);
+    background: #ffffff;
+    color: var(--text-primary);
+    border-radius: 8px;
+    padding: 0.4rem 0.6rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  .copy-btn:hover {
+    background: #f6f8fa;
+    border-color: #cb3837;
+  }
+
+  .copy-btn.copied {
+    background: #fff5f5;
+    border-color: #cb3837;
+    color: #cb3837;
+  }
+
+  .copy-btn svg {
+    width: 16px;
+    height: 16px;
+  }
+
   .code-block pre {
     margin: 0;
     padding: 1rem;
@@ -377,6 +497,7 @@ try {
   .commands-table table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: fixed;
   }
 
   .commands-table th,
@@ -384,6 +505,8 @@ try {
     padding: 0.75rem 1rem;
     text-align: left;
     border-bottom: 1px solid var(--border-color);
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
   .commands-table th {
@@ -403,6 +526,9 @@ try {
     border-radius: 4px;
     font-family: var(--font-mono);
     font-size: 0.85rem;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
   }
 
   /* Keywords */
@@ -425,6 +551,173 @@ try {
 
   .keyword-tag:hover {
     background: #ffe0e0;
+  }
+
+  /* Versions */
+  .versions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .version-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background: #fff;
+  }
+
+  .version-label {
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .version-date {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+
+  .version-notes {
+    margin: 0.35rem 0 0;
+    color: var(--text-secondary);
+  }
+
+  .version-actions .copy-btn {
+    padding: 0.4rem 0.5rem;
+  }
+
+  /* Dependency graph */
+  .dependency-graph {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .dependency-node {
+    display: grid;
+    grid-template-columns: 14px 1fr;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .dep-line {
+    width: 2px;
+    height: 100%;
+    background: var(--border-color);
+    margin-left: 6px;
+  }
+
+  .dep-card {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    background: #f9f9f9;
+  }
+
+  .dep-name {
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .dep-version {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+  }
+
+  .dep-tag {
+    display: inline-block;
+    margin-top: 0.35rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+    background: #fff5f5;
+    color: #cb3837;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  /* Badges */
+  .badge-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 220px) minmax(0, 1fr);
+    gap: 1.25rem;
+    align-items: start;
+  }
+
+  .badge-preview {
+    padding: 1rem;
+    background: #f6f8fa;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .badge-preview img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .badge-snippets pre {
+    margin: 0;
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 0.85rem 1rem;
+    border-radius: 10px;
+    border: 1px solid #333;
+    background: #1e1e1e;
+    color: #ffffff;
+  }
+
+  .badge-snippets code {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    white-space: pre;
+  }
+
+  .badge-snippets {
+    display: grid;
+    gap: 1rem;
+    min-width: 0;
+  }
+
+  .snippet-block {
+    display: grid;
+    gap: 0.6rem;
+  }
+
+  .snippet-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .snippet-label {
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  /* Charts */
+  .chart-box {
+    background: #1e1e1e;
+    border-radius: 8px;
+    padding: 1rem;
+    border: 1px solid #333;
+  }
+
+  .chart-box canvas {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+  }
+
+  .muted {
+    color: var(--text-secondary);
   }
 
   /* Sidebar */
@@ -558,6 +851,19 @@ try {
   }
 
   @media (max-width: 768px) {
+    .badge-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .dependency-node {
+      grid-template-columns: 10px 1fr;
+    }
+
+    .version-item {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
     .package-layout {
       grid-template-columns: 1fr;
       gap: 2rem;
@@ -580,9 +886,9 @@ try {
     
     .package-tabs {
       gap: 1rem;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      padding-bottom: 0.5rem;
+      flex-wrap: wrap;
+      overflow-x: visible;
+      padding-bottom: 0;
     }
     
     .tab {
@@ -596,11 +902,11 @@ try {
     }
     
     .commands-table {
-      overflow-x: auto;
+      overflow: hidden;
     }
     
     .commands-table table {
-      min-width: 400px;
+      min-width: 0;
     }
     
     .commands-table th,
@@ -699,19 +1005,21 @@ try {
       try {
         await navigator.clipboard.writeText(text);
         const svg = btn.querySelector('svg');
+        const original = svg ? svg.innerHTML : null;
+        const originalText = btn.textContent;
+
         if (svg) {
-          const original = svg.innerHTML;
-          // Checkmark icon
           svg.innerHTML = '<path d="M20 6L9 17l-5-5" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>';
-          
-          // Add success class for styling if needed
-          btn.classList.add('copied');
-          
-          setTimeout(() => {
-            svg.innerHTML = original;
-            btn.classList.remove('copied');
-          }, 2000);
+        } else {
+          btn.textContent = 'Copied!';
         }
+
+        btn.classList.add('copied');
+        setTimeout(() => {
+          if (svg && original !== null) svg.innerHTML = original;
+          if (!svg && originalText) btn.textContent = originalText;
+          btn.classList.remove('copied');
+        }, 1500);
       } catch (err) {
         console.error('Failed to copy:', err);
       }
@@ -721,4 +1029,33 @@ try {
   document.querySelectorAll('.copy-btn, .copy-icon-btn').forEach(btn => {
     btn.addEventListener('click', () => copyToClipboard(btn as HTMLElement));
   });
+
+  // Simple canvas bar chart for downloads
+  const chartEl = document.getElementById('download-chart') as HTMLCanvasElement;
+  if (chartEl) {
+    const ctx = chartEl.getContext('2d');
+    const series = JSON.parse(chartEl.dataset.series || '[]');
+    if (ctx && series.length) {
+      const padding = 32;
+      const width = chartEl.width - padding * 2;
+      const height = chartEl.height - padding * 2;
+      const max = Math.max(...series.map((s: any) => s.count));
+      const barWidth = width / series.length - 12;
+
+      ctx.clearRect(0, 0, chartEl.width, chartEl.height);
+      ctx.fillStyle = '#0f0f0f';
+      ctx.fillRect(0, 0, chartEl.width, chartEl.height);
+
+      series.forEach((s: any, idx: number) => {
+        const x = padding + idx * (barWidth + 12);
+        const barHeight = max ? (s.count / max) * height : 0;
+        const y = chartEl.height - padding - barHeight;
+        ctx.fillStyle = '#cb3837';
+        ctx.fillRect(x, y, barWidth, barHeight);
+        ctx.fillStyle = '#ccc';
+        ctx.font = '10px monospace';
+        ctx.fillText(s.date || '', x, chartEl.height - padding + 12);
+      });
+    }
+  }
 </script>
