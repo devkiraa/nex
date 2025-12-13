@@ -21,6 +21,7 @@ static void print_usage(void) {
     printf("  list                   List installed packages\n");
     printf("  search <query>         Search the registry\n");
     printf("  info <package>         Show package details\n");
+    printf("  self-update            Update nex CLI to latest version\n");
     printf("\nOptions:\n");
     printf("  -v, --version          Show version\n");
     printf("  -h, --help             Show this help message\n");
@@ -28,6 +29,7 @@ static void print_usage(void) {
     printf("  nex install john.image-converter\n");
     printf("  nex run john.image-converter convert --input file.png\n");
     printf("  nex search \"python utility\"\n");
+    printf("  nex self-update\n");
 }
 
 static void print_version(void) {
@@ -91,6 +93,9 @@ int main(int argc, char *argv[]) {
     }
     else if (strcmp(command, "info") == 0) {
         result = cmd_info(argc - 2, argv + 2);
+    }
+    else if (strcmp(command, "self-update") == 0) {
+        result = cmd_self_update(argc - 2, argv + 2);
     }
     else {
         print_error("Unknown command: %s", command);

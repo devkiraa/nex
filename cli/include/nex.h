@@ -102,6 +102,11 @@ int cmd_remove(int argc, char *argv[]);
 int cmd_list(int argc, char *argv[]);
 int cmd_search(int argc, char *argv[]);
 int cmd_info(int argc, char *argv[]);
+int cmd_self_update(int argc, char *argv[]);
+
+/* Self-update helpers */
+int nex_check_for_updates(int *update_available, char *latest_version, size_t version_size);
+int nex_self_update(void);
 
 /* HTTP client (http/client.c) */
 int http_init(void);

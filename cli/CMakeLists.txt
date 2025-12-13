@@ -20,6 +20,7 @@ set(SOURCES
     src/commands/list.c
     src/commands/search.c
     src/commands/info.c
+    src/commands/self_update.c
     src/http/client.c
     src/package/manager.c
     src/config/config.c

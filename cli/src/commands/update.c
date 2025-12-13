@@ -9,6 +9,17 @@ int cmd_update(int argc, char *argv[]) {
         /* Update all packages */
         print_info("Checking for updates...");
         
+        /* First, check for nex CLI updates */
+        int cli_update_available = 0;
+        char latest_cli_version[MAX_VERSION_LEN];
+        if (nex_check_for_updates(&cli_update_available, latest_cli_version, sizeof(latest_cli_version)) == 0) {
+            if (cli_update_available) {
+                printf("\n");
+                print_info("New nex version available: %s -> %s", NEX_VERSION, latest_cli_version);
+                printf("Run 'nex self-update' to update the CLI.\n\n");
+            }
+        }
+        
         LocalPackage *packages = NULL;
         int count = 0;
         

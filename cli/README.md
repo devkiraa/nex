@@ -75,3 +75,24 @@ copy build\Release\nex.exe C:\Windows\System32\
 ```bash
 sudo cp build/nex /usr/local/bin/
 ```
+
+## Updating
+
+Nex can update itself to the latest version:
+
+```bash
+nex self-update
+```
+
+This will:
+1. Check the GitHub releases for the latest version
+2. Download the appropriate binary for your platform
+3. Replace the current executable with the new version
+
+You can also check for updates when updating packages:
+
+```bash
+nex update
+```
+
+This will notify you if a new CLI version is available.
