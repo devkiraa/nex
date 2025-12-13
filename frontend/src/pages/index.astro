@@ -15,8 +15,29 @@ try {
   packages = [];
 }
 
+// Fetch latest release version from GitHub
+const githubReleasesApi = 'https://api.github.com/repos/devkiraa/nex/releases/latest';
+let releaseVersion = 'v1.0.0'; // fallback
+let releaseDate = '';
+
+try {
+  const releaseResponse = await fetch(githubReleasesApi, {
+    headers: {
+      'Accept': 'application/vnd.github.v3+json',
+      'User-Agent': 'nex-frontend'
+    }
+  });
+  if (releaseResponse.ok) {
+    const releaseData = await releaseResponse.json();
+    releaseVersion = releaseData.tag_name || 'v1.0.0';
+    releaseDate = releaseData.published_at ? new Date(releaseData.published_at).toLocaleDateString() : '';
+  }
+} catch (e) {
+  // Use fallback version
+  console.error('Failed to fetch release info:', e);
+}
+
 const baseUrl = import.meta.env.BASE_URL;
-const releaseVersion = 'v1.0.0';
 const releaseBaseUrl = `https://github.com/devkiraa/nex/releases/download/${releaseVersion}`;
 const releasePageUrl = `https://github.com/devkiraa/nex/releases/tag/${releaseVersion}`;
 const downloadLinks = {

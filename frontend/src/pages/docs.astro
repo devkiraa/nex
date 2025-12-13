@@ -1,6 +1,28 @@
 ---
 import Layout from '../layouts/Layout.astro';
 
+// Fetch latest release version from GitHub
+const githubReleasesApi = 'https://api.github.com/repos/devkiraa/nex/releases/latest';
+let releaseVersion = 'v1.0.0'; // fallback
+
+try {
+  const releaseResponse = await fetch(githubReleasesApi, {
+    headers: {
+      'Accept': 'application/vnd.github.v3+json',
+      'User-Agent': 'nex-frontend'
+    }
+  });
+  if (releaseResponse.ok) {
+    const releaseData = await releaseResponse.json();
+    releaseVersion = releaseData.tag_name || 'v1.0.0';
+  }
+} catch (e) {
+  console.error('Failed to fetch release info:', e);
+}
+
+const releaseBaseUrl = `https://github.com/devkiraa/nex/releases/download/${releaseVersion}`;
+const releasePageUrl = `https://github.com/devkiraa/nex/releases/tag/${releaseVersion}`;
+
 const manifestExample = `{
   "id": "yourname.your-tool",
   "name": "Your Tool Name",
@@ -66,38 +88,44 @@ const manifestExample = `{
           <h2>Installation</h2>
           
           <h3>Download</h3>
-          <p>Download nex v1.0.0 from GitHub Releases:</p>
-          <a href="https://github.com/devkiraa/nex/releases/tag/v1.0.0" class="download-btn" target="_blank">
+          <p>Download nex {releaseVersion} from GitHub Releases:</p>
+          <a href={releasePageUrl} class="download-btn" target="_blank">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3"/>
             </svg>
-            View v1.0.0 Release
+            View {releaseVersion} Release
           </a>
           
           <h3>Windows</h3>
           <div class="code-block">
             <div class="code-header">Download & install</div>
-            <pre><code>curl -LO https://github.com/devkiraa/nex/releases/download/v1.0.0/nex-windows-x64.exe
+            <pre><code>curl -LO {releaseBaseUrl}/nex-windows-x64.exe
 move .\nex-windows-x64.exe %USERPROFILE%\bin\nex.exe</code></pre>
           </div>
           
           <h3>Linux</h3>
           <div class="code-block">
             <div class="code-header">Download & install</div>
-            <pre><code>curl -LO https://github.com/devkiraa/nex/releases/download/v1.0.0/nex-linux-x64
+            <pre><code>curl -LO {releaseBaseUrl}/nex-linux-x64
 sudo install -m 755 nex-linux-x64 /usr/local/bin/nex</code></pre>
           </div>
           
           <h3>macOS</h3>
           <div class="code-block">
             <div class="code-header">Download & install</div>
-            <pre><code>curl -LO https://github.com/devkiraa/nex/releases/download/v1.0.0/nex-macos-x64
+            <pre><code>curl -LO {releaseBaseUrl}/nex-macos-x64
 sudo install -m 755 nex-macos-x64 /usr/local/bin/nex</code></pre>
           </div>
           
           <h3>Verify Installation</h3>
           <div class="code-block">
             <pre><code>nex --version</code></pre>
+          </div>
+
+          <h3>Self-Update</h3>
+          <p>Already have nex installed? Update to the latest version with:</p>
+          <div class="code-block">
+            <pre><code>nex self-update</code></pre>
           </div>
         </section>
 
