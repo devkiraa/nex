@@ -1,28 +1,28 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 
+import fs from 'node:fs';
+import path from 'node:path';
+
 export async function getStaticPaths() {
   const registryUrl = 'https://raw.githubusercontent.com/devkiraa/nex/main/registry/index.json';
   let packages = [];
   
   try {
-    if (import.meta.env.DEV) {
-      packages = [
-        {
-          id: 'devkiraa.pagepull',
-          name: 'PagePull',
-          version: '1.0.0',
-          description: 'Extract web pages as clean Markdown for AI/LLM consumption',
-          keywords: ['web', 'scraper', 'markdown', 'ai', 'llm'],
-          manifest: 'packages/d/devkiraa/pagepull/manifest.json'
-        }
-      ];
+    // 1. Try local file (Monorepo)
+    // resolve from process.cwd() (frontend root) -> ../registry/index.json
+    const localPath = path.resolve(process.cwd(), '../registry/index.json');
+    if (fs.existsSync(localPath)) {
+      const data = JSON.parse(fs.readFileSync(localPath, 'utf-8'));
+      packages = data.packages || [];
     } else {
-      const response = await fetch(registryUrl);
+      // 2. Fetch from GitHub
+      const response = await fetch(registryUrl, { cache: 'no-store' });
       const data = await response.json();
       packages = data.packages || [];
     }
   } catch (e) {
+    console.warn("Failed to load registry index for static paths", e);
     packages = [];
   }
   
@@ -43,38 +43,35 @@ let dependencyList: any[] = [];
 const siteBase = import.meta.env.BASE_URL || '/';
 
 try {
-  if (import.meta.env.DEV) {
-    manifest = {
-      id: pkg.id,
-      name: pkg.name,
-      version: pkg.version,
-      description: pkg.description,
-      author: { name: 'DevKira', github: 'devkiraa' },
-      license: 'MIT',
-      repository: 'https://github.com/devkiraa/pagepull',
-      runtime: { type: 'python', version: '>=3.10' },
-      entrypoint: 'main.py',
-      commands: {
-        default: 'python main.py',
-        'export': 'python main.py export',
-        help: 'python main.py --help'
-      },
-      keywords: pkg.keywords,
-      platforms: ['windows', 'linux', 'macos'],
-      dependencies: [
-        { id: 'python', version: '>=3.10', type: 'runtime' },
-        { id: 'requests', version: '^2.31.0', type: 'library' }
-      ],
-      versions: [
-        { version: '1.0.0', date: '2023-10-25', changelog: 'Initial release.' }
-      ]
-    };
+  // 1. Try local manifest file
+  // pkg.manifest is relative to registry root, e.g. "packages/d/devkiraa/..."
+  const localManifestPath = path.resolve(process.cwd(), `../registry/${pkg.manifest}`);
+  
+  if (fs.existsSync(localManifestPath)) {
+    console.log(`Loading local manifest for ${pkg.id}`);
+    manifest = JSON.parse(fs.readFileSync(localManifestPath, 'utf-8'));
   } else {
-    const response = await fetch(manifestUrl);
-    manifest = await response.json();
+    // 2. Fallback to GitHub
+    const response = await fetch(manifestUrl, { cache: 'no-store' });
+    if (response.ok) {
+        manifest = await response.json();
+    } else {
+        throw new Error(`Failed to fetch manifest: ${response.status}`);
+    }
   }
 } catch (e) {
-  manifest = pkg;
+  console.warn(`Error loading manifest for ${pkg.id}, using index data fallback.`);
+  // Fallback to minimal data from index
+  manifest = {
+    id: pkg.id,
+    name: pkg.name,
+    version: pkg.version,
+    description: pkg.description,
+    author: pkg.author || { name: 'Unknown' },
+    keywords: pkg.keywords || [],
+    repository: pkg.repository,
+    ...pkg
+  };
 }
 
 // Version history
@@ -117,10 +114,9 @@ if (Array.isArray(manifest.dependencies)) {
       <p class="package-description">{manifest.description}</p>
       
       <div class="package-tabs">
-        <a href="#" class="tab active">Readme</a>
-        <a href="#" class="tab">Code</a>
-        <a href="#" class="tab">Dependencies</a>
-        <a href="#" class="tab">Versions</a>
+        <button class="tab active" data-target="readme">Readme</button>
+        <button class="tab" data-target="dependencies">Dependencies</button>
+        <button class="tab" data-target="versions">Versions</button>
       </div>
     </div>
   </div>
@@ -128,100 +124,134 @@ if (Array.isArray(manifest.dependencies)) {
   <main class="container">
     <div class="package-layout">
       <div class="main-column">
-        <div class="readme-content">
-          <section class="markdown-section">
-            <h2>Usage</h2>
-            <div class="code-block">
-              <div class="code-header">
-                <span>Run this package</span>
-                <button class="copy-btn" data-copy={`nex run ${manifest.name.toLowerCase()}`}>
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="9" y="9" width="13" height="13" rx="2"/>
-                    <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-                  </svg>
-                </button>
+        <div class="main-content-wrapper">
+          <div id="tab-readme" class="tab-content active">
+            <section class="quick-start-section">
+              <div class="quick-start-card">
+                <div class="qs-left">
+                  <div class="qs-label-row">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" class="qs-icon">
+                      <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                    </svg>
+                    <h3>Quick Start</h3>
+                  </div>
+                  <p>Run instantly with nex:</p>
+                </div>
+                <div class="qs-right">
+                  <div class="qs-cmd">
+                    <span class="qs-prompt">$</span>
+                    <code>nex run {manifest.name.toLowerCase()}</code>
+                  </div>
+                  <button class="copy-icon-btn qs-copy" data-copy={`nex run ${manifest.name.toLowerCase()}`} title="Copy run command">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="9" y="9" width="13" height="13" rx="2"/>
+                      <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                    </svg>
+                  </button>
+                </div>
               </div>
-              <pre><code>nex run {manifest.name.toLowerCase()}</code></pre>
-            </div>
-          </section>
+            </section>
 
-          {manifest.commands && Object.keys(manifest.commands).length > 0 && (
-            <section class="markdown-section">
-              <h2>Available Commands</h2>
-              <div class="commands-table">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Command</th>
-                      <th>Runs</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {Object.entries(manifest.commands).map(([name, cmd]) => (
+            {manifest.screenshots && manifest.screenshots.length > 0 && (
+              <section class="screenshots-section">
+                <h2>Preview</h2>
+                <div class="screenshots-grid">
+                  {manifest.screenshots.map((s: any) => (
+                    <figure class="screenshot-item">
+                      <img src={s.url} alt={s.caption || 'Package screenshot'} loading="lazy" />
+                      {s.caption && <figcaption>{s.caption}</figcaption>}
+                    </figure>
+                  ))}
+                </div>
+              </section>
+            )}
+  
+            {manifest.commands && Object.keys(manifest.commands).length > 0 && (
+              <section class="markdown-section">
+                <h2>Available Commands</h2>
+                <div class="commands-table">
+                  <table>
+                    <thead>
                       <tr>
-                        <td><code>nex run {manifest.name.toLowerCase()} {name === 'default' ? '' : name}</code></td>
-                        <td><code class="cmd-value">{cmd}</code></td>
+                        <th>Command</th>
+                        <th>Runs</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-          )}
+                    </thead>
+                    <tbody>
+                      {Object.entries(manifest.commands).map(([name, cmd]) => (
+                        <tr>
+                          <td><code>nex run {manifest.name.toLowerCase()} {name === 'default' ? '' : name}</code></td>
+                          <td><code class="cmd-value">{cmd}</code></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            )}
+  
+            {manifest.keywords && manifest.keywords.length > 0 && (
+              <section class="markdown-section">
+                <h2>Keywords</h2>
+                <div class="keywords-list">
+                  {manifest.keywords.map((kw: string) => (
+                    <span class="keyword-tag">{kw}</span>
+                  ))}
+                </div>
+              </section>
+            )}
+          </div>
 
-          {manifest.keywords && manifest.keywords.length > 0 && (
-            <section class="markdown-section">
-              <h2>Keywords</h2>
-              <div class="keywords-list">
-                {manifest.keywords.map((kw: string) => (
-                  <a href="#" class="keyword-tag">{kw}</a>
-                ))}
-              </div>
-            </section>
-          )}
+          <div id="tab-versions" class="tab-content" style="display: none;">
+            {versionHistory && versionHistory.length > 0 ? (
+              <section class="markdown-section">
+                <h2>Version History</h2>
+                <div class="versions-list">
+                  {versionHistory.map((v) => (
+                    <div class="version-item">
+                      <div>
+                        <div class="version-label">v{v.version}</div>
+                        {v.date && <div class="version-date">{v.date}</div>}
+                        {v.changelog && <p class="version-notes">{v.changelog}</p>}
+                      </div>
+                      <div class="version-actions">
+                        <button class="copy-btn" data-copy={`nex install ${manifest.name.toLowerCase()}@${v.version}`} title="Copy install command">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="9" y="9" width="13" height="13" rx="2"/>
+                            <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </section>
+            ) : (
+                <p class="empty-text">No version history available.</p>
+            )}
+          </div>
 
-          {versionHistory && versionHistory.length > 0 && (
-            <section class="markdown-section">
-              <h2>Version History</h2>
-              <div class="versions-list">
-                {versionHistory.map((v) => (
-                  <div class="version-item">
-                    <div>
-                      <div class="version-label">v{v.version}</div>
-                      {v.date && <div class="version-date">{v.date}</div>}
-                      {v.changelog && <p class="version-notes">{v.changelog}</p>}
+          <div id="tab-dependencies" class="tab-content" style="display: none;">
+            {dependencyList && dependencyList.length > 0 ? (
+              <section class="markdown-section">
+                <h2>Dependencies</h2>
+                <div class="dependency-graph">
+                  {dependencyList.map((dep) => (
+                    <div class="dependency-node">
+                      <div class="dep-line"></div>
+                      <div class="dep-card">
+                        <div class="dep-name">{dep.id || dep.name}</div>
+                        {dep.version && <div class="dep-version">{dep.version}</div>}
+                        {dep.type && <span class="dep-tag">{dep.type}</span>}
+                      </div>
                     </div>
-                    <div class="version-actions">
-                      <button class="copy-btn" data-copy={`nex install ${manifest.name.toLowerCase()}@${v.version}`} title="Copy install command">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                          <rect x="9" y="9" width="13" height="13" rx="2"/>
-                          <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-                        </svg>
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
-
-          {dependencyList && dependencyList.length > 0 && (
-            <section class="markdown-section">
-              <h2>Dependencies</h2>
-              <div class="dependency-graph">
-                {dependencyList.map((dep) => (
-                  <div class="dependency-node">
-                    <div class="dep-line"></div>
-                    <div class="dep-card">
-                      <div class="dep-name">{dep.id || dep.name}</div>
-                      {dep.version && <div class="dep-version">{dep.version}</div>}
-                      {dep.type && <span class="dep-tag">{dep.type}</span>}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
+                  ))}
+                </div>
+              </section>
+            ) : (
+                <p class="empty-text">No dependencies.</p>
+            )}
+          </div>
         </div>
       </div>
 
@@ -243,17 +273,68 @@ if (Array.isArray(manifest.dependencies)) {
         </div>
 
         <div class="sidebar-block">
-          <h3>Repository</h3>
-          {manifest.repository ? (
-            <a href={manifest.repository} target="_blank" rel="noopener" class="sidebar-link">
-              <svg viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
-                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+          <h3>Resources</h3>
+          <div class="resource-links">
+            {manifest.funding && (
+              <a href={manifest.funding} target="_blank" rel="noopener" class="sponsor-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+                <span>Sponsor</span>
+              </a>
+            )}
+            {manifest.repository && (
+              <a href={manifest.repository} target="_blank" rel="noopener" class="resource-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/>
+                </svg>
+                <span>Repository</span>
+              </a>
+            )}
+            
+            {manifest.repository && manifest.repository.includes('github.com') && (
+              <a href={`${manifest.repository.replace(/\.git$/, '')}/issues`} target="_blank" rel="noopener" class="resource-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="12"></line>
+                  <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+                <span>Issues</span>
+              </a>
+            )}
+            
+            {manifest.homepage && (
+              <a href={manifest.homepage} target="_blank" rel="noopener" class="resource-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                  <polyline points="15 3 21 3 21 9"></polyline>
+                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                </svg>
+                <span>Homepage</span>
+              </a>
+            )}
+          </div>
+        </div>
+
+        <div class="sidebar-block" id="github-stats-block" style="display: none;" data-repo={manifest.repository}>
+          <h3>GitHub Stats</h3>
+          <div class="stats-grid">
+            <div class="stat-item" title="Stars">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
               </svg>
-              <span>{manifest.repository.replace('https://github.com/', '')}</span>
-            </a>
-          ) : (
-            <span class="sidebar-text">No repository linked</span>
-          )}
+              <span id="gh-stars">--</span>
+            </div>
+            <div class="stat-item" title="Forks">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="6" y1="3" x2="6" y2="15"></line>
+                <circle cx="18" cy="6" r="3"></circle>
+                <circle cx="6" cy="18" r="3"></circle>
+                <path d="M18 9a9 9 0 0 1-9 9"></path>
+              </svg>
+              <span id="gh-forks">--</span>
+            </div>
+          </div>
         </div>
 
         <div class="sidebar-block">
@@ -423,6 +504,10 @@ if (Array.isArray(manifest.dependencies)) {
     border-radius: 8px 8px 0 0;
     border-bottom: 2px solid transparent;
     transition: all 0.2s ease;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
   }
 
   .tab:hover {
@@ -446,6 +531,122 @@ if (Array.isArray(manifest.dependencies)) {
 
 
   /* --- Content Sections --- */
+  /* Quick Start Card */
+  .quick-start-section {
+    margin-bottom: 3rem;
+  }
+
+  .quick-start-card {
+    background: linear-gradient(135deg, #fff1f2 0%, #ffffff 100%);
+    border: 1px solid #fecdd3; /* Rose 200 */
+    border-radius: 16px;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    box-shadow: 0 10px 30px -5px rgba(225, 29, 72, 0.1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .quick-start-card::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; bottom: 0; width: 4px;
+    background: var(--accent);
+    opacity: 0.5;
+  }
+
+  .qs-left {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    min-width: 180px;
+  }
+
+  .qs-label-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--accent);
+  }
+
+  .qs-label-row h3 {
+    margin: 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+  }
+
+  .qs-left p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #71717a;
+  }
+
+  .qs-right {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: #ffffff;
+    border: 1px solid #e4e4e7;
+    padding: 0.75rem 1rem;
+    border-radius: 10px;
+    flex: 1;
+    max-width: 450px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+  }
+
+  .qs-cmd {
+    flex: 1;
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    color: #18181b;
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    overflow: hidden;
+  }
+
+  .qs-prompt {
+    color: #d4d4d8;
+    user-select: none;
+    font-weight: 600;
+  }
+  
+  .qs-cmd code {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .qs-copy {
+    background: #f4f4f5;
+    border: none;
+    color: #52525b;
+    padding: 6px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .qs-copy:hover {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  @media (max-width: 768px) {
+    .quick-start-card {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    .qs-right {
+      width: 100%;
+      max-width: none;
+    }
+  }
+
   .markdown-section {
     margin-bottom: 3rem;
   }
@@ -623,6 +824,120 @@ if (Array.isArray(manifest.dependencies)) {
   }
 
   /* Responsive */
+  /* Screenshots */
+  .screenshots-grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+  
+  .screenshot-item {
+    margin: 0;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    background: #000;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  
+  .screenshot-item img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  
+  .screenshot-item figcaption {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    background: var(--bg-surface);
+    border-top: 1px solid var(--border);
+    text-align: center;
+  }
+  
+  /* Sponsor Button */
+  .sponsor-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.6rem;
+    border-radius: 8px;
+    background: #fdf2f8; /* Pink 50 */
+    color: #db2777; /* Pink 600 */
+    border: 1px solid #fbcfe8;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    margin-bottom: 0.75rem;
+  }
+  
+  .sponsor-btn:hover {
+    background: #fce7f3;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px -2px rgba(219, 39, 119, 0.2);
+  }
+  
+  .sponsor-btn svg {
+    fill: currentColor;
+    color: #db2777;
+  }
+
+  /* Sidebar Resources */
+  .resource-links {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  
+  .resource-link {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.5rem;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: 6px;
+    transition: all 0.2s;
+    font-size: 0.9rem;
+  }
+  
+  .resource-link:hover {
+    background: var(--bg-main);
+    color: var(--accent);
+  }
+  
+  /* GitHub Stats */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  
+  .stat-item {
+    background: var(--bg-main);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  
+  .stat-value {
+    font-weight: 700;
+    color: var(--text-primary);
+    font-size: 1.1rem;
+  }
+  
+  .stat-item svg {
+    color: var(--text-secondary);
+    width: 14px; height: 14px;
+    margin-bottom: 2px;
+  }
+  
   @media (max-width: 768px) {
     .package-layout { grid-template-columns: 1fr; }
     .sidebar-column { position: static; order: -1; }
@@ -662,6 +977,22 @@ if (Array.isArray(manifest.dependencies)) {
     btn.addEventListener('click', () => copyToClipboard(btn as HTMLElement));
   });
 
+  // Tab Switching Logic
+  const tabs = document.querySelectorAll('.tab');
+  const contents = document.querySelectorAll('.tab-content');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      const target = (tab as HTMLElement).dataset.target;
+      contents.forEach(content => {
+        (content as HTMLElement).style.display = content.id === `tab-${target}` ? 'block' : 'none';
+      });
+    });
+  });
+
   // Simple canvas bar chart for downloads
   const chartEl = document.getElementById('download-chart') as HTMLCanvasElement;
   if (chartEl) {
@@ -689,5 +1020,39 @@ if (Array.isArray(manifest.dependencies)) {
         ctx.fillText(s.date || '', x, chartEl.height - padding + 12);
       });
     }
+  }
+  // Fetch GitHub Stats
+  const statsBlock = document.getElementById('github-stats-block');
+  if (statsBlock && statsBlock.dataset.repo) {
+    const repoUrl = statsBlock.dataset.repo;
+    if (repoUrl.includes('github.com')) {
+      const match = repoUrl.match(/github\.com\/([^/]+)\/([^/]+)/);
+      if (match) {
+        const [_, owner, repo] = match;
+        // Clean repo name from .git suffix
+        const cleanRepo = repo.replace(/\.git$/, '');
+        const api = `https://api.github.com/repos/${owner}/${cleanRepo}`;
+        
+        fetch(api)
+          .then(res => res.json())
+          .then(data => {
+            if (data.stargazers_count !== undefined) {
+              const starsEl = document.getElementById('gh-stars');
+              const forksEl = document.getElementById('gh-forks');
+              if (starsEl) starsEl.textContent = kFormatter(data.stargazers_count);
+              if (forksEl) forksEl.textContent = kFormatter(data.forks_count);
+              statsBlock.style.display = 'block';
+            }
+          })
+          .catch(console.error);
+      }
+    }
+  }
+
+  function kFormatter(num: any) {
+      const n = Number(num);
+      return Math.abs(n) > 999 
+        ? (Math.sign(n)*((Math.abs(n)/1000).toFixed(1))) + 'k' 
+        : Math.sign(n)*Math.abs(n)
   }
 </script>

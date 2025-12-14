@@ -4,7 +4,12 @@
   "title": "Nex Package Configuration",
   "description": "Configuration file (nex.json) that defines how Nex installs and runs your tool",
   "type": "object",
-  "required": ["id", "name", "version", "type"],
+  "required": [
+    "id",
+    "name",
+    "version",
+    "type"
+  ],
   "properties": {
     "$schema": {
       "type": "string",
@@ -30,7 +35,12 @@
     },
     "type": {
       "type": "string",
-      "enum": ["binary", "python", "node", "script"],
+      "enum": [
+        "binary",
+        "python",
+        "node",
+        "script"
+      ],
       "description": "Package type determines how it's installed and run"
     },
     "python": {
@@ -65,7 +75,11 @@
         },
         "package_manager": {
           "type": "string",
-          "enum": ["npm", "yarn", "pnpm"],
+          "enum": [
+            "npm",
+            "yarn",
+            "pnpm"
+          ],
           "default": "npm"
         }
       }
@@ -97,11 +111,19 @@
           "description": "Ordered list of installation steps",
           "items": {
             "type": "object",
-            "required": ["action"],
+            "required": [
+              "action"
+            ],
             "properties": {
               "action": {
                 "type": "string",
-                "enum": ["download", "extract", "pip_install", "npm_install", "run_command"],
+                "enum": [
+                  "download",
+                  "extract",
+                  "pip_install",
+                  "npm_install",
+                  "run_command"
+                ],
                 "description": "Installation action to perform"
               },
               "url": {
@@ -135,7 +157,9 @@
         },
         "args": {
           "type": "array",
-          "items": { "type": "string" },
+          "items": {
+            "type": "string"
+          },
           "description": "Default arguments"
         },
         "passthrough_args": {
@@ -145,7 +169,9 @@
         },
         "env": {
           "type": "object",
-          "additionalProperties": { "type": "string" },
+          "additionalProperties": {
+            "type": "string"
+          },
           "description": "Environment variables to set"
         },
         "working_dir": {
@@ -160,12 +186,18 @@
       "additionalProperties": {
         "type": "object",
         "properties": {
-          "description": { "type": "string" },
+          "description": {
+            "type": "string"
+          },
           "args": {
             "type": "array",
-            "items": { "type": "string" }
+            "items": {
+              "type": "string"
+            }
           },
-          "example": { "type": "string" }
+          "example": {
+            "type": "string"
+          }
         }
       }
     },
@@ -175,17 +207,27 @@
       "items": {
         "type": "object",
         "properties": {
-          "description": { "type": "string" },
-          "command": { "type": "string" }
+          "description": {
+            "type": "string"
+          },
+          "command": {
+            "type": "string"
+          }
         }
       }
     },
     "author": {
       "type": "object",
       "properties": {
-        "name": { "type": "string" },
-        "github": { "type": "string" },
-        "email": { "type": "string" }
+        "name": {
+          "type": "string"
+        },
+        "github": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
       }
     },
     "license": {
@@ -203,7 +245,9 @@
     },
     "keywords": {
       "type": "array",
-      "items": { "type": "string" }
+      "items": {
+        "type": "string"
+      }
     }
   }
 }

@@ -30,23 +30,47 @@ You must generate the following files:
 4. `README.md`: Usage instructions.
 
 ### 3. Manifest Schema (nex.json)
+```json
 {
-  "id": "author.name",          // Lowercase, alphanumeric, dots allowed
-  "name": "name",               // Display name
-  "version": "0.1.0",           // SemVer
-  "description": "...",         // Short description
-  "author": "YourName",
-  "license": "MIT",
-  "runtime": { 
-    "type": "python"            // "python", "node", "bash" 
+  "id": "author.name",          // Lowercase, alphanumeric, dots allowed. E.g. "devkiraa.pagepull"
+  "name": "Display Name",       // Human-readable title
+  "version": "0.1.0",           // Semantic Versioning
+  "description": "...",         // Short summary for the list view
+  "author": {
+    "name": "YourName",
+    "github": "username"        // Optional: Links to GitHub profile
   },
-  "entrypoint": "main.py",      // Relative path to script
+  "license": "MIT",
+  "repository": "https://github.com/user/repo", // Link to source code
+  "homepage": "https://tool.site",              // Optional: Project website
+  "funding": "https://github.com/sponsors/user",// Optional: "Sponsor" button in sidebar
+  "bugs": "https://github.com/user/repo/issues",// Optional: Issue tracker
+  "keywords": ["cli", "tool"],                  // Search tags
+  "categories": ["Utility"],                    // Browsing categories
+  "screenshots": [                              // Optional: Gallery in details page
+    {
+      "url": "https://...", 
+      "caption": "CLI Usage Demo"
+    }
+  ],
+  "runtime": { 
+    "type": "python",           // "python", "node", "bash"
+    "version": ">=3.10"
+  },
+  "entrypoint": "main.py",      // Relative path to main script
   "commands": {
     "default": "python main.py",
     "install": "pip install -r requirements.txt"
   }
 }
 ```
+
+### 4. UI Optimization Tips (Crucial)
+To make your package look **perfect** in the Nex Registry UI:
+1.  **Screenshots**: Always include at least one screenshot url in `screenshots`. This renders a preview gallery.
+2.  **Funding**: If you accept sponsorships, add `funding`. It creates a distinct "Sponsor" button.
+3.  **Keywords**: Add 3-5 relevant keywords for better search visibility.
+4.  **Repository**: Ensure the URL is valid to enable GitHub stats (Stars/Forks) in the sidebar.
 
 ---
 

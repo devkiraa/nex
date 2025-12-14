@@ -256,6 +256,37 @@
       "description": "Version history with download information",
       "additionalProperties": true
     },
+    "funding": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL to sponsorship page (GitHub Sponsors, Patreon, etc.)"
+    },
+    "bugs": {
+      "type": "string",
+      "format": "uri",
+      "description": "URL for issue tracking"
+    },
+    "screenshots": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "url"
+        ],
+        "properties": {
+          "url": {
+            "type": "string",
+            "format": "uri",
+            "description": "Public URL to image file"
+          },
+          "caption": {
+            "type": "string",
+            "description": "Alt text/caption for the screenshot"
+          }
+        }
+      },
+      "description": "Gallery of screenshots to showcase the package"
+    },
     "latest": {
       "type": "string",
       "description": "Latest stable version"
