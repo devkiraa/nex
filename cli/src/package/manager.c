@@ -379,33 +379,86 @@ int package_remove(const char *package_id) {
     return 0;
 }
 
+/* Helper to check if a package is linked */
+static int check_package_link(const char *package_id, char *linked_path, size_t size) {
+    char home[MAX_PATH_LEN];
+    if (config_get_home_dir(home, sizeof(home)) != 0) return 0;
+    
+    char links_file[MAX_PATH_LEN];
+    snprintf(links_file, sizeof(links_file), "%s%clinks.json", home, PATH_SEPARATOR);
+    
+    FILE *f = fopen(links_file, "r");
+    if (!f) return 0;
+    
+    fseek(f, 0, SEEK_END);
+    long fsize = ftell(f);
+    fseek(f, 0, SEEK_SET);
+    
+    char *data = malloc(fsize + 1);
+    fread(data, 1, fsize, f);
+    data[fsize] = '\0';
+    fclose(f);
+    
+    cJSON *json = cJSON_Parse(data);
+    free(data);
+    
+    if (!json) return 0;
+    
+    cJSON *item = cJSON_GetObjectItem(json, package_id);
+    if (!item || !cJSON_IsString(item)) {
+        cJSON_Delete(json);
+        return 0;
+    }
+    
+    strncpy(linked_path, item->valuestring, size - 1);
+    cJSON_Delete(json);
+    return 1;
+}
+
 int package_is_installed(const char *package_id, LocalPackage *local) {
-    char packages_dir[MAX_PATH_LEN];
-    if (config_get_packages_dir(packages_dir, sizeof(packages_dir)) != 0) {
-        return 0;
-    }
-    
     char install_path[MAX_PATH_LEN];
-    snprintf(install_path, sizeof(install_path), "%s%c%s",
-        packages_dir, PATH_SEPARATOR, package_id);
+    int is_linked = check_package_link(package_id, install_path, sizeof(install_path));
     
-    /* Check if directory exists */
-#ifdef _WIN32
-    DWORD attrs = GetFileAttributesA(install_path);
-    if (attrs == INVALID_FILE_ATTRIBUTES || !(attrs & FILE_ATTRIBUTE_DIRECTORY)) {
-        return 0;
+    if (!is_linked) {
+        char packages_dir[MAX_PATH_LEN];
+        if (config_get_packages_dir(packages_dir, sizeof(packages_dir)) != 0) {
+            return 0;
+        }
+        
+        snprintf(install_path, sizeof(install_path), "%s%c%s",
+            packages_dir, PATH_SEPARATOR, package_id);
+        
+        /* Check if directory exists */
+    #ifdef _WIN32
+        DWORD attrs = GetFileAttributesA(install_path);
+        if (attrs == INVALID_FILE_ATTRIBUTES || !(attrs & FILE_ATTRIBUTE_DIRECTORY)) {
+            return 0;
+        }
+    #else
+        struct stat st;
+        if (stat(install_path, &st) != 0 || !S_ISDIR(st.st_mode)) {
+            return 0;
+        }
+    #endif
+    } else {
+        /* Verify linked path exists */
+    #ifdef _WIN32
+        DWORD attrs = GetFileAttributesA(install_path);
+        if (attrs == INVALID_FILE_ATTRIBUTES || !(attrs & FILE_ATTRIBUTE_DIRECTORY)) {
+            return 0;
+        }
+    #else
+        struct stat st;
+        if (stat(install_path, &st) != 0 || !S_ISDIR(st.st_mode)) {
+            return 0;
+        }
+    #endif
     }
-#else
-    struct stat st;
-    if (stat(install_path, &st) != 0 || !S_ISDIR(st.st_mode)) {
-        return 0;
-    }
-#endif
     
     if (local) {
         strncpy(local->id, package_id, MAX_NAME_LEN - 1);
         strncpy(local->install_path, install_path, MAX_PATH_LEN - 1);
-        strcpy(local->version, "installed");  /* TODO: Read from local manifest */
+        strcpy(local->version, is_linked ? "linked" : "installed");
         local->is_installed = 1;
     }
     

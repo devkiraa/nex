@@ -25,6 +25,10 @@ set(SOURCES
     src/commands/config.c
     src/commands/alias.c
     src/commands/publish.c
+    src/commands/doctor.c
+    src/commands/link.c
+    src/commands/outdated.c
+    src/commands/lock.c
     src/http/client.c
     src/package/manager.c
     src/runtime/runtime.c

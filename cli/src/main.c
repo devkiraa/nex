@@ -117,9 +117,13 @@ static void print_usage(void) {
     printf("  list                   List installed packages\n");
     printf("  search <query>         Search the registry\n");
     printf("  info <package>         Show package details\n");
+    printf("  outdated               Check for available updates\n");
+    printf("  doctor                 Check system health\n");
     printf("\n\033[33mDeveloper Commands:\033[0m\n");
     printf("  init                   Create a new package\n");
+    printf("  link [pkg]             Link local package to global\n");
     printf("  publish                Submit package to registry\n");
+    printf("  lock                   Generate nex.lock snapshot\n");
     printf("\n\033[33mConfiguration:\033[0m\n");
     printf("  config [key] [value]   Manage nex settings\n");
     printf("  alias [name] [pkg]     Manage package shortcuts\n");
@@ -208,6 +212,18 @@ int main(int argc, char *argv[]) {
     }
     else if (strcmp(command, "publish") == 0) {
         result = cmd_publish(argc - 2, argv + 2);
+    }
+    else if (strcmp(command, "doctor") == 0) {
+        result = cmd_doctor(argc - 2, argv + 2);
+    }
+    else if (strcmp(command, "link") == 0) {
+        result = cmd_link(argc - 2, argv + 2);
+    }
+    else if (strcmp(command, "outdated") == 0) {
+        result = cmd_outdated(argc - 2, argv + 2);
+    }
+    else if (strcmp(command, "lock") == 0) {
+        result = cmd_lock(argc - 2, argv + 2);
     }
     else if (strcmp(command, "self-update") == 0) {
         result = cmd_self_update(argc - 2, argv + 2);
