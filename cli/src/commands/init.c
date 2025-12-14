@@ -5,9 +5,17 @@
 #include "nex.h"
 #include <ctype.h>
 
+#ifdef _WIN32
+#include <io.h>
+#define access _access
+#define F_OK 0
+#else
+#include <unistd.h>
+#endif
+
 static void to_lowercase(char *str) {
     for (int i = 0; str[i]; i++) {
-        str[i] = tolower(str[i]);
+        str[i] = (char)tolower((unsigned char)str[i]);
     }
 }
 
