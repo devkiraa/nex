@@ -2,14 +2,30 @@
 import Layout from '../../layouts/Layout.astro';
 
 // Fetch packages from registry (at build time)
-const registryUrl = 'https://raw.githubusercontent.com/devkiraa/nex/main/registry/index.json';
+import fs from 'node:fs';
+import path from 'node:path';
+
 let packages: any[] = [];
 
 try {
-  const response = await fetch(registryUrl);
-  const data = await response.json();
-  packages = data.packages || [];
+  // 1. Try reading local file (Monorepo dev mode)
+  // process.cwd() is usually 'frontend' root
+  const localPath = path.resolve(process.cwd(), '../registry/index.json');
+  
+  if (fs.existsSync(localPath)) {
+    console.log('Using local registry:', localPath);
+    const data = JSON.parse(fs.readFileSync(localPath, 'utf-8'));
+    packages = data.packages || [];
+  } else {
+    // 2. Fallback to GitHub (Production / Standalone usage)
+    console.log('Using remote registry');
+    const registryUrl = 'https://raw.githubusercontent.com/devkiraa/nex/main/registry/index.json';
+    const response = await fetch(registryUrl, { cache: 'no-store' });
+    const data = await response.json();
+    packages = data.packages || [];
+  }
 } catch (e) {
+  console.error("Failed to load registry:", e);
   packages = [];
 }
 
