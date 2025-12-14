@@ -6,12 +6,19 @@
 
 int cmd_remove(int argc, char *argv[]) {
     if (argc < 1) {
-        print_error("Usage: nex remove <package-id>");
-        printf("Example: nex remove author.package-name\n");
+        print_error("Usage: nex remove <package>");
+        printf("Example: nex remove pagepull\n");
         return 1;
     }
     
-    const char *package_id = argv[0];
+    const char *input_name = argv[0];
+    char package_id[MAX_NAME_LEN];
+    
+    /* Resolve short name to full package ID */
+    if (package_resolve_name(input_name, package_id, sizeof(package_id)) != 0) {
+        return 1;
+    }
+    
     LocalPackage local;
     
     /* Check if installed */

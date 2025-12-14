@@ -10,6 +10,7 @@
   "entrypoint": "pagepull.py",
   "commands": {
     "default": "python pagepull.py",
+    "install": "pip install -r requirements.txt",
     "pull": "python pagepull.py",
     "serve": "python pagepull.py --serve",
     "help": "python pagepull.py --help"

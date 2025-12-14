@@ -244,17 +244,53 @@ int package_fetch_manifest(const char *package_id, PackageInfo *info) {
     return result;
 }
 
+/* Fetch manifest and return raw JSON (caller must free) */
+static char* package_fetch_manifest_raw(const char *package_id) {
+    char url[MAX_URL_LEN];
+    
+    if (build_manifest_url(package_id, url, sizeof(url)) != 0) {
+        return NULL;
+    }
+    
+    HttpResponse *response = http_get(url);
+    if (!response) {
+        return NULL;
+    }
+    
+    if (response->status_code != 200) {
+        http_response_free(response);
+        return NULL;
+    }
+    
+    char *json = malloc(response->size + 1);
+    if (json) {
+        memcpy(json, response->data, response->size);
+        json[response->size] = '\0';
+    }
+    
+    http_response_free(response);
+    return json;
+}
+
 int package_install(const char *package_id) {
     PackageInfo info;
     
-    /* Fetch manifest */
-    if (package_fetch_manifest(package_id, &info) != 0) {
+    /* Fetch manifest and keep raw JSON */
+    char *manifest_json = package_fetch_manifest_raw(package_id);
+    if (!manifest_json) {
+        print_error("Failed to fetch package manifest");
+        return -1;
+    }
+    
+    if (package_parse_manifest(manifest_json, &info) != 0) {
+        free(manifest_json);
         return -1;
     }
     
     /* Get install directory */
     char packages_dir[MAX_PATH_LEN];
     if (config_get_packages_dir(packages_dir, sizeof(packages_dir)) != 0) {
+        free(manifest_json);
         return -1;
     }
     
@@ -271,8 +307,21 @@ int package_install(const char *package_id) {
     
     if (run_command(cmd) != 0) {
         print_error("Failed to clone repository");
+        free(manifest_json);
         return -1;
     }
+    
+    /* Save manifest.json to install directory */
+    char manifest_path[MAX_PATH_LEN];
+    snprintf(manifest_path, sizeof(manifest_path), "%s%cmanifest.json",
+        install_path, PATH_SEPARATOR);
+    
+    FILE *mf = fopen(manifest_path, "w");
+    if (mf) {
+        fputs(manifest_json, mf);
+        fclose(mf);
+    }
+    free(manifest_json);
     
     /* Run install command if specified */
     for (int i = 0; i < info.command_count; i++) {
@@ -402,6 +451,14 @@ int package_execute(const char *package_id, const char *command, int argc, char 
         fclose(f);
     }
     
+    /* Check if required runtime is available */
+    if (info.runtime != RUNTIME_UNKNOWN && info.runtime != RUNTIME_BINARY) {
+        if (runtime_ensure_available(info.runtime) != 0) {
+            print_error("Cannot run package without required runtime");
+            return -1;
+        }
+    }
+    
     /* Find command to execute */
     char exec_cmd[MAX_COMMAND_LEN] = {0};
     
@@ -437,6 +494,27 @@ int package_execute(const char *package_id, const char *command, int argc, char 
         print_error("No command '%s' found for package", command);
         return -1;
     }
+    
+    /* Normalize python command - use python3 if python doesn't exist */
+#ifndef _WIN32
+    if (info.runtime == RUNTIME_PYTHON) {
+        /* Check if 'python' exists, if not use 'python3' */
+        if (system("which python >/dev/null 2>&1") != 0 && 
+            system("which python3 >/dev/null 2>&1") == 0) {
+            /* Replace "python " with "python3 " in the command */
+            char temp_cmd[MAX_COMMAND_LEN];
+            char *pos = strstr(exec_cmd, "python ");
+            if (pos == exec_cmd || (pos && *(pos-1) == ' ' || *(pos-1) == '&')) {
+                size_t prefix_len = pos - exec_cmd;
+                strncpy(temp_cmd, exec_cmd, prefix_len);
+                temp_cmd[prefix_len] = '\0';
+                strcat(temp_cmd, "python3 ");
+                strcat(temp_cmd, pos + 7);  /* Skip "python " */
+                strncpy(exec_cmd, temp_cmd, MAX_COMMAND_LEN - 1);
+            }
+        }
+    }
+#endif
     
     /* Build full command with args */
     char full_cmd[MAX_COMMAND_LEN * 2];

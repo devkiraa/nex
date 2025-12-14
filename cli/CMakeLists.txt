@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(nex VERSION 1.3.0 LANGUAGES C)
+project(nex VERSION 1.4.0 LANGUAGES C)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -23,6 +23,7 @@ set(SOURCES
     src/commands/self_update.c
     src/http/client.c
     src/package/manager.c
+    src/runtime/runtime.c
     src/config/config.c
     src/utils/utils.c
     deps/cJSON/cJSON.c
@@ -40,6 +41,11 @@ target_include_directories(nex PRIVATE
 
 # Link libraries
 target_link_libraries(nex ${CURL_LIBRARIES})
+
+# Unix-specific settings (link math library for cJSON)
+if(UNIX)
+    target_link_libraries(nex m)
+endif()
 
 # Windows-specific settings
 if(WIN32)

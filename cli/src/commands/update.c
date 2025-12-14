@@ -62,7 +62,14 @@ int cmd_update(int argc, char *argv[]) {
     }
     
     /* Update specific package */
-    const char *package_id = argv[0];
+    const char *input_name = argv[0];
+    char package_id[MAX_NAME_LEN];
+    
+    /* Resolve short name to full package ID */
+    if (package_resolve_name(input_name, package_id, sizeof(package_id)) != 0) {
+        return 1;
+    }
+    
     LocalPackage local;
     
     if (!package_is_installed(package_id, &local)) {

@@ -24,8 +24,90 @@ static void print_banner(void) {
     printf("\n");
 }
 
+/* Get version string from a command */
+static int get_version_string(const char *cmd, char *version, size_t size) {
+    FILE *fp;
+    char full_cmd[256];
+    
+#ifdef _WIN32
+    snprintf(full_cmd, sizeof(full_cmd), "%s 2>nul", cmd);
+    fp = _popen(full_cmd, "r");
+#else
+    snprintf(full_cmd, sizeof(full_cmd), "%s 2>/dev/null", cmd);
+    fp = popen(full_cmd, "r");
+#endif
+    
+    if (!fp) return -1;
+    
+    if (fgets(version, (int)size, fp) == NULL) {
+#ifdef _WIN32
+        _pclose(fp);
+#else
+        pclose(fp);
+#endif
+        return -1;
+    }
+    
+#ifdef _WIN32
+    _pclose(fp);
+#else
+    pclose(fp);
+#endif
+    
+    /* Remove trailing newline */
+    size_t len = strlen(version);
+    while (len > 0 && (version[len-1] == '\n' || version[len-1] == '\r')) {
+        version[--len] = '\0';
+    }
+    
+    return 0;
+}
+
+static void print_runtimes(void) {
+    char version[128];
+    int found_any = 0;
+    
+    printf("\033[33mInstalled Runtimes:\033[0m\n");
+    
+    /* Python */
+#ifdef _WIN32
+    if (get_version_string("python --version", version, sizeof(version)) == 0) {
+#else
+    if (get_version_string("python3 --version", version, sizeof(version)) == 0 ||
+        get_version_string("python --version", version, sizeof(version)) == 0) {
+#endif
+        printf("  \033[32m✓\033[0m Python     %s\n", version);
+        found_any = 1;
+    } else {
+        printf("  \033[31m✗\033[0m Python     \033[90mnot installed\033[0m\n");
+    }
+    
+    /* Node.js */
+    if (get_version_string("node --version", version, sizeof(version)) == 0) {
+        printf("  \033[32m✓\033[0m Node.js    %s\n", version);
+        found_any = 1;
+    } else {
+        printf("  \033[31m✗\033[0m Node.js    \033[90mnot installed\033[0m\n");
+    }
+    
+    /* Git */
+    if (get_version_string("git --version", version, sizeof(version)) == 0) {
+        /* Extract just version number */
+        char *ver = strstr(version, "version ");
+        if (ver) ver += 8; else ver = version;
+        printf("  \033[32m✓\033[0m Git        %s\n", ver);
+        found_any = 1;
+    } else {
+        printf("  \033[31m✗\033[0m Git        \033[90mnot installed\033[0m\n");
+    }
+    
+    printf("\n");
+    (void)found_any;  /* Suppress unused warning */
+}
+
 static void print_usage(void) {
     print_banner();
+    print_runtimes();
     printf("Usage: nex <command> [options] [arguments]\n\n");
     printf("\033[33mCommands:\033[0m\n");
     printf("  install <package>      Install a package from the registry\n");

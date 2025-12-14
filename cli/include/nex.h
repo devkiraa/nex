@@ -26,8 +26,8 @@
 #endif
 
 /* Version */
-#define NEX_VERSION "1.3.0"
-#define NEX_USER_AGENT "nex/1.3.0"
+#define NEX_VERSION "1.4.0"
+#define NEX_USER_AGENT "nex/1.4.0"
 
 /* Registry configuration */
 #define REGISTRY_BASE_URL "https://raw.githubusercontent.com/devkiraa/nex/main/registry"
@@ -140,5 +140,14 @@ int make_directory_recursive(const char *path);
 RuntimeType runtime_from_string(const char *str);
 const char* runtime_to_string(RuntimeType runtime);
 int run_command(const char *command);
+
+/* Runtime management (runtime/runtime.c) */
+int runtime_is_installed(RuntimeType runtime);
+int runtime_ensure_available(RuntimeType runtime);
+int runtime_install(RuntimeType runtime);
+int runtime_install_python(void);
+int runtime_install_node(void);
+int runtime_prompt_install(RuntimeType runtime);
+const char* runtime_get_install_instructions(RuntimeType runtime);
 
 #endif /* NEX_H */

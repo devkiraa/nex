@@ -243,7 +243,23 @@
         }
       },
       "description": "Lifecycle scripts"
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Package categories for browsing"
+    },
+    "versions": {
+      "type": "object",
+      "description": "Version history with download information",
+      "additionalProperties": true
+    },
+    "latest": {
+      "type": "string",
+      "description": "Latest stable version"
     }
   },
-  "additionalProperties": false
+  "additionalProperties": true
 }
