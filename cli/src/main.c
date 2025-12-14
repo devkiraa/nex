@@ -12,12 +12,10 @@
 
 static void print_banner(void) {
     printf("\n");
-    printf("  \033[31m███╗   ██╗███████╗██╗  ██╗\033[0m\n");
-    printf("  \033[31m████╗  ██║██╔════╝╚██╗██╔╝\033[0m\n");
-    printf("  \033[31m██╔██╗ ██║█████╗   ╚███╔╝ \033[0m\n");
-    printf("  \033[31m██║╚██╗██║██╔══╝   ██╔██╗ \033[0m\n");
-    printf("  \033[31m██║ ╚████║███████╗██╔╝ ██╗\033[0m\n");
-    printf("  \033[31m╚═╝  ╚═══╝╚══════╝╚═╝  ╚═╝\033[0m\n");
+    printf("  \033[31m   _  _______  __\033[0m\n");
+    printf("  \033[31m  / |/ / __/ |/_/\033[0m\n");
+    printf("  \033[31m /    / _/_>  <  \033[0m\n");
+    printf("  \033[31m/_/|_/___/_/|_|  \033[0m\n");
     printf("\n");
     printf("  \033[90m⚡ Nimble Executor v%s\033[0m\n", NEX_VERSION);
     printf("  \033[90m   Package manager for developer tools\033[0m\n");
