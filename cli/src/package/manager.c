@@ -36,7 +36,7 @@ static int build_manifest_url(const char *package_id, char *url, size_t url_size
         first_letter = first_letter - 'A' + 'a';
     }
     
-    snprintf(url, url_size, "%s/packages/%c/%s/%s/manifest.json",
+    snprintf(url, url_size, "%s/packages/%c/%s/%s/nex.json",
         REGISTRY_BASE_URL, first_letter, author, name);
     
     return 0;
@@ -313,7 +313,7 @@ int package_install(const char *package_id) {
     
     /* Save manifest.json to install directory */
     char manifest_path[MAX_PATH_LEN];
-    snprintf(manifest_path, sizeof(manifest_path), "%s%cmanifest.json",
+    snprintf(manifest_path, sizeof(manifest_path), "%s%cnex.json",
         install_path, PATH_SEPARATOR);
     
     FILE *mf = fopen(manifest_path, "w");

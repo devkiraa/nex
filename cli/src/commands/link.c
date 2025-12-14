@@ -52,10 +52,10 @@ int cmd_link(int argc, char *argv[]) {
     (void)argc;
     (void)argv;
     
-    /* 1. Check for manifest.json */
-    FILE *f = fopen("manifest.json", "r");
+    /* 1. Check for nex.json */
+    FILE *f = fopen("nex.json", "r");
     if (!f) {
-        print_error("No manifest.json found in current directory");
+        print_error("No nex.json found in current directory");
         return 1;
     }
     
@@ -73,7 +73,7 @@ int cmd_link(int argc, char *argv[]) {
     free(data);
     
     if (!manifest) {
-        print_error("Invalid manifest.json");
+        print_error("Invalid nex.json");
         return 1;
     }
     

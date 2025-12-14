@@ -13,10 +13,10 @@ int cmd_publish(int argc, char *argv[]) {
     printf("  \033[33m📤 Publish Package to Registry\033[0m\n");
     printf("  \033[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m\n\n");
     
-    /* Check if manifest.json exists */
-    FILE *f = fopen("manifest.json", "r");
+    /* Check if nex.json exists */
+    FILE *f = fopen("nex.json", "r");
     if (!f) {
-        print_error("No manifest.json found in current directory");
+        print_error("No nex.json found in current directory");
         printf("\nRun 'nex init' to create a new package first.\n\n");
         return 1;
     }
@@ -41,7 +41,7 @@ int cmd_publish(int argc, char *argv[]) {
     free(data);
     
     if (!manifest) {
-        print_error("Invalid manifest.json");
+        print_error("Invalid nex.json");
         return 1;
     }
     
@@ -132,9 +132,9 @@ int cmd_publish(int argc, char *argv[]) {
         strncpy(pkg_name, dot + 1, sizeof(pkg_name) - 1);
     }
     
-    printf("     Create: registry/packages/%c/%s/%s/manifest.json\n", 
+    printf("     Create: registry/packages/%c/%s/%s/nex.json\n", 
            first_letter, author, pkg_name);
-    printf("     Copy your manifest.json there\n\n");
+    printf("     Copy your nex.json there\n\n");
     
     printf("  \033[33m4. Update registry/index.json:\033[0m\n");
     printf("     Add your package entry with shortName\n\n");

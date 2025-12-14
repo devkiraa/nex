@@ -24,12 +24,12 @@ Your goal is to build a complete, ready-to-publish package based on the user's r
 
 ### 2. Required Files
 You must generate the following files:
-1. `manifest.json`: The Nex configuration file.
+1. `nex.json`: The Nex configuration file.
 2. Source Code: `main.py` / `index.js` / `script.sh`.
 3. Dependency File: `requirements.txt` / `package.json`.
 4. `README.md`: Usage instructions.
 
-### 3. Manifest Schema (manifest.json)
+### 3. Manifest Schema (nex.json)
 {
   "id": "author.name",          // Lowercase, alphanumeric, dots allowed
   "name": "name",               // Display name
@@ -58,7 +58,7 @@ A typical Nex package looks like this:
 
 ```
 my-tool/
-├── manifest.json       # REQUIRED: Metadata
+├── nex.json            # REQUIRED: Metadata
 ├── main.py             # REQUIRED: Entrypoint script
 ├── requirements.txt    # OPTIONAL: Python deps
 ├── README.md           # OPTIONAL: Docs
@@ -66,7 +66,7 @@ my-tool/
     └── helper.py
 ```
 
-### 2. The `manifest.json` File
+### 2. The `nex.json` File
 
 This file tells the Nex CLI how to install and run your tool.
 
@@ -112,7 +112,7 @@ To test a package before publishing:
 
 ## 🛠️ Example Package: Weather CLI
 
-**manifest.json**
+**nex.json**
 ```json
 {
   "id": "demo.weather",

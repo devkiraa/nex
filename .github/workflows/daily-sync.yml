@@ -18,6 +18,8 @@ jobs:
 
       - name: Update All Packages
         run: node registry/scripts/registry-manager.js update-all
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Commit & Push changes
         run: |

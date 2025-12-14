@@ -112,10 +112,10 @@ int cmd_init(int argc, char *argv[]) {
     printf("\n  \033[90m━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\033[0m\n\n");
     printf("  Creating package: \033[1m%s\033[0m\n\n", package_id);
     
-    /* Create manifest.json */
-    FILE *f = fopen("manifest.json", "w");
+    /* Create nex.json */
+    FILE *f = fopen("nex.json", "w");
     if (!f) {
-        print_error("Failed to create manifest.json");
+        print_error("Failed to create nex.json");
         return 1;
     }
     
@@ -149,7 +149,7 @@ int cmd_init(int argc, char *argv[]) {
     fprintf(f, "  \"keywords\": []\n");
     fprintf(f, "}\n");
     fclose(f);
-    printf("  \033[32m✓\033[0m Created manifest.json\n");
+    printf("  \033[32m✓\033[0m Created nex.json\n");
     
     /* Create entrypoint file if it doesn't exist */
     if (access(entrypoint, F_OK) != 0) {
