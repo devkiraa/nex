@@ -193,7 +193,33 @@ function updateIndex(newManifest) {
 /**
  * Delete a package
  */
-function deletePackage(id) {
+function deletePackage(input) {
+    let id = input;
+    let index = { packages: [] };
+
+    if (fs.existsSync(INDEX_FILE)) {
+        index = JSON.parse(fs.readFileSync(INDEX_FILE));
+    }
+
+    // 1. URL Detection Logic
+    if (input && input.includes('github.com')) {
+        console.log(`🔍 Input looks like a URL. Searching for linked package...`);
+        // Normalize: remove .git, trailing slashes, protocol
+        const normalize = (u) => u ? u.replace('https://', '').replace('.git', '').replace(/\/$/, '').toLowerCase() : '';
+        const target = normalize(input);
+
+        // Find package with matching repository URL
+        const found = index.packages.find(p => normalize(p.repository) === target);
+
+        if (found) {
+            id = found.id;
+            console.log(`   🎯 Resolved to ID: ${id}`);
+        } else {
+            console.warn(`   ⚠️  No package found in index for repo: ${input}`);
+            console.warn(`   Attempting to treat '${input}' as an ID anyway...`);
+        }
+    }
+
     console.log(`🗑️  Deleting ${id}...`);
 
     if (!id || !id.includes('.')) {
@@ -201,21 +227,18 @@ function deletePackage(id) {
         process.exit(1);
     }
 
-    // 1. Update Index
-    if (fs.existsSync(INDEX_FILE)) {
-        let index = JSON.parse(fs.readFileSync(INDEX_FILE));
-        const initLen = index.packages.length;
-        index.packages = index.packages.filter(p => p.id !== id);
+    // 2. Update Index
+    const initLen = index.packages.length;
+    index.packages = index.packages.filter(p => p.id !== id);
 
-        if (index.packages.length === initLen) {
-            console.warn(`   ⚠️  Package ${id} not found in index.`);
-        } else {
-            fs.writeFileSync(INDEX_FILE, JSON.stringify(index, null, 2));
-            console.log("   ✅ Removed from index.json");
-        }
+    if (index.packages.length === initLen) {
+        console.warn(`   ⚠️  Package ${id} not found in index.`);
+    } else {
+        fs.writeFileSync(INDEX_FILE, JSON.stringify(index, null, 2));
+        console.log("   ✅ Removed from index.json");
     }
 
-    // 2. Remove Directory
+    // 3. Remove Directory
     const [author, pkgName] = id.split('.');
     const firstLetter = author[0].toLowerCase();
     const pkgDir = path.join(REGISTRY_ROOT, firstLetter, author, pkgName);
@@ -259,7 +282,7 @@ function deletePackage(id) {
         }
         else if (mode === 'delete') {
             if (!target) {
-                console.error("Usage: node registry-manager.js delete <package_id>");
+                console.error("Usage: node registry-manager.js delete <package_id_or_url>");
                 process.exit(1);
             }
             deletePackage(target);
