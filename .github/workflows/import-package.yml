@@ -1,0 +1,29 @@
+name: Import Package
+
+on:
+  workflow_dispatch:
+    inputs:
+      repo_url:
+        description: 'GitHub Repository URL (e.g., https://github.com/user/tool)'
+        required: true
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Import Package
+        run: node registry/scripts/registry-manager.js add ${{ inputs.repo_url }}
+
+      - name: Commit & Push changes
+        run: |
+          git config --global user.name 'Nex Bot'
+          git config --global user.email 'bot@nex.dev'
+          git add registry/packages registry/index.json
+          git diff --quiet && git diff --staged --quiet || (git commit -m "feat(registry): Import ${{ inputs.repo_url }}" && git push)
