@@ -149,7 +149,7 @@ nex run author.package-name convert  # runs "convert"
 
 ### Fork the Repository
 
-1. Go to https://github.com/devkiraa/nex
+1. Go to https://github.com/nexhq/nex
 2. Click "Fork" to create your own copy
 
 ### Add Your Package
@@ -261,7 +261,7 @@ You can optionally add a `nex.json` file to your tool's repository. This file te
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/devkiraa/nex/main/registry/schema/nex-package.schema.json",
+  "$schema": "https://raw.githubusercontent.com/nexhq/nex/main/registry/schema/nex-package.schema.json",
   "id": "author.package-name",
   "name": "My Tool",
   "version": "1.0.0",
@@ -302,7 +302,7 @@ You can optionally add a `nex.json` file to your tool's repository. This file te
 
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/devkiraa/nex/main/registry/schema/nex-package.schema.json",
+  "$schema": "https://raw.githubusercontent.com/nexhq/nex/main/registry/schema/nex-package.schema.json",
   "id": "devkiraa.pagepull",
   "name": "PagePull",
   "version": "0.0.1",
@@ -323,7 +323,7 @@ You can optionally add a `nex.json` file to your tool's repository. This file te
     "github": "devkiraa"
   },
   "license": "MIT",
-  "repository": "https://github.com/devkiraa/pagepull"
+  "repository": "https://github.com/nexhq/pagepull"
 }
 ```
 

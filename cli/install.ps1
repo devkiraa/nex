@@ -1,6 +1,6 @@
 # Install Nex CLI on Windows
 $InstallDir = "$env:USERPROFILE\.nex\bin"
-$BinaryUrl = "https://github.com/devkiraa/nex/releases/download/v1.6.0/nex-windows-x64.exe"
+$BinaryUrl = "https://github.com/nexhq/nex/releases/download/v1.6.0/nex-windows-x64.exe"
 $ExePath = "$InstallDir\nex.exe"
 
 Write-Host "Installing Nex to $InstallDir..."

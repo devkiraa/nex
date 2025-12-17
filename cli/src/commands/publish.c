@@ -115,7 +115,7 @@ int cmd_publish(int argc, char *argv[]) {
     printf("     git push origin v%s\n\n", version->valuestring);
     
     printf("  \033[33m2. Fork the nex registry:\033[0m\n");
-    printf("     https://github.com/devkiraa/nex\n\n");
+    printf("     https://github.com/nexhq/nex\n\n");
     
     printf("  \033[33m3. Add your package:\033[0m\n");
     

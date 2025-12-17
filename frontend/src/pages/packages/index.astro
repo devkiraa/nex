@@ -19,7 +19,7 @@ try {
   } else {
     // 2. Fallback to GitHub (Production / Standalone usage)
     console.log('Using remote registry');
-    const registryUrl = 'https://raw.githubusercontent.com/devkiraa/nex/main/registry/index.json';
+    const registryUrl = 'https://raw.githubusercontent.com/nexhq/nex/main/registry/index.json';
     const response = await fetch(registryUrl, { cache: 'no-store' });
     const data = await response.json();
     packages = data.packages || [];
@@ -268,7 +268,7 @@ const baseUrl = import.meta.env.BASE_URL;
           <div class="empty-state">
             <h3>No packages available yet</h3>
             <p>Be the first to contribute to the registry.</p>
-            <a href="https://github.com/devkiraa/nex" class="btn btn-primary">Submit a Package</a>
+            <a href="https://github.com/nexhq/nex" class="btn btn-primary">Submit a Package</a>
           </div>
         )}
       </div>

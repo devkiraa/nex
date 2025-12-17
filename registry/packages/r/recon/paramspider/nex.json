@@ -13,6 +13,6 @@
     "default": "cd param-spider && python main.py",
     "install": "cd param-spider && pip install -r requirements.txt"
   },
-  "repository": "https://github.com/devkiraa/nex-pakages.git",
-  "manifestUrl": "https://raw.githubusercontent.com/devkiraa/nex-pakages/master/param-spider/nex.json"
+  "repository": "https://github.com/nexhq/nex-pakages.git",
+  "manifestUrl": "https://raw.githubusercontent.com/nexhq/nex-pakages/master/param-spider/nex.json"
 }

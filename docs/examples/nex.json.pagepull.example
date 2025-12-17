@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/devkiraa/nex/main/registry/schema/nex-package.schema.json",
+  "$schema": "https://raw.githubusercontent.com/nexhq/nex/main/registry/schema/nex-package.schema.json",
   "id": "devkiraa.pagepull",
   "name": "PagePull",
   "version": "0.0.1",
@@ -14,12 +14,12 @@
     "steps": [
       {
         "action": "download",
-        "url": "https://github.com/devkiraa/pagepull/releases/download/v${version}/pagepull.py",
+        "url": "https://github.com/nexhq/pagepull/releases/download/v${version}/pagepull.py",
         "dest": "pagepull.py"
       },
       {
         "action": "download",
-        "url": "https://github.com/devkiraa/pagepull/releases/download/v${version}/requirements.txt",
+        "url": "https://github.com/nexhq/pagepull/releases/download/v${version}/requirements.txt",
         "dest": "requirements.txt"
       },
       {
@@ -69,6 +69,6 @@
     "github": "devkiraa"
   },
   "license": "MIT",
-  "repository": "https://github.com/devkiraa/pagepull",
+  "repository": "https://github.com/nexhq/pagepull",
   "keywords": ["website", "downloader", "offline", "scraper", "backup"]
 }

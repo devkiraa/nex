@@ -14,7 +14,7 @@
 **The AI-Native Package Manager for Developer Tools**
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![Version](https://img.shields.io/badge/version-1.6.0-green.svg)](https://github.com/devkiraa/nex/releases)
+[![Version](https://img.shields.io/badge/version-1.6.0-green.svg)](https://github.com/nexhq/nex/releases)
 [![Platform](https://img.shields.io/badge/platform-win%20%7C%20linux%20%7C%20macos-lightgrey.svg)]()
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
@@ -47,12 +47,12 @@ Built for speed in C, Nex handles all the complexity of runtime detection, depen
 
 **Windows (PowerShell)**
 ```powershell
-iwr https://raw.githubusercontent.com/devkiraa/nex/main/cli/install.ps1 | iex
+iwr https://raw.githubusercontent.com/nexhq/nex/main/cli/install.ps1 | iex
 ```
 
 **Linux / macOS**
 ```bash
-curl -fsSL https://raw.githubusercontent.com/devkiraa/nex/main/cli/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/nexhq/nex/main/cli/install.sh | bash
 ```
 
 ### Basic Commands
@@ -97,7 +97,7 @@ A Nex package resides in a GitHub repository and must contain:
 ## 2. Manifest Schema (nex.json)
 ```json
 {
-  "$schema": "https://raw.githubusercontent.com/devkiraa/nex/main/registry/schema/package.schema.json",
+  "$schema": "https://raw.githubusercontent.com/nexhq/nex/main/registry/schema/package.schema.json",
   "id": "username.package-name",
   "name": "package-name",
   "version": "1.0.0",
@@ -158,5 +158,5 @@ Distributed under the MIT License. See `LICENSE` for more information.
 ---
 
 <div align="center">
-  <sub>Built with ❤️ by <a href="https://github.com/devkiraa">DevKiraa</a></sub>
+  <sub>Built with ❤️ by <a href="https://github.com/nexhq">NexHQ</a></sub>
 </div>

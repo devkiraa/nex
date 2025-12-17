@@ -21,7 +21,7 @@ esac
 # Fallback to v1.5.6 if 1.6.0 not released yet, but usually we point to latest
 VERSION="v1.6.0" 
 BINARY="nex-${PLATFORM}-${ARCH}"
-URL="https://github.com/devkiraa/nex/releases/download/${VERSION}/${BINARY}"
+URL="https://github.com/nexhq/nex/releases/download/${VERSION}/${BINARY}"
 INSTALL_DIR="/usr/local/bin"
 
 echo "Installing Nex (${VERSION}) for ${PLATFORM}/${ARCH}..."

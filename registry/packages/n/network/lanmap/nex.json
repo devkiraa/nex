@@ -24,6 +24,6 @@
   "categories": [
     "Network Mapping"
   ],
-  "repository": "https://github.com/devkiraa/nex-pakages.git",
-  "manifestUrl": "https://raw.githubusercontent.com/devkiraa/nex-pakages/master/lan-map/nex.json"
+  "repository": "https://github.com/nexhq/nex-pakages.git",
+  "manifestUrl": "https://raw.githubusercontent.com/nexhq/nex-pakages/master/lan-map/nex.json"
 }

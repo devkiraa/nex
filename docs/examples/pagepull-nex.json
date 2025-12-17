@@ -1,5 +1,5 @@
 {
-  "$schema": "https://raw.githubusercontent.com/devkiraa/nex/main/registry/schema/nex-package.schema.json",
+  "$schema": "https://raw.githubusercontent.com/nexhq/nex/main/registry/schema/nex-package.schema.json",
   "id": "devkiraa.pagepull",
   "name": "PagePull",
   "version": "0.0.1",
@@ -12,7 +12,9 @@
   },
   "run": {
     "command": "python",
-    "args": ["pagepull.py"],
+    "args": [
+      "pagepull.py"
+    ],
     "passthrough_args": true
   },
   "author": {
@@ -20,5 +22,5 @@
     "github": "devkiraa"
   },
   "license": "MIT",
-  "repository": "https://github.com/devkiraa/pagepull"
+  "repository": "https://github.com/nexhq/pagepull"
 }

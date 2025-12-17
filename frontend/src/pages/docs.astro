@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 
 // Fetch latest release version from GitHub
-const githubReleasesApi = 'https://api.github.com/repos/devkiraa/nex/releases/latest';
+const githubReleasesApi = 'https://api.github.com/repos/nexhq/nex/releases/latest';
 let releaseVersion = 'v1.0.0'; // fallback
 
 try {
@@ -20,8 +20,8 @@ try {
   console.error('Failed to fetch release info:', e);
 }
 
-const releaseBaseUrl = `https://github.com/devkiraa/nex/releases/download/${releaseVersion}`;
-const releasePageUrl = `https://github.com/devkiraa/nex/releases/tag/${releaseVersion}`;
+const releaseBaseUrl = `https://github.com/nexhq/nex/releases/download/${releaseVersion}`;
+const releasePageUrl = `https://github.com/nexhq/nex/releases/tag/${releaseVersion}`;
 
 const manifestExample = `{
   "id": "yourname.your-tool",
@@ -331,13 +331,13 @@ sudo install -m 755 nex-macos-x64 /usr/local/bin/nex</code></pre>
           
           <ol class="publish-steps">
             <li>Create your tool repository with a valid <code>nex.json</code></li>
-            <li>Fork the <a href="https://github.com/devkiraa/nex" target="_blank">nex repository</a></li>
+            <li>Fork the <a href="https://github.com/nexhq/nex" target="_blank">nex repository</a></li>
             <li>Add your package to <code>registry/index.json</code></li>
             <li>Create your manifest file in <code>registry/packages/</code></li>
             <li>Submit a pull request</li>
           </ol>
           
-          <a href="https://github.com/devkiraa/nex" class="submit-btn" target="_blank">
+          <a href="https://github.com/nexhq/nex" class="submit-btn" target="_blank">
             Submit a Package
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M12 5l7 7-7 7"/>
