@@ -4,22 +4,6 @@
   "updated": "2025-12-13T00:00:00Z",
   "packages": [
     {
-      "id": "devkiraa.pagepull",
-      "shortName": "pagepull",
-      "name": "PagePull",
-      "version": "1.0.0",
-      "description": "Pull entire websites for offline viewing",
-      "author": {
-        "name": "devkiraa",
-        "github": "devkiraa"
-      },
-      "category": "General",
-      "keywords": [],
-      "manifest": "packages/d/devkiraa/pagepull/nex.json",
-      "repository": "https://github.com/nexhq/nex-pakages.git",
-      "updatedAt": "2025-12-14T14:59:21.234Z"
-    },
-    {
       "id": "recon.paramspider",
       "shortName": "paramspider",
       "name": "ParamSpider",
