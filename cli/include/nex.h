@@ -26,11 +26,11 @@
 #endif
 
 /* Version */
-#define NEX_VERSION "1.7.0"
-#define NEX_USER_AGENT "nex/1.7.0"
+#define NEX_VERSION "1.7.1"
+#define NEX_USER_AGENT "nex/1.7.1"
 
 /* Registry configuration */
-#define REGISTRY_BASE_URL "https://raw.githubusercontent.com/devkiraa/nex/main/registry"
+#define REGISTRY_BASE_URL "https://raw.githubusercontent.com/nexhq/nex/main/registry"
 #define REGISTRY_INDEX_URL REGISTRY_BASE_URL "/index.json"
 
 /* Limits */
