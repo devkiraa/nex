@@ -20,6 +20,9 @@ static void enable_colors(void) {
     HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
     DWORD mode = 0;
     if (GetConsoleMode(hOut, &mode)) {
+#ifndef ENABLE_VIRTUAL_TERMINAL_PROCESSING
+#define ENABLE_VIRTUAL_TERMINAL_PROCESSING 0x0004
+#endif
         mode |= ENABLE_VIRTUAL_TERMINAL_PROCESSING;
         if (SetConsoleMode(hOut, mode)) {
             colors_enabled = 1;

@@ -18,6 +18,8 @@ if (-not $env:VCPKG_ROOT) {
     
     # Common vcpkg locations
     $vcpkgPaths = @(
+        "$PWD\..\vcpkg",
+        "$PWD\..\..\vcpkg",
         "C:\vcpkg",
         "C:\src\vcpkg",
         "$env:USERPROFILE\vcpkg"
@@ -25,8 +27,8 @@ if (-not $env:VCPKG_ROOT) {
     
     foreach ($path in $vcpkgPaths) {
         if (Test-Path "$path\vcpkg.exe") {
-            $env:VCPKG_ROOT = $path
-            Write-Host "Found vcpkg at: $path" -ForegroundColor Green
+            $env:VCPKG_ROOT = Resolve-Path $path
+            Write-Host "Found vcpkg at: $env:VCPKG_ROOT" -ForegroundColor Green
             break
         }
     }
