@@ -31,7 +31,7 @@
 
 /* Registry configuration */
 /* Registry configuration */
-#define REGISTRY_BASE_URL "http://localhost:5000/api"
+#define REGISTRY_BASE_URL "https://nex-9ujp.onrender.com/api"
 #define REGISTRY_INDEX_URL REGISTRY_BASE_URL "/packages"
 
 /* Limits */
