@@ -11,7 +11,7 @@
 #endif
 
 /* GitHub API URL for latest release */
-#define GITHUB_RELEASES_API "https://api.github.com/repos/devkiraa/nex/releases/latest"
+#define GITHUB_RELEASES_API "https://api.github.com/repos/nexhq/nex/releases/latest"
 
 /* Platform-specific asset names */
 #ifdef _WIN32

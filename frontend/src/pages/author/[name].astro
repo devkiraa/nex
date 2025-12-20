@@ -2,7 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
-  const registryUrl = 'https://raw.githubusercontent.com/devkiraa/nex/main/registry/index.json';
+  const registryUrl = 'https://nex-9ujp.onrender.com/api/packages';
   let packages = [];
   try {
     const response = await fetch(registryUrl);
@@ -25,7 +25,7 @@ export async function getStaticPaths() {
   }));
 }
 
-const registryUrl = 'https://raw.githubusercontent.com/devkiraa/nex/main/registry/index.json';
+const registryUrl = 'https://nex-9ujp.onrender.com/api/packages';
 const { name } = Astro.params;
 let packages = [];
 

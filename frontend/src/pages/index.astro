@@ -21,7 +21,7 @@ try {
 }
 
 // Fetch latest release version from GitHub
-const githubReleasesApi = 'https://api.github.com/repos/devkiraa/nex/releases/latest';
+const githubReleasesApi = 'https://api.github.com/repos/nexhq/nex/releases/latest';
 let releaseVersion = 'v1.8.1'; // Default to current version
 let releaseDate = '';
 
@@ -147,21 +147,21 @@ const downloadLinks = {
         <div class="install-content">
           <div class="install-panel active" id="windows">
             <pre><code><span class="comment"># Install via PowerShell (admin not required)</span>
-iwr https://raw.githubusercontent.com/devkiraa/nex/main/cli/install.ps1 | iex
+iwr https://raw.githubusercontent.com/nexhq/nex/main/cli/install.ps1 | iex
 
 <span class="comment"># Verify</span>
 nex --version</code></pre>
           </div>
           <div class="install-panel" id="linux">
             <pre><code><span class="comment"># Install via Bash</span>
-curl -fsSL https://raw.githubusercontent.com/devkiraa/nex/main/cli/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/nexhq/nex/main/cli/install.sh | bash
 
 <span class="comment"># Verify</span>
 nex --version</code></pre>
           </div>
           <div class="install-panel" id="mac">
             <pre><code><span class="comment"># Install via Bash</span>
-curl -fsSL https://raw.githubusercontent.com/devkiraa/nex/main/cli/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/nexhq/nex/main/cli/install.sh | bash
 
 <span class="comment"># Verify</span>
 nex --version</code></pre>
