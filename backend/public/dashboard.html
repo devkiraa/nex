@@ -4,124 +4,280 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nex Dashboard</title>
+    <title>Dashboard | nex</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Fira+Code&display=swap"
+        rel="stylesheet">
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f4f7f6;
+        :root {
+            --nex-red: #cb3837;
+            --nex-red-dark: #a82726;
+            --nex-red-light: #fb3e44;
+            --nex-black: #231f20;
+            --nex-dark: #333333;
+            --nex-gray: #757575;
+            --nex-gray-light: #c2c2c2;
+            --nex-bg: #f7f7f7;
+            --nex-white: #ffffff;
+            --nex-border: #e0e0e0;
+            --nex-success: #00c642;
+            --nex-link: #196cb2;
+            --font-main: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            --font-mono: 'Fira Code', 'SF Mono', Consolas, monospace;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+            --radius: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--nex-bg);
+            color: var(--nex-black);
+            line-height: 1.6;
             display: flex;
-            height: 100vh;
+            min-height: 100vh;
         }
 
         /* Sidebar */
         .sidebar {
-            width: 250px;
-            background: #1a1a2e;
-            color: white;
+            width: 280px;
+            background: var(--nex-black);
+            color: var(--nex-white);
             display: flex;
             flex-direction: column;
-            padding: 1rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            z-index: 100;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            margin-bottom: 2rem;
-            color: #e94560;
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--nex-red);
             display: flex;
             align-items: center;
             gap: 0.5rem;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--nex-red) 0%, var(--nex-red-dark) 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+        }
+
+        .sidebar-nav {
+            padding: 1rem 0;
+            flex: 1;
+        }
+
+        .nav-section {
+            padding: 0 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .nav-section-title {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--nex-gray);
+            padding: 0 0.75rem;
+            margin-bottom: 0.5rem;
         }
 
         .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
             padding: 0.75rem 1rem;
-            margin-bottom: 0.5rem;
-            border-radius: 6px;
+            margin-bottom: 0.25rem;
+            border-radius: var(--radius);
             cursor: pointer;
-            transition: background 0.2s;
-            color: #a0a0a0;
+            transition: all 0.2s;
+            color: var(--nex-gray-light);
             text-decoration: none;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--nex-white);
+        }
+
+        .nav-item.active {
+            background: rgba(203, 56, 55, 0.2);
+            color: var(--nex-red-light);
+        }
+
+        .nav-item svg {
+            width: 20px;
+            height: 20px;
+            opacity: 0.8;
+        }
+
+        .user-section {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--nex-red) 0%, var(--nex-red-dark) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .user-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--nex-white);
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
-        .nav-item:hover,
-        .nav-item.active {
-            background: #16213e;
+        .role-badge {
+            font-size: 0.65rem;
+            padding: 2px 6px;
+            background: var(--nex-red);
             color: white;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .nav-item i {
-            width: 20px;
-            text-align: center;
-        }
-
-        .spacer {
-            flex: 1;
-        }
-
-        .user-info {
-            padding: 1rem;
-            border-top: 1px solid #333;
-            margin-top: auto;
-            font-size: 0.9rem;
-        }
-
-        .logout {
-            color: #e94560;
+        .logout-btn {
+            color: var(--nex-gray);
+            font-size: 0.85rem;
             cursor: pointer;
-            font-size: 0.8rem;
-            margin-top: 0.5rem;
-            display: block;
+            transition: color 0.2s;
+            background: none;
+            border: none;
+            padding: 0;
+            margin-top: 0.25rem;
+        }
+
+        .logout-btn:hover {
+            color: var(--nex-red-light);
         }
 
         /* Main Content */
-        .main {
+        .main-content {
             flex: 1;
+            margin-left: 280px;
             padding: 2rem;
-            overflow-y: auto;
+            min-height: 100vh;
         }
 
-        .header {
+        .page-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
         }
 
-        .title {
-            font-size: 1.8rem;
-            font-weight: 600;
-            color: #333;
+        .page-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--nex-black);
+        }
+
+        .page-subtitle {
+            color: var(--nex-gray);
+            font-size: 0.95rem;
+            margin-top: 0.25rem;
         }
 
         .btn {
-            padding: 0.6rem 1.2rem;
-            border-radius: 6px;
-            border: none;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: var(--radius);
+            font-weight: 600;
+            font-size: 0.95rem;
             text-decoration: none;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
         }
 
         .btn-primary {
-            background: #0f3460;
+            background: linear-gradient(135deg, var(--nex-red) 0%, var(--nex-red-dark) 100%);
             color: white;
         }
 
         .btn-primary:hover {
-            background: #16213e;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(203, 56, 55, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--nex-white);
+            color: var(--nex-dark);
+            border: 2px solid var(--nex-border);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--nex-red);
+            color: var(--nex-red);
         }
 
         .btn-danger {
-            background: #e94560;
+            background: #fef2f2;
+            color: #dc2626;
+            border: 1px solid #fecaca;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
             color: white;
         }
 
-        /* Stats Cards */
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        /* Stats Grid */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -129,33 +285,78 @@
             margin-bottom: 2rem;
         }
 
-        .card {
-            background: white;
-            padding: 1.5rem;
+        .stat-card {
+            background: var(--nex-white);
             border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            padding: 1.5rem;
+            border: 1px solid var(--nex-border);
+            box-shadow: var(--shadow-sm);
+            transition: all 0.2s;
         }
 
-        .card h3 {
-            margin: 0;
-            font-size: 0.9rem;
-            color: #666;
+        .stat-card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon.red {
+            background: linear-gradient(135deg, #fff1f2 0%, #fecdd3 100%);
+            color: var(--nex-red);
+        }
+
+        .stat-icon.green {
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            color: #16a34a;
+        }
+
+        .stat-icon.blue {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            color: #2563eb;
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--nex-gray);
             font-weight: 500;
+            margin-bottom: 0.25rem;
         }
 
-        .card .value {
+        .stat-value {
             font-size: 2rem;
             font-weight: 700;
-            color: #333;
-            margin-top: 0.5rem;
+            color: var(--nex-black);
         }
 
         /* Table */
         .table-container {
-            background: white;
+            background: var(--nex-white);
             border-radius: 12px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--nex-border);
+            box-shadow: var(--shadow-sm);
             overflow: hidden;
+        }
+
+        .table-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--nex-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-title {
+            font-weight: 600;
+            font-size: 1rem;
         }
 
         table {
@@ -165,32 +366,71 @@
 
         th,
         td {
-            padding: 1rem;
+            padding: 1rem 1.5rem;
             text-align: left;
-            border-bottom: 1px solid #eee;
+            border-bottom: 1px solid var(--nex-border);
         }
 
         th {
-            background: #fafafa;
-            color: #666;
+            background: var(--nex-bg);
             font-weight: 600;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            color: var(--nex-gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         tr:last-child td {
             border-bottom: none;
         }
 
-        .status-badge {
-            padding: 0.25rem 0.6rem;
-            border-radius: 100px;
-            font-size: 0.75rem;
-            font-weight: 600;
+        tr:hover td {
+            background: rgba(247, 247, 247, 0.5);
         }
 
-        .status-active {
-            background: #d4edda;
-            color: #155724;
+        .package-id {
+            font-family: var(--font-mono);
+            font-weight: 600;
+            color: var(--nex-black);
+        }
+
+        .version-badge {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            color: #16a34a;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border-radius: 100px;
+        }
+
+        .runtime-badge {
+            display: inline-block;
+            padding: 0.25rem 0.6rem;
+            background: var(--nex-bg);
+            border: 1px solid var(--nex-border);
+            color: var(--nex-dark);
+            font-size: 0.8rem;
+            font-weight: 500;
+            border-radius: 100px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--nex-gray);
+        }
+
+        .empty-state svg {
+            width: 64px;
+            height: 64px;
+            color: var(--nex-gray-light);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state h3 {
+            color: var(--nex-dark);
+            margin-bottom: 0.5rem;
         }
 
         /* Modal */
@@ -201,6 +441,8 @@
             background: rgba(0, 0, 0, 0.5);
             align-items: center;
             justify-content: center;
+            z-index: 1000;
+            backdrop-filter: blur(4px);
         }
 
         .modal.active {
@@ -208,73 +450,298 @@
         }
 
         .modal-content {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            width: 500px;
+            background: var(--nex-white);
+            border-radius: 16px;
+            width: 560px;
             max-width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
         }
 
-        textarea {
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--nex-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 1.25rem;
+            color: var(--nex-black);
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            background: var(--nex-bg);
+            color: var(--nex-gray);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: var(--nex-border);
+            color: var(--nex-dark);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-body p {
+            color: var(--nex-gray);
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .modal-body textarea {
             width: 100%;
-            height: 200px;
-            font-family: monospace;
-            padding: 0.8rem;
-            margin: 1rem 0;
-            border: 1px solid #ddd;
-            border-radius: 6px;
+            height: 250px;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            padding: 1rem;
+            border: 2px solid var(--nex-border);
+            border-radius: var(--radius);
+            resize: vertical;
+            transition: border-color 0.2s;
         }
 
-        .role-badge {
-            display: inline-block;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 10px;
-            background: #333;
-            color: #fff;
-            margin-left: 5px;
+        .modal-body textarea:focus {
+            outline: none;
+            border-color: var(--nex-red);
+        }
+
+        .modal-footer {
+            padding: 1rem 1.5rem;
+            border-top: 1px solid var(--nex-border);
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 80px;
+            }
+
+            .sidebar-header .logo span:last-child,
+            .nav-section-title,
+            .nav-item span,
+            .user-details {
+                display: none;
+            }
+
+            .nav-item {
+                justify-content: center;
+                padding: 0.75rem;
+            }
+
+            .user-section {
+                padding: 1rem;
+                display: flex;
+                justify-content: center;
+            }
+
+            .main-content {
+                margin-left: 80px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            th,
+            td {
+                padding: 0.75rem 1rem;
+            }
         }
     </style>
 </head>
 
 <body>
     <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="logo">📦 Nex Admin</div>
-        <a class="nav-item active" onclick="switchView('overview')">User Overview</a>
-        <a class="nav-item" onclick="switchView('packages')">My Packages</a>
-        <a class="nav-item" id="adminLink" onclick="switchView('admin')" style="display:none;">Admin All Packages</a>
-
-        <div class="spacer"></div>
-        <div class="user-info">
-            <div id="username">Loading...</div>
-            <span class="logout" onclick="logout()">Sign Out</span>
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <a href="/" class="logo">
+                <div class="logo-icon">📦</div>
+                <span>nex</span>
+            </a>
         </div>
-    </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <div class="nav-section-title">Menu</div>
+                <a class="nav-item active" onclick="switchView('overview')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
+                <a class="nav-item" onclick="switchView('packages')">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path
+                            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                        </path>
+                    </svg>
+                    <span>My Packages</span>
+                </a>
+                <a class="nav-item" id="adminLink" onclick="switchView('admin')" style="display: none;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
+                        <path d="M2 17l10 5 10-5"></path>
+                        <path d="M2 12l10 5 10-5"></path>
+                    </svg>
+                    <span>All Packages</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Quick Links</div>
+                <a class="nav-item" href="/packages/" target="_blank">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                    <span>Browse Registry</span>
+                </a>
+                <a class="nav-item" href="https://github.com/nexhq/nex" target="_blank">
+                    <svg viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+                    </svg>
+                    <span>GitHub</span>
+                </a>
+            </div>
+        </nav>
+
+        <div class="user-section">
+            <div class="user-info">
+                <div class="user-avatar" id="user-avatar">U</div>
+                <div class="user-details">
+                    <div class="user-name" id="user-name">Loading...</div>
+                    <button class="logout-btn" onclick="logout()">Sign out</button>
+                </div>
+            </div>
+        </div>
+    </aside>
 
     <!-- Main Content -->
-    <div class="main">
+    <main class="main-content">
         <!-- Overview View -->
         <div id="view-overview">
-            <div class="header">
-                <div class="title">Dashboard</div>
-                <button class="btn btn-primary" onclick="openPublishModal()">+ New Package</button>
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title">Dashboard</h1>
+                    <p class="page-subtitle">Manage your packages and view statistics</p>
+                </div>
+                <button class="btn btn-primary" onclick="openPublishModal()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14" />
+                    </svg>
+                    New Package
+                </button>
             </div>
 
             <div class="stats-grid">
-                <div class="card">
-                    <h3>Total Packages</h3>
-                    <div class="value" id="stat-total">0</div>
+                <div class="stat-card">
+                    <div class="stat-icon red">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path
+                                d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
+                            </path>
+                        </svg>
+                    </div>
+                    <div class="stat-label">Total Packages</div>
+                    <div class="stat-value" id="stat-total">0</div>
                 </div>
-                <!-- Add more stats as needed -->
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                    </div>
+                    <div class="stat-label">Your Packages</div>
+                    <div class="stat-value" id="stat-mine">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="9" cy="7" r="4"></circle>
+                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                        </svg>
+                    </div>
+                    <div class="stat-label">Contributors</div>
+                    <div class="stat-value" id="stat-contributors">1</div>
+                </div>
+            </div>
+
+            <div class="table-container">
+                <div class="table-header">
+                    <div class="table-title">Recent Packages</div>
+                    <a href="#" onclick="switchView('packages')" style="color: var(--nex-link); font-size: 0.9rem;">View
+                        all →</a>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Package</th>
+                            <th>Version</th>
+                            <th>Runtime</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recent-packages">
+                        <!-- Loaded via JS -->
+                    </tbody>
+                </table>
             </div>
         </div>
 
         <!-- Packages List View -->
         <div id="view-packages" style="display:none;">
-            <div class="header">
-                <div class="title" id="page-title">My Packages</div>
-                <button class="btn btn-primary" onclick="openPublishModal()">+ New Package</button>
+            <div class="page-header">
+                <div>
+                    <h1 class="page-title" id="page-title">My Packages</h1>
+                    <p class="page-subtitle">Manage and publish your packages</p>
+                </div>
+                <button class="btn btn-primary" onclick="openPublishModal()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14" />
+                    </svg>
+                    New Package
+                </button>
             </div>
 
             <div class="table-container">
@@ -284,7 +751,7 @@
                             <th>ID</th>
                             <th>Name</th>
                             <th>Version</th>
-                            <th>Owner</th>
+                            <th>Author</th>
                             <th>Runtime</th>
                             <th>Actions</th>
                         </tr>
@@ -295,16 +762,41 @@
                 </table>
             </div>
         </div>
-    </div>
+    </main>
 
     <!-- Publish Modal -->
     <div id="publishModal" class="modal">
         <div class="modal-content">
-            <h2 style="margin-top:0">Publish / Update Package</h2>
-            <p style="color:#666; font-size:0.9rem">Paste your <code>nex.json</code> manifest below.</p>
-            <textarea id="manifestInput" placeholder='{ "name": "my-pkg", ... }'></textarea>
-            <div style="display:flex; gap:10px; justify-content:flex-end;">
-                <button class="btn" style="background:#eee" onclick="closePublishModal()">Cancel</button>
+            <div class="modal-header">
+                <h2>Publish Package</h2>
+                <button class="modal-close" onclick="closePublishModal()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Paste your <code style="background: #f0f0f0; padding: 2px 6px; border-radius: 4px;">nex.json</code>
+                    manifest below to publish or update a package.</p>
+                <textarea id="manifestInput" placeholder='{
+  "id": "your-package-id",
+  "name": "My Package",
+  "version": "1.0.0",
+  "description": "A description of your package",
+  "author": {
+    "name": "Your Name",
+    "github": "yourusername"
+  },
+  "repository": "https://github.com/user/repo",
+  "runtime": {
+    "type": "python"
+  },
+  "entrypoint": "main.py",
+  "keywords": ["cli", "tool"]
+}'></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closePublishModal()">Cancel</button>
                 <button class="btn btn-primary" onclick="submitPackage()">Publish</button>
             </div>
         </div>
@@ -326,14 +818,16 @@
             }
 
             currentUser = JSON.parse(userStr);
-            console.log("Logged in user:", currentUser);
 
             // Set UI
-            const userDisplay = `
-                <div>${currentUser.username}</div>
-                ${currentUser.role === 'admin' ? '<span class="role-badge">ADMIN</span>' : ''}
-            `;
-            document.getElementById('username').innerHTML = userDisplay;
+            const initial = currentUser.username ? currentUser.username.charAt(0).toUpperCase() : 'U';
+            document.getElementById('user-avatar').textContent = initial;
+
+            let userNameHTML = currentUser.username || 'User';
+            if (currentUser.role === 'admin') {
+                userNameHTML += ' <span class="role-badge">Admin</span>';
+            }
+            document.getElementById('user-name').innerHTML = userNameHTML;
 
             if (currentUser.role === 'admin') {
                 document.getElementById('adminLink').style.display = 'flex';
@@ -348,20 +842,75 @@
                 const data = await res.json();
                 allPackages = data.packages || [];
 
+                // Count my packages
+                const myPackages = allPackages.filter(p => {
+                    const pkgWorkspace = p.workspace ? String(p.workspace) : null;
+                    const userId = currentUser.id ? String(currentUser.id) : null;
+                    return !pkgWorkspace || pkgWorkspace === userId;
+                });
+
                 // Update stats
                 document.getElementById('stat-total').innerText = allPackages.length;
+                document.getElementById('stat-mine').innerText = myPackages.length;
 
-                // Default view
+                // Count unique authors
+                const authors = new Set(allPackages.map(p => p.author?.name || p.author || 'Unknown'));
+                document.getElementById('stat-contributors').innerText = authors.size;
+
+                // Render recent packages (last 5)
+                renderRecentPackages();
                 renderPackages();
             } catch (err) {
                 console.error(err);
             }
         }
 
+        function renderRecentPackages() {
+            const tbody = document.getElementById('recent-packages');
+            tbody.innerHTML = '';
+
+            const recent = allPackages.slice(0, 5);
+
+            if (recent.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="4">
+                            <div class="empty-state">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                </svg>
+                                <h3>No packages yet</h3>
+                                <p>Publish your first package to get started!</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            recent.forEach(pkg => {
+                const tr = document.createElement('tr');
+                const runtime = pkg.runtime ? (pkg.runtime.type || 'unknown') : 'unknown';
+
+                tr.innerHTML = `
+                    <td>
+                        <div class="package-id">${pkg.id}</div>
+                        <div style="color: var(--nex-gray); font-size: 0.85rem;">${pkg.name}</div>
+                    </td>
+                    <td><span class="version-badge">v${pkg.version}</span></td>
+                    <td><span class="runtime-badge">${runtime}</span></td>
+                    <td>
+                        <button class="btn btn-danger btn-sm" onclick="deletePackage('${pkg.id}')">Delete</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
         function switchView(viewName) {
             // Update Sidebar
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            event.target.classList.add('active');
+            event.target.closest('.nav-item').classList.add('active');
 
             // Hide all views
             document.getElementById('view-overview').style.display = 'none';
@@ -380,25 +929,28 @@
             const tbody = document.getElementById('packages-list');
             tbody.innerHTML = '';
 
-            console.log('All packages:', allPackages);
-            console.log('Current user:', currentUser);
-
             const filtered = showAll
                 ? allPackages
-                // Filter by workspace (owner) - convert both to string for comparison
                 : allPackages.filter(p => {
-                    // If no workspace set, or workspace matches current user ID
                     const pkgWorkspace = p.workspace ? String(p.workspace) : null;
                     const userId = currentUser.id ? String(currentUser.id) : null;
-                    console.log(`Package ${p.id}: workspace=${pkgWorkspace}, userId=${userId}`);
                     return !pkgWorkspace || pkgWorkspace === userId;
                 });
 
-            console.log('Filtered packages:', filtered);
-
-            // If empty
             if (filtered.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" style="text-align:center">No packages found. Click "+ New Package" to publish your first package!</td></tr>';
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6">
+                            <div class="empty-state">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                                </svg>
+                                <h3>No packages found</h3>
+                                <p>Click "+ New Package" to publish your first package!</p>
+                            </div>
+                        </td>
+                    </tr>
+                `;
                 return;
             }
 
@@ -408,13 +960,13 @@
                 const runtime = pkg.runtime ? (pkg.runtime.type || 'unknown') : 'unknown';
 
                 tr.innerHTML = `
-                    <td style="font-family:monospace; font-weight:600">${pkg.id}</td>
+                    <td class="package-id">${pkg.id}</td>
                     <td>${pkg.name}</td>
-                    <td><span class="status-badge status-active">v${pkg.version}</span></td>
+                    <td><span class="version-badge">v${pkg.version}</span></td>
                     <td>${owner}</td>
-                    <td>${runtime}</td>
+                    <td><span class="runtime-badge">${runtime}</span></td>
                     <td>
-                        <button class="btn btn-danger" style="padding:4px 8px; font-size:0.8rem" onclick="deletePackage('${pkg.id}')">Delete</button>
+                        <button class="btn btn-danger btn-sm" onclick="deletePackage('${pkg.id}')">Delete</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -445,18 +997,18 @@
                 if (res.ok) {
                     alert('Package published successfully!');
                     closePublishModal();
-                    await loadData(); // Reload list
+                    await loadData();
                 } else {
                     const d = await res.json();
                     alert('Error: ' + d.msg);
                 }
             } catch (e) {
-                alert('Invalid JSON');
+                alert('Invalid JSON format');
             }
         }
 
         async function deletePackage(id) {
-            if (!confirm(`Are you sure you want to delete ${id}?`)) return;
+            if (!confirm(`Are you sure you want to delete "${id}"?`)) return;
 
             try {
                 const res = await fetch(`${API}/packages/${id}`, {
@@ -467,7 +1019,7 @@
                 });
 
                 if (res.ok) {
-                    await loadData(); // Reload
+                    await loadData();
                 } else {
                     const d = await res.json();
                     alert('Error: ' + d.msg);

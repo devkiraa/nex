@@ -8,6 +8,7 @@ cli/*.o
 frontend/node_modules/
 frontend/.astro/
 frontend/dist/
+frontend/.vercel/
 vcpkg/
 
 # IDE
