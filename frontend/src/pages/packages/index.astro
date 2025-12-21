@@ -1,30 +1,22 @@
 ---
 import Layout from '../../layouts/Layout.astro';
 
-// Fetch packages from registry (at build time)
-import fs from 'node:fs';
-import path from 'node:path';
-
+// Fetch packages from backend API
+const registryUrl = 'https://nex-9ujp.onrender.com/api/packages';
 let packages: any[] = [];
+let error = null;
 
 try {
-  // 1. Try reading local file (Monorepo dev mode)
-  // process.cwd() is usually 'frontend' root
-  const localPath = path.resolve(process.cwd(), '../registry/index.json');
-  
-  if (fs.existsSync(localPath)) {
-    console.log('Using local registry:', localPath);
-    const data = JSON.parse(fs.readFileSync(localPath, 'utf-8'));
-    packages = data.packages || [];
-  } else {
-    // 2. Fallback to GitHub (Production / Standalone usage)
-    console.log('Using remote registry');
-    const registryUrl = 'https://raw.githubusercontent.com/nexhq/nex/main/registry/index.json';
-    const response = await fetch(registryUrl, { cache: 'no-store' });
+  const response = await fetch(registryUrl, { cache: 'no-store' });
+  if (response.ok) {
     const data = await response.json();
     packages = data.packages || [];
+  } else {
+    error = `API Error: ${response.status}`;
+    console.error(error);
   }
 } catch (e) {
+  error = 'Could not connect to registry backend';
   console.error("Failed to load registry:", e);
   packages = [];
 }

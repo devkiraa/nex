@@ -7,8 +7,18 @@ require('dotenv').config();
 
 const app = express();
 
+// CORS Configuration - Allow all origins for API access
+// The frontend (https://try-nex.vercel.app) and Vercel build servers need access
+// Also allows localhost for development
+const corsOptions = {
+    origin: true, // Allow all origins (needed for SSR and build-time fetches)
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
+};
+
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(bodyParser.json());
 app.use(express.static('public')); // Serve static files for simple frontend
 
