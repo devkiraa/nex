@@ -26,8 +26,8 @@
 #endif
 
 /* Version */
-#define NEX_VERSION "1.8.1"
-#define NEX_USER_AGENT "nex/1.8.1"
+#define NEX_VERSION "1.9.0"
+#define NEX_USER_AGENT "nex/1.9.0"
 
 /* Registry configuration */
 /* Registry configuration */
