@@ -24,11 +24,10 @@
             --nex-success: #00c642;
             --nex-warning: #f59e0b;
             --nex-link: #196cb2;
-            --font-main: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            --font-mono: 'Fira Code', 'SF Mono', Consolas, monospace;
+            --font-main: 'Poppins', sans-serif;
+            --font-mono: 'Fira Code', monospace;
             --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
             --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
-            --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
             --radius: 8px;
         }
 
@@ -40,18 +39,16 @@
 
         body {
             font-family: var(--font-main);
-            background-color: var(--nex-bg);
+            background: var(--nex-bg);
             color: var(--nex-black);
-            line-height: 1.6;
             display: flex;
             min-height: 100vh;
         }
 
-        /* Sidebar */
         .sidebar {
             width: 260px;
             background: var(--nex-black);
-            color: var(--nex-white);
+            color: white;
             display: flex;
             flex-direction: column;
             position: fixed;
@@ -79,13 +76,11 @@
         .logo-icon {
             width: 36px;
             height: 36px;
-            background: linear-gradient(135deg, var(--nex-red) 0%, var(--nex-red-dark) 100%);
+            background: linear-gradient(135deg, var(--nex-red), var(--nex-red-dark));
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
-            font-size: 1rem;
         }
 
         .sidebar-nav {
@@ -101,7 +96,6 @@
         .nav-section-title {
             font-size: 0.65rem;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
             color: var(--nex-gray);
             padding: 0 0.75rem;
             margin-bottom: 0.5rem;
@@ -115,16 +109,16 @@
             margin-bottom: 0.25rem;
             border-radius: var(--radius);
             cursor: pointer;
-            transition: all 0.2s;
             color: var(--nex-gray-light);
             text-decoration: none;
             font-weight: 500;
             font-size: 0.9rem;
+            transition: all 0.2s;
         }
 
         .nav-item:hover {
             background: rgba(255, 255, 255, 0.05);
-            color: var(--nex-white);
+            color: white;
         }
 
         .nav-item.active {
@@ -135,7 +129,6 @@
         .nav-item svg {
             width: 18px;
             height: 18px;
-            opacity: 0.8;
         }
 
         .user-section {
@@ -153,24 +146,16 @@
         .user-avatar {
             width: 36px;
             height: 36px;
-            background: linear-gradient(135deg, var(--nex-red) 0%, var(--nex-red-dark) 100%);
+            background: linear-gradient(135deg, var(--nex-red), var(--nex-red-dark));
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
             font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .user-details {
-            flex: 1;
-            min-width: 0;
         }
 
         .user-name {
             font-weight: 600;
-            color: var(--nex-white);
             font-size: 0.9rem;
             display: flex;
             align-items: center;
@@ -181,7 +166,6 @@
             font-size: 0.6rem;
             padding: 2px 6px;
             background: var(--nex-red);
-            color: white;
             border-radius: 4px;
             text-transform: uppercase;
         }
@@ -193,14 +177,13 @@
             background: none;
             border: none;
             padding: 0;
-            margin-top: 0.25rem;
+            margin-top: 4px;
         }
 
         .logout-btn:hover {
             color: var(--nex-red-light);
         }
 
-        /* Main Content */
         .main-content {
             flex: 1;
             margin-left: 260px;
@@ -220,34 +203,30 @@
         .page-title {
             font-size: 1.5rem;
             font-weight: 700;
-            color: var(--nex-black);
         }
 
         .page-subtitle {
             color: var(--nex-gray);
             font-size: 0.9rem;
-            margin-top: 0.25rem;
         }
 
-        /* Buttons */
         .btn {
             display: inline-flex;
             align-items: center;
-            justify-content: center;
             gap: 0.5rem;
             padding: 0.6rem 1rem;
             border-radius: var(--radius);
             font-weight: 600;
             font-size: 0.85rem;
-            text-decoration: none;
-            transition: all 0.2s;
             cursor: pointer;
             border: none;
             font-family: inherit;
+            transition: all 0.2s;
+            text-decoration: none;
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--nex-red) 0%, var(--nex-red-dark) 100%);
+            background: linear-gradient(135deg, var(--nex-red), var(--nex-red-dark));
             color: white;
         }
 
@@ -257,7 +236,7 @@
         }
 
         .btn-secondary {
-            background: var(--nex-white);
+            background: white;
             color: var(--nex-dark);
             border: 2px solid var(--nex-border);
         }
@@ -284,20 +263,10 @@
             border: 1px solid #fcd34d;
         }
 
-        .btn-warning:hover {
-            background: #f59e0b;
-            color: white;
-        }
-
         .btn-success {
             background: #dcfce7;
             color: #166534;
             border: 1px solid #86efac;
-        }
-
-        .btn-success:hover {
-            background: #16a34a;
-            color: white;
         }
 
         .btn-sm {
@@ -308,10 +277,8 @@
         .btn-group {
             display: flex;
             gap: 0.5rem;
-            flex-wrap: wrap;
         }
 
-        /* Stats */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -320,11 +287,10 @@
         }
 
         .stat-card {
-            background: var(--nex-white);
+            background: white;
             border-radius: 12px;
             padding: 1.25rem;
             border: 1px solid var(--nex-border);
-            box-shadow: var(--shadow-sm);
         }
 
         .stat-icon {
@@ -338,38 +304,35 @@
         }
 
         .stat-icon.red {
-            background: linear-gradient(135deg, #fff1f2 0%, #fecdd3 100%);
+            background: linear-gradient(135deg, #fff1f2, #fecdd3);
             color: var(--nex-red);
         }
 
         .stat-icon.green {
-            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
             color: #16a34a;
         }
 
         .stat-icon.blue {
-            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
             color: #2563eb;
         }
 
         .stat-icon.purple {
-            background: linear-gradient(135deg, #f3e8ff 0%, #e9d5ff 100%);
+            background: linear-gradient(135deg, #f3e8ff, #e9d5ff);
             color: #9333ea;
         }
 
         .stat-label {
             font-size: 0.8rem;
             color: var(--nex-gray);
-            font-weight: 500;
         }
 
         .stat-value {
             font-size: 1.75rem;
             font-weight: 700;
-            color: var(--nex-black);
         }
 
-        /* Charts */
         .charts-grid {
             display: grid;
             grid-template-columns: 2fr 1fr;
@@ -378,26 +341,22 @@
         }
 
         .chart-card {
-            background: var(--nex-white);
+            background: white;
             border-radius: 12px;
             padding: 1.25rem;
             border: 1px solid var(--nex-border);
-            box-shadow: var(--shadow-sm);
         }
 
         .chart-title {
             font-weight: 600;
             font-size: 0.95rem;
             margin-bottom: 1rem;
-            color: var(--nex-dark);
         }
 
-        /* Table */
         .table-container {
-            background: var(--nex-white);
+            background: white;
             border-radius: 12px;
             border: 1px solid var(--nex-border);
-            box-shadow: var(--shadow-sm);
             overflow: hidden;
         }
 
@@ -413,7 +372,6 @@
 
         .table-title {
             font-weight: 600;
-            font-size: 0.95rem;
         }
 
         .table-filters {
@@ -427,8 +385,6 @@
             border: 1px solid var(--nex-border);
             border-radius: var(--radius);
             font-size: 0.8rem;
-            background: white;
-            cursor: pointer;
         }
 
         table {
@@ -450,7 +406,6 @@
             font-size: 0.7rem;
             color: var(--nex-gray);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         tr:last-child td {
@@ -461,15 +416,9 @@
             background: rgba(247, 247, 247, 0.5);
         }
 
-        tr.deprecated td {
-            opacity: 0.6;
-        }
-
-        /* Badges */
         .package-id {
             font-family: var(--font-mono);
             font-weight: 600;
-            color: var(--nex-black);
             font-size: 0.85rem;
             cursor: pointer;
         }
@@ -482,7 +431,7 @@
         .version-badge {
             display: inline-block;
             padding: 0.15rem 0.4rem;
-            background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+            background: linear-gradient(135deg, #dcfce7, #bbf7d0);
             color: #16a34a;
             font-size: 0.7rem;
             font-weight: 600;
@@ -496,30 +445,16 @@
             padding: 0.15rem 0.4rem;
             background: var(--nex-bg);
             border: 1px solid var(--nex-border);
-            color: var(--nex-dark);
             font-size: 0.7rem;
-            font-weight: 500;
-            border-radius: 100px;
-        }
-
-        .runtime-badge {
-            display: inline-block;
-            padding: 0.15rem 0.4rem;
-            background: var(--nex-bg);
-            border: 1px solid var(--nex-border);
-            color: var(--nex-dark);
-            font-size: 0.7rem;
-            font-weight: 500;
             border-radius: 100px;
         }
 
         .category-badge {
             display: inline-block;
             padding: 0.15rem 0.4rem;
-            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            background: linear-gradient(135deg, #dbeafe, #bfdbfe);
             color: #2563eb;
             font-size: 0.7rem;
-            font-weight: 500;
             border-radius: 100px;
         }
 
@@ -538,13 +473,6 @@
             font-size: 0.8rem;
         }
 
-        .rating-value {
-            font-weight: 600;
-            color: var(--nex-dark);
-            margin-left: 4px;
-        }
-
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -553,9 +481,8 @@
             align-items: center;
             justify-content: center;
             z-index: 1000;
-            backdrop-filter: blur(4px);
-            overflow-y: auto;
             padding: 2rem;
+            overflow-y: auto;
         }
 
         .modal.active {
@@ -563,13 +490,12 @@
         }
 
         .modal-content {
-            background: var(--nex-white);
+            background: white;
             border-radius: 16px;
             width: 700px;
             max-width: 100%;
             max-height: 90vh;
             overflow-y: auto;
-            box-shadow: var(--shadow-lg);
         }
 
         .modal-header {
@@ -581,12 +507,10 @@
             position: sticky;
             top: 0;
             background: white;
-            z-index: 10;
         }
 
         .modal-header h2 {
             font-size: 1.1rem;
-            color: var(--nex-black);
         }
 
         .modal-close {
@@ -595,16 +519,10 @@
             border-radius: 6px;
             border: none;
             background: var(--nex-bg);
-            color: var(--nex-gray);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .modal-close:hover {
-            background: var(--nex-border);
-            color: var(--nex-dark);
         }
 
         .modal-body {
@@ -619,7 +537,6 @@
             gap: 0.5rem;
         }
 
-        /* Package Detail */
         .pkg-detail-header {
             display: flex;
             gap: 1rem;
@@ -629,23 +546,17 @@
         .pkg-detail-icon {
             width: 64px;
             height: 64px;
-            background: linear-gradient(135deg, #fff1f2 0%, #fecdd3 100%);
+            background: linear-gradient(135deg, #fff1f2, #fecdd3);
             border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: var(--nex-red);
-            flex-shrink: 0;
-        }
-
-        .pkg-detail-info {
-            flex: 1;
         }
 
         .pkg-detail-name {
             font-size: 1.25rem;
             font-weight: 700;
-            color: var(--nex-black);
             display: flex;
             align-items: center;
             gap: 0.5rem;
@@ -680,12 +591,10 @@
             font-size: 0.7rem;
             color: var(--nex-gray);
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .pkg-meta-value {
             font-weight: 600;
-            color: var(--nex-dark);
             font-size: 0.9rem;
         }
 
@@ -696,11 +605,7 @@
         .pkg-section-title {
             font-size: 0.85rem;
             font-weight: 600;
-            color: var(--nex-dark);
             margin-bottom: 0.75rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
         }
 
         .pkg-tags {
@@ -715,7 +620,6 @@
             border: 1px solid var(--nex-border);
             border-radius: 100px;
             font-size: 0.75rem;
-            color: var(--nex-dark);
         }
 
         .version-list {
@@ -729,10 +633,6 @@
             padding: 0.5rem;
             border-bottom: 1px solid var(--nex-border);
             font-size: 0.85rem;
-        }
-
-        .version-item:last-child {
-            border-bottom: none;
         }
 
         .dep-item {
@@ -768,7 +668,6 @@
             font-size: 0.85rem;
         }
 
-        /* Access Denied */
         .access-denied {
             display: flex;
             flex-direction: column;
@@ -787,7 +686,6 @@
         }
 
         .access-denied h1 {
-            font-size: 1.5rem;
             margin-bottom: 0.5rem;
         }
 
@@ -796,7 +694,6 @@
             margin-bottom: 1.5rem;
         }
 
-        /* Form */
         .form-group {
             margin-bottom: 1rem;
         }
@@ -805,33 +702,36 @@
             display: block;
             font-size: 0.8rem;
             font-weight: 500;
-            color: var(--nex-dark);
             margin-bottom: 0.25rem;
         }
 
-        .form-input,
-        .form-select,
         .form-textarea {
             width: 100%;
-            padding: 0.6rem 0.75rem;
+            min-height: 150px;
+            padding: 0.75rem;
             border: 2px solid var(--nex-border);
             border-radius: var(--radius);
+            font-family: var(--font-mono);
             font-size: 0.85rem;
-            font-family: inherit;
-            transition: border-color 0.2s;
+            resize: vertical;
         }
 
-        .form-input:focus,
-        .form-select:focus,
         .form-textarea:focus {
             outline: none;
             border-color: var(--nex-red);
         }
 
-        .form-textarea {
-            min-height: 150px;
-            resize: vertical;
-            font-family: var(--font-mono);
+        .form-input {
+            width: 100%;
+            padding: 0.6rem 0.75rem;
+            border: 2px solid var(--nex-border);
+            border-radius: var(--radius);
+            font-size: 0.85rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--nex-red);
         }
 
         @media (max-width: 1200px) {
@@ -865,35 +765,32 @@
 </head>
 
 <body>
-    <!-- Sidebar -->
     <aside class="sidebar">
         <div class="sidebar-header">
             <a href="/" class="logo">
-                <div class="logo-icon">📦</div>
-                <span>nex</span>
+                <div class="logo-icon">📦</div><span>nex</span>
             </a>
         </div>
         <nav class="sidebar-nav">
             <div class="nav-section">
                 <div class="nav-section-title">Dashboard</div>
-                <a class="nav-item active" onclick="switchView('analytics')">
+                <a href="javascript:void(0)" class="nav-item active" onclick="switchView('analytics')">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M18 20V10M12 20V4M6 20v-6" />
                     </svg>
                     <span>Analytics</span>
                 </a>
-                <a class="nav-item" onclick="switchView('packages')">
+                <a href="javascript:void(0)" class="nav-item" onclick="switchView('packages')">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path
-                            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
-                        </path>
+                            d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
                     </svg>
                     <span>Packages</span>
                 </a>
             </div>
             <div class="nav-section">
                 <div class="nav-section-title">Links</div>
-                <a class="nav-item" href="https://try-nex.vercel.app" target="_blank">
+                <a href="https://try-nex.vercel.app" target="_blank" class="nav-item">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
                         <polyline points="15 3 21 3 21 9" />
@@ -901,47 +798,36 @@
                     </svg>
                     <span>Frontend</span>
                 </a>
-                <a class="nav-item" href="https://github.com/nexhq/nex" target="_blank">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                        <path
-                            d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
-                    </svg>
-                    <span>GitHub</span>
-                </a>
             </div>
         </nav>
         <div class="user-section">
             <div class="user-info">
                 <div class="user-avatar" id="user-avatar">A</div>
-                <div class="user-details">
-                    <div class="user-name" id="user-name">Admin <span class="role-badge">Admin</span></div>
+                <div>
+                    <div class="user-name" id="user-name">Admin</div>
                     <button class="logout-btn" onclick="logout()">Sign out</button>
                 </div>
             </div>
         </div>
     </aside>
 
-    <!-- Main Content -->
     <main class="main-content" id="main-content">
-        <!-- Analytics View -->
         <div id="view-analytics">
             <div class="page-header">
                 <div>
                     <h1 class="page-title">Analytics</h1>
-                    <p class="page-subtitle">Registry statistics and download metrics</p>
+                    <p class="page-subtitle">Registry statistics</p>
                 </div>
                 <button class="btn btn-primary" onclick="openPublishModal()">+ New Package</button>
             </div>
-
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-icon red"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2">
                             <path
-                                d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z">
-                            </path>
+                                d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
                         </svg></div>
-                    <div class="stat-label">Total Packages</div>
+                    <div class="stat-label">Packages</div>
                     <div class="stat-value" id="stat-packages">0</div>
                 </div>
                 <div class="stat-card">
@@ -951,7 +837,7 @@
                             <polyline points="7 10 12 15 17 10" />
                             <line x1="12" y1="15" x2="12" y2="3" />
                         </svg></div>
-                    <div class="stat-label">Total Downloads</div>
+                    <div class="stat-label">Downloads</div>
                     <div class="stat-value" id="stat-downloads">0</div>
                 </div>
                 <div class="stat-card">
@@ -960,33 +846,28 @@
                             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
                             <circle cx="9" cy="7" r="4" />
                         </svg></div>
-                    <div class="stat-label">Total Users</div>
+                    <div class="stat-label">Users</div>
                     <div class="stat-value" id="stat-users">0</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-icon purple"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"
                             stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                            <rect x="3" y="4" width="18" height="18" rx="2" />
                             <line x1="16" y1="2" x2="16" y2="6" />
                             <line x1="8" y1="2" x2="8" y2="6" />
-                            <line x1="3" y1="10" x2="21" y2="10" />
                         </svg></div>
                     <div class="stat-label">Deprecated</div>
                     <div class="stat-value" id="stat-deprecated">0</div>
                 </div>
             </div>
-
             <div class="charts-grid">
                 <div class="chart-card">
-                    <div class="chart-title">Downloads (Last 30 Days)</div>
-                    <canvas id="downloadsChart" height="200"></canvas>
+                    <div class="chart-title">Downloads (30 Days)</div><canvas id="downloadsChart" height="200"></canvas>
                 </div>
                 <div class="chart-card">
-                    <div class="chart-title">By Category</div>
-                    <canvas id="categoryChart" height="200"></canvas>
+                    <div class="chart-title">By Category</div><canvas id="categoryChart" height="200"></canvas>
                 </div>
             </div>
-
             <div class="table-container">
                 <div class="table-header">
                     <div class="table-title">Top Packages</div>
@@ -1005,40 +886,29 @@
             </div>
         </div>
 
-        <!-- Packages View -->
         <div id="view-packages" style="display:none;">
             <div class="page-header">
                 <div>
                     <h1 class="page-title">Packages</h1>
-                    <p class="page-subtitle">Manage all registry packages</p>
+                    <p class="page-subtitle">Manage all packages</p>
                 </div>
                 <button class="btn btn-primary" onclick="openPublishModal()">+ New Package</button>
             </div>
-
             <div class="table-container">
                 <div class="table-header">
                     <div class="table-title" id="packages-count">0 packages</div>
                     <div class="table-filters">
-                        <select class="filter-select" id="filter-category" onchange="filterPackages()">
+                        <select class="filter-select" id="filter-category" onchange="renderPackages()">
                             <option value="">All Categories</option>
                             <option value="cli">CLI</option>
                             <option value="utility">Utility</option>
                             <option value="development">Development</option>
                             <option value="automation">Automation</option>
-                            <option value="data">Data</option>
-                            <option value="web">Web</option>
-                            <option value="security">Security</option>
                             <option value="other">Other</option>
                         </select>
-                        <select class="filter-select" id="filter-deprecated" onchange="filterPackages()">
-                            <option value="">All Status</option>
-                            <option value="active">Active Only</option>
-                            <option value="deprecated">Deprecated Only</option>
-                        </select>
-                        <select class="filter-select" id="filter-sort" onchange="filterPackages()">
+                        <select class="filter-select" id="filter-sort" onchange="renderPackages()">
                             <option value="downloads">Most Downloads</option>
                             <option value="rating">Highest Rated</option>
-                            <option value="updated">Recently Updated</option>
                             <option value="name">Name A-Z</option>
                         </select>
                     </div>
@@ -1061,58 +931,46 @@
         </div>
     </main>
 
-    <!-- Publish Modal -->
     <div id="publishModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Publish Package</h2>
-                <button class="modal-close" onclick="closePublishModal()">✕</button>
+                <h2>Publish Package</h2><button class="modal-close" onclick="closePublishModal()">×</button>
             </div>
             <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">Package Manifest (JSON)</label>
-                    <textarea id="manifestInput" class="form-textarea"
-                        placeholder='{"id": "my-package", "name": "My Package", "version": "1.0.0", ...}'></textarea>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Changelog (optional)</label>
-                    <input type="text" id="changelogInput" class="form-input" placeholder="What's new in this version?">
-                </div>
+                <div class="form-group"><label class="form-label">Package Manifest (JSON)</label><textarea
+                        id="manifestInput" class="form-textarea"
+                        placeholder='{"id": "my-package", "name": "My Package", "version": "1.0.0"}'></textarea></div>
+                <div class="form-group"><label class="form-label">Changelog (optional)</label><input type="text"
+                        id="changelogInput" class="form-input" placeholder="What's new?"></div>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closePublishModal()">Cancel</button>
-                <button class="btn btn-primary" onclick="submitPackage()">Publish</button>
-            </div>
+            <div class="modal-footer"><button class="btn btn-secondary"
+                    onclick="closePublishModal()">Cancel</button><button class="btn btn-primary"
+                    onclick="submitPackage()">Publish</button></div>
         </div>
     </div>
 
-    <!-- Package Detail Modal -->
     <div id="detailModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Package Details</h2>
-                <button class="modal-close" onclick="closeDetailModal()">✕</button>
+                <h2>Package Details</h2><button class="modal-close" onclick="closeDetailModal()">×</button>
             </div>
-            <div class="modal-body" id="detail-content">
-                <!-- Loaded dynamically -->
-            </div>
+            <div class="modal-body" id="detail-content"></div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeDetailModal()">Close</button>
                 <button class="btn btn-warning" id="deprecate-btn" onclick="toggleDeprecation()">Deprecate</button>
-                <button class="btn btn-danger" id="delete-btn" onclick="deleteCurrentPackage()">Delete</button>
+                <button class="btn btn-danger" onclick="deleteCurrentPackage()">Delete</button>
             </div>
         </div>
     </div>
 
-    <!-- Access Denied -->
     <div id="access-denied" class="access-denied" style="display:none;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <circle cx="12" cy="12" r="10" />
             <path d="m4.93 4.93 14.14 14.14" />
         </svg>
         <h1>Access Denied</h1>
-        <p>This dashboard is only accessible to administrators.</p>
-        <a href="/login" class="btn btn-primary">Back to Login</a>
+        <p>Admin access required.</p>
+        <a href="/login" class="btn btn-primary">Login</a>
     </div>
 
     <script>
@@ -1124,17 +982,14 @@
         let downloadsChart = null;
         let categoryChart = null;
 
-        // Init
-        (async () => {
+        (async function init() {
             const token = localStorage.getItem('token');
             const userStr = localStorage.getItem('user');
+            if (!token || !userStr) { window.location.href = '/login'; return; }
 
-            if (!token || !userStr) {
-                window.location.href = '/login';
-                return;
-            }
-
-            currentUser = JSON.parse(userStr);
+            try {
+                currentUser = JSON.parse(userStr);
+            } catch (e) { window.location.href = '/login'; return; }
 
             if (currentUser.role !== 'admin') {
                 document.querySelector('.sidebar').style.display = 'none';
@@ -1143,90 +998,68 @@
                 return;
             }
 
-            const initial = currentUser.username ? currentUser.username.charAt(0).toUpperCase() : 'A';
-            document.getElementById('user-avatar').textContent = initial;
-            document.getElementById('user-name').innerHTML = `${currentUser.username} <span class="role-badge">Admin</span>`;
+            document.getElementById('user-avatar').textContent = (currentUser.username || 'A').charAt(0).toUpperCase();
+            document.getElementById('user-name').innerHTML = currentUser.username + ' <span class="role-badge">Admin</span>';
 
             await loadData();
         })();
 
         async function loadData() {
             try {
-                const pkgRes = await fetch(`${API}/packages`);
+                const pkgRes = await fetch(API + '/packages');
                 const pkgData = await pkgRes.json();
-                allPackages = pkgData.packages |       const statsRes = await fetch(`${API}/packages/stats`, {
+                allPackages = pkgData.packages || [];
+
+                const statsRes = await fetch(API + '/packages/stats', {
                     headers: { 'x-auth-token': localStorage.getItem('token') }
                 });
-                
                 if (statsRes.ok) {
                     statsData = await statsRes.json();
                     updateStats();
                     renderCharts();
                     renderTopPackages();
                 }
-
                 renderPackages();
-            } catch (err) {
-                console.error(err);
-            }
+            } catch (err) { console.error(err); }
         }
 
         function updateStats() {
             if (!statsData) return;
             document.getElementById('stat-packages').textContent = statsData.totalPackages || 0;
-            document.getEltat-downloads').textContent = formatNumber(statsData.totalDownloads || 0);
+            document.getElementById('stat-downloads').textContent = formatNumber(statsData.totalDownloads || 0);
             document.getElementById('stat-users').textContent = statsData.totalUsers || 0;
             document.getElementById('stat-deprecated').textContent = statsData.deprecatedCount || 0;
         }
 
-        function formatNumber(num) {
-            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
-            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
-            return num.toString();
+        function formatNumber(n) {
+            if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+            if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+            return n.toString();
         }
 
         function renderCharts() {
             const ctx1 = document.getElementById('downloadsChart').getContext('2d');
-            const dailyData = statsData.dailyDownloads || [];
-             const last30Days = [];
+            const daily = statsData.dailyDownloads || [];
+            const last30 = [];
             for (let i = 29; i >= 0; i--) {
-                const date = new Date();
-                date.setDate(date.getDate() - i);
-                const dateStr = date.toISOString().split('T')[0];
-                const found = dailyData.find(d => d._id === dateStr);
-                last30Days.push({ date: dateStr, count: found ? found.count : 0 });
+                const d = new Date(); d.setDate(d.getDate() - i);
+                const ds = d.toISOString().split('T')[0];
+                const f = daily.find(x => x._id === ds);
+                last30.push({ date: ds, count: f ? f.count : 0 });
             }
-
             if (downloadsChart) downloadsChart.destroy();
             downloadsChart = new Chart(ctx1, {
                 type: 'line',
-                data: {
-                    labels: last30Days.map(d => d.date.split('-').slice(1).join('/')),
-                    datasets: [{
-                        label: 'Downloads',
-                        data: last30Days.map(d => d.count),
-                        borderColor: '#cb3837',
-                        backgroundColor: 'rgba(203, 56, 55, 0.1)',
-                        fill: true,
-                        tension: 0.4
-                    }]
-                },
+                data: { labels: last30.map(x => x.date.slice(5)), datasets: [{ data: last30.map(x => x.count), borderColor: '#cb3837', backgroundColor: 'rgba(203,56,55,0.1)', fill: true, tension: 0.4 }] },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
             });
 
             const ctx2 = document.getElementById('categoryChart').getContext('2d');
-            const catData = statsData.downloadsByCategory || [];
-
+            const cats = statsData.downloadsByCategory || [];
             if (categoryChart) categoryChart.destroy();
             categoryChart = new Chart(ctx2, {
                 type: 'doughnut',
-                data: {
-                    labels: catData.map(r => r._id || 'other'),
-                    datasets: [{
-                        data: catData.map(r => r.count),
-                        backgroundColor: ['#cb3837', '#16a34a', '#2563eb', '#9333ea', '#f59e0b', '#6b7280', '#ec4899', '#14b8a6']
-                    }]
-                },
+                data: { labels: cats.map(x => x._id || 'other'), datasets: [{ data: cats.map(x => x.count), backgroundColor: ['#cb3837', '#16a34a', '#2563eb', '#9333ea', '#f59e0b', '#6b7280'] }] },
                 options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } } } }
             });
         }
@@ -1235,77 +1068,49 @@
             const tbody = document.getElementById('top-packages');
             tbody.innerHTML = '';
             const top = statsData.topPackages || [];
-            if (top.length === 0) { tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--nex-gray);">No packages</td></tr>'; return; }
-
-            top.forEach(pkg => {
+            if (!top.length) { tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;color:var(--nex-gray)">No packages</td></tr>'; return; }
+            top.forEach(p => {
                 const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td><span class="package-id" onclick="viewPackage('${pkg.id}')">${pkg.id}</span><div style="color:var(--nex-gray);font-size:0.75rem;">${pkg.name}</div></td>
-                    <td><span class="version-badge">v${pkg.version}</span></td>
-                    <td>${renderRating(pkg.averageRating)}</td>
-                    <td><span class="downloads-badge">↓ ${formatNumber(pkg.downloads || 0)}</span></td>
-                `;
+                tr.innerHTML = '<td><span class="package-id" onclick="viewPackage(\'' + p.id + '\')">' + p.id + '</span></td><td><span class="version-badge">v' + p.version + '</span></td><td>' + renderRating(p.averageRating) + '</td><td><span class="downloads-badge">↓ ' + formatNumber(p.downloads || 0) + '</span></td>';
                 tbody.appendChild(tr);
             });
         }
 
-        function renderRating(rating) {
-            if (!rating) return '<span style="color:var(--nex-gray-light)">—</span>';
-            const stars = '★'.repeat(Math.round(rating)) + '☆'.repeat(5 - Math.round(rating));
-            return `<span class="rating-stars">${stars}</span><span class="rating-value">${rating.toFixed(1)}</span>`;
+        function renderRating(r) {
+            if (!r) return '—';
+            const stars = '★'.repeat(Math.round(r)) + '☆'.repeat(5 - Math.round(r));
+            return '<span class="rating-stars">' + stars + '</span> ' + r.toFixed(1);
         }
 
-        function switchView(viewName) {
+        function switchView(view) {
             document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-            if (event && event.target) event.target.closest('.nav-item')?.classList.add('active');
-            document.getElementById('view-analytics').style.display = 'none';
-            document.getElementById('view-packages').style.display = 'none';
-            if (viewName === 'analytics') document.getElementById('view-analytics').style.display = 'block';
-            else if (viewName === 'packages') { document.getElementById('view-packages').style.display = 'block'; renderPackages(); }
+            if (event && event.target) {
+                const navItem = event.target.closest('.nav-item');
+                if (navItem) navItem.classList.add('active');
+            }
+            document.getElementById('view-analytics').style.display = view === 'analytics' ? 'block' : 'none';
+            document.getElementById('view-packages').style.display = view === 'packages' ? 'block' : 'none';
+            if (view === 'packages') renderPackages();
         }
-
-        function filterPackages() { renderPackages(); }
 
         function renderPackages() {
-            const category = document.getElementById('filter-category').value;
-            const deprecated = document.getElementById('filter-deprecated').value;
+            const cat = document.getElementById('filter-category').value;
             const sort = document.getElementById('filter-sort').value;
+            let list = [...allPackages];
+            if (cat) list = list.filter(p => p.category === cat);
+            if (sort === 'downloads') list.sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
+            else if (sort === 'rating') list.sort((a, b) => (b.averageRating || 0) - (a.averageRating || 0));
+            else if (sort === 'name') list.sort((a, b) => a.name.localeCompare(b.name));
 
-            let filtered = [...allPackages];
-            if (category) filtered = filtered.filter(p => p.category === category);
-            if (deprecated === 'active') filtered = filtered.filter(p => !p.deprecated);
-            else if (deprecated === 'deprecated') filtered = filtered.filter(p => p.deprecated);
-
-            if (sort === 'downloads') filtered.sort((a, b) => (b.downloads || 0) - (a.downloads || 0));
-            else if (sort === 'rating') filtered.sort((a, b) => (b.averageRating || 0) - (a.averageRating || 0));
-            else if (sort === 'updated') filtered.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
-            else if (sort === 'name') filtered.sort((a, b) => a.name.localeCompare(b.name));
-
-            document.getElementById('packages-count').textContent = `${filtered.length} packages`;
-
+            document.getElementById('packages-count').textContent = list.length + ' packages';
             const tbody = document.getElementById('packages-list');
             tbody.innerHTML = '';
-            if (filtered.length === 0) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--nex-gray);">No packages match filters</td></tr>'; return; }
+            if (!list.length) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--nex-gray)">No packages</td></tr>'; return; }
 
-            filtered.forEach(pkg => {
+            list.forEach(p => {
                 const tr = document.createElement('tr');
-                if (pkg.deprecated) tr.classList.add('deprecated');
-                const runtime = pkg.runtime?.type || 'unknown';
-                tr.innerHTML = `
-                    <td><span class="package-id" onclick="viewPackage('${pkg.id}')">${pkg.id}</span><div style="color:var(--nex-gray);font-size:0.75rem;">${pkg.name}</div></td>
-                    <td><span class="category-badge">${pkg.category || 'other'}</span></td>
-                    <td><span class="version-badge">v${pkg.version}</span></td>
-                    <td>${renderRating(pkg.averageRating)}</td>
-                    <td><span class="downloads-badge">↓ ${formatNumber(pkg.downloads || 0)}</span></td>
-                    <td>${pkg.deprecated ? '<span class="deprecated-badge">Deprecated</span>' : '<span style="color:var(--nex-success);">Active</span>'}</td>
-                    <td>
-                        <div class="btn-group">
-                            <button class="btn btn-secondary btn-sm" onclick="viewPackage('${pkg.id}')">View</button>
-                            <button class="btn btn-danger btn-sm" onclick="deletePackage('${pkg.id}')">Delete</button>
-                        </div>
-                    </td>
-                `;
-                tbody.ndC);
+                tr.innerHTML = '<td><span class="package-id" onclick="viewPackage(\'' + p.id + '\')">' + p.id + '</span><div style="color:var(--nex-gray);font-size:0.75rem">' + p.name + '</div></td><td><span class="category-badge">' + (p.category || 'other') + '</span></td><td><span class="version-badge">v' + p.version + '</span></td><td>' + renderRating(p.averageRating) + '</td><td><span class="downloads-badge">↓ ' + formatNumber(p.downloads || 0) + '</span></td><td>' + (p.deprecated ? '<span class="deprecated-badge">Deprecated</span>' : '<span style="color:#16a34a">Active</span>') + '</td><td><div class="btn-group"><button class="btn btn-secondary btn-sm" onclick="viewPackage(\'' + p.id + '\')">View</button><button class="btn btn-danger btn-sm" onclick="deletePackage(\'' + p.id + '\')">Delete</button></div></td>';
+                tbody.appendChild(tr);
             });
         }
 
@@ -1314,94 +1119,15 @@
             const pkg = allPackages.find(p => p.id === id);
             if (!pkg) return;
 
-            // Fetch versions
-            let versions = [];
-            try {
-                const vRes = await fetch(`${API}/packages/${id}/versions`);
-                if (vRes.ok) versions = await vRes.json();
-            } catch (e) {}
+            let versions = [], reviews = [];
+            try { const r = await fetch(API + '/packages/' + id + '/versions'); if (r.ok) versions = await r.json(); } catch (e) { }
+            try { const r = await fetch(API + '/packages/' + id + '/reviews'); if (r.ok) reviews = await r.json(); } catch (e) { }
 
-            // Fetch reviews
-            let reviews = [];
-            try {
-                const rRes = await fetch(`${API}/packages/${id}/reviews`);
-                if (rRes.ok) reviews = await rRes.json();
-            } catch (e) {}
+            document.getElementById('detail-content').innerHTML = '<div class="pkg-detail-header"><div class="pkg-detail-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></div><div><div class="pkg-detail-name">' + pkg.name + ' <span class="version-badge">v' + pkg.version + '</span> ' + (pkg.deprecated ? '<span class="deprecated-badge">Deprecated</span>' : '') + '</div><div class="pkg-detail-id">' + pkg.id + '</div><div class="pkg-detail-desc">' + (pkg.description || 'No description') + '</div></div></div><div class="pkg-meta-grid"><div class="pkg-meta-item"><div class="pkg-meta-label">Downloads</div><div class="pkg-meta-value">' + formatNumber(pkg.downloads || 0) + '</div></div><div class="pkg-meta-item"><div class="pkg-meta-label">Rating</div><div class="pkg-meta-value">' + (pkg.averageRating ? pkg.averageRating.toFixed(1) + '/5' : 'None') + '</div></div><div class="pkg-meta-item"><div class="pkg-meta-label">Category</div><div class="pkg-meta-value">' + (pkg.category || 'other') + '</div></div><div class="pkg-meta-item"><div class="pkg-meta-label">Runtime</div><div class="pkg-meta-value">' + (pkg.runtime?.type || 'unknown') + '</div></div><div class="pkg-meta-item"><div class="pkg-meta-label">Author</div><div class="pkg-meta-value">' + (pkg.author?.name || 'Unknown') + '</div></div><div class="pkg-meta-item"><div class="pkg-meta-label">License</div><div class="pkg-meta-value">' + (pkg.license || 'None') + '</div></div></div>' + (pkg.deprecated ? '<div class="pkg-section" style="background:#fef3c7;padding:1rem;border-radius:var(--radius)"><strong>⚠️ ' + (pkg.deprecationMessage || 'Deprecated') + '</strong></div>' : '') + '<div class="pkg-section"><div class="pkg-section-title">📌 Keywords</div><div class="pkg-tags">' + (pkg.keywords || []).map(k => '<span class="pkg-tag">' + k + '</span>').join('') + '</div></div><div class="pkg-section"><div class="pkg-section-title">📦 Versions (' + versions.length + ')</div><div class="version-list">' + (versions.length ? versions.slice(0, 10).map(v => '<div class="version-item"><span><strong>v' + v.version + '</strong></span><span style="color:var(--nex-gray)">' + new Date(v.publishedAt).toLocaleDateString() + '</span></div>').join('') : '<div style="color:var(--nex-gray)">No versions</div>') + '</div></div><div class="pkg-section"><div class="pkg-section-title">⭐ Reviews (' + reviews.length + ')</div>' + (reviews.length ? reviews.slice(0, 5).map(r => '<div class="review-item"><div class="review-header"><span class="review-user">' + r.username + ' ' + renderRating(r.rating) + '</span></div>' + (r.comment ? '<div class="review-comment">' + r.comment + '</div>' : '') + '</div>').join('') : '<div style="color:var(--nex-gray)">No reviews</div>') + '</div>';
 
-            document.getElementById('detail-content').innerHTML = `
-                <div class="pkg-detail-header">
-                    <div class="pkg-detail-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg></div>
-                    <div class="pkg-detail-info">
-                        <div class="pkg-detail-name">${pkg.name} <span class="version-badge">v${pkg.version}</span> ${pkg.deprecated ? '<span class="deprecated-badge">Deprecated</span>' : ''}</div>
-                        <div class="pkg-detail-id">${pkg.id}</div>
-                        <div class="pkg-detail-desc">${pkg.description || 'No description'}</div>
-                    </div>
-                </div>
-
-                <div class="pkg-meta-grid">
-                    <div class="pkg-meta-item"><div class="pkg-meta-label">Downloads</div><div class="pkg-meta-value">${formatNumber(pkg.downloads || 0)}</div></div>
-                    <div class="pkg-meta-item"><div class="pkg-meta-label">Rating</div><div class="pkg-meta-value">${pkg.averageRating ? pkg.averageRating.toFixed(1) + '/5 (' + pkg.totalRatings + ' reviews)' : 'No ratings'}</div></div>
-                    <div class="pkg-meta-item"><div class="pkg-meta-label">Category</div><div class="pkg-meta-value">${pkg.category || 'other'}</div></div>
-                    <div class="pkg-meta-item"><div class="pkg-meta-label">Runtime</div><div class="pkg-meta-value">${pkg.runtime?.type || 'unknown'}</div></div>
-                    <div class="pkg-meta-item"><div class="pkg-meta-label">Author</div><div class="pkg-meta-value">${pkg.author?.name || 'Unknown'}</div></div>
-                    <div class="pkg-meta-item"><div class="pkg-meta-label">License</div><div class="pkg-meta-value">${pkg.license || 'None'}</div></div>
-                </div>
-
-                ${pkg.deprecated ? `<div class="pkg-section" style="background:#fef3c7;padding:1rem;border-radius:var(--radius);"><strong>⚠️ Deprecated:</strong> ${pkg.deprecationMessage || 'This package has been deprecated.'} ${pkg.replacementPackage ? `<br>Use <strong>${pkg.replacementPackage}</strong> instead.` : ''}</div>` : ''}
-
-                <div class="pkg-section">
-                    <div class="pkg-section-title">📌 Keywords & Tags</div>
-                    <div class="pkg-tags">
-                        ${(pkg.keywords || []).map(k => `<span class="pkg-tag">${k}</span>`).join('')}
-                        ${(pkg.tags || []).map(t => `<span class="pkg-tag" style="background:#dbeafe">${t}</span>`).join('')}
-                    </div>
-                </div>
-
-                <div class="pkg-section">
-                    <div class="pkg-section-title">📦 Version History (${versions.length})</div>
-                    <div class="version-list">
-                        ${versions.length ? versions.slice(0, 10).map(v => `
-                            <div class="version-item">
-                                <span><strong>v${v.version}</strong> ${v.deprecated ? '<span class="deprecated-badge">Deprecated</span>' : ''}</span>
-                                <span style="color:var(--nex-gray);font-size:0.8rem;">${new Date(v.publishedAt).toLocaleDateString()}</span>
-                            </div>
-                            ${v.changelog ? `<div style="font-size:0.8rem;color:var(--nex-gray);padding:0 0.5rem 0.5rem;">${v.changelog}</div>` : ''}
-                        `).join('') : '<div style="color:var(--nex-gray);font-size:0.85rem;">No version history</div>'}
-                    </div>
-                </div>
-
-                <div class="pkg-section">
-                    <div class="pkg-section-title">🔗 Dependencies (${(pkg.dependencies || []).length})</div>
-                    ${(pkg.dependencies || []).length ? pkg.dependencies.map(d => `
-                        <div class="dep-item"><span>${d.packageId}</span><span class="version-badge">${d.version || 'any'}</span></div>
-                    `).join('') : '<div style="color:var(--nex-gray);font-size:0.85rem;">No dependencies</div>'}
-                </div>
-
-                <div class="pkg-section">
-                    <div class="pkg-section-title">⭐ Reviews (${reviews.length})</div>
-                    ${reviews.length ? reviews.slice(0, 5).map(r => `
-                        <div class="review-item">
-                            <div class="review-header">
-                                <span class="review-user">${r.username} ${renderRating(r.rating)}</span>
-                                <span style="color:var(--nex-gray);font-size:0.75rem;">${new Date(r.createdAt).toLocaleDateString()}</span>
-                            </div>
-                            ${r.title ? `<div style="font-weight:500;font-size:0.85rem;">${r.title}</div>` : ''}
-                            ${r.comment ? `<div class="review-comment">${r.comment}</div>` : ''}
-                        </div>
-                    `).join('') : '<div style="color:var(--nex-gray);font-size:0.85rem;">No reviews yet</div>'}
-                </div>
-            `;
-
-            // Update deprecation button
-            const deprecateBtn = document.getElementById('deprecate-btn');
-            if (pkg.deprecated) {
-                deprecateBtn.textContent = 'Undeprecate';
-                deprecateBtn.className = 'btn btn-success';
-            } else {
-                deprecateBtn.textContent = 'Deprecate';
-                deprecateBtn.className = 'btn btn-warning';
-            }
-
+            const btn = document.getElementById('deprecate-btn');
+            btn.textContent = pkg.deprecated ? 'Undeprecate' : 'Deprecate';
+            btn.className = pkg.deprecated ? 'btn btn-success' : 'btn btn-warning';
             document.getElementById('detailModal').classList.add('active');
         }
 
@@ -1411,43 +1137,20 @@
             if (!currentPackageId) return;
             const pkg = allPackages.find(p => p.id === currentPackageId);
             const endpoint = pkg.deprecated ? 'undeprecate' : 'deprecate';
-            
             let body = {};
-            if (!pkg.deprecated) {
-                const msg = prompt('Deprecation message (optional):');
-                const replacement = prompt('Replacement package ID (optional):');
-                body = { message: msg, replacementPackage: replacement };
-            }
-
+            if (!pkg.deprecated) { const msg = prompt('Deprecation message:'); body = { message: msg }; }
             try {
-                const res = await fetch(`${API}/packages/${currentPackageId}/${endpoint}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'x-auth-token': localStorage.getItem('token') },
-                    body: JSON.stringify(body)
-                });
-                if (res.ok) {
-                    alert(pkg.deprecated ? 'Package undeprecated!' : 'Package deprecated!');
-                    closeDetailModal();
-                    await loadData();
-                } else {
-                    const d = await res.json();
-                    alert('Error: ' + d.msg);
-                }
+                const res = await fetch(API + '/packages/' + currentPackageId + '/' + endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-auth-token': localStorage.getItem('token') }, body: JSON.stringify(body) });
+                if (res.ok) { alert('Done!'); closeDetailModal(); await loadData(); }
+                else { const d = await res.json(); alert('Error: ' + d.msg); }
             } catch (e) { console.error(e); }
         }
 
         async function deleteCurrentPackage() {
-            if (!currentPackageId) return;
-            if (!confirm(`Delete "${currentPackageId}" and all its versions?`)) return;
+            if (!currentPackageId || !confirm('Delete ' + currentPackageId + '?')) return;
             try {
-                const res = await fetch(`${API}/packages/${currentPackageId}`, {
-                    method: 'DELETE',
-                    headers: { 'x-auth-token': localStorage.getItem('token') }
-                });
-                if (res.ok) {
-                    closeDetailModal();
-                    await loadData();
-                } else alert('Error deleting package');
+                const res = await fetch(API + '/packages/' + currentPackageId, { method: 'DELETE', headers: { 'x-auth-token': localStorage.getItem('token') } });
+                if (res.ok) { closeDetailModal(); await loadData(); } else alert('Error');
             } catch (e) { console.error(e); }
         }
 
@@ -1460,34 +1163,17 @@
             try {
                 const manifest = JSON.parse(content);
                 if (changelog) manifest.changelog = changelog;
-                const res = await fetch(`${API}/packages`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'x-auth-token': localStorage.getItem('token') },
-                    body: JSON.stringify(manifest)
-                });
-                if (res.ok) {
-                    const data = await res.json();
-                    alert(`Package ${data.msg}: ${data.id} v${data.version}`);
-                    closePublishModal();
-                    document.getElementById('manifestInput').value = '';
-                    document.getElementById('changelogInput').value = '';
-                    await loadData();
-                } else {
-                    const d = await res.json();
-                    alert('Error: ' + d.msg);
-                }
-            } catch (e) { alert('Invalid JSON'); }
+                const res = await fetch(API + '/packages', { method: 'POST', headers: { 'Content-Type': 'application/json', 'x-auth-token': localStorage.getItem('token') }, body: JSON.stringify(manifest) });
+                if (res.ok) { const d = await res.json(); alert(d.msg + ': ' + d.id); closePublishModal(); document.getElementById('manifestInput').value = ''; document.getElementById('changelogInput').value = ''; await loadData(); }
+                else { const d = await res.json(); alert('Error: ' + d.msg); }
+            } catch (e) { alert('Invalid JSON: ' + e.message); }
         }
 
         async function deletePackage(id) {
-            if (!confirm(`Delete "${id}"?`)) return;
+            if (!confirm('Delete ' + id + '?')) return;
             try {
-                const res = await fetch(`${API}/packages/${id}`, {
-                    method: 'DELETE',
-                    headers: { 'x-auth-token': localStorage.getItem('token') }
-                });
-                if (res.ok) await loadData();
-                else alert('Error deleting package');
+                const res = await fetch(API + '/packages/' + id, { method: 'DELETE', headers: { 'x-auth-token': localStorage.getItem('token') } });
+                if (res.ok) await loadData(); else alert('Error');
             } catch (e) { console.error(e); }
         }
 
